@@ -14,7 +14,7 @@ class CreatePlansTable extends Migration
     public function up()
     {
         Schema::create('plans', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
 
             $table->string('name')->unique();
             $table->text('description');
@@ -28,25 +28,6 @@ class CreatePlansTable extends Migration
 
             $table->timestamps();
         });
-
-        Schema::create('plan_features', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->integer('plan_id')->unsigned();
-            $table->string('slug');
-            $table->name('name');
-            $table->text('description')->nullable();
-            $table->integer('value');
-            $table->smallInteger('period')->unsigned()->default(1);
-            $table->string('interval')->default('month');
-
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->unique(['plan_id', 'slug']);
-            $table->foreign('plan_id')->references('id')->on('plans')
-                ->onDelete('cascade')->onUpdate('cascade');
-        });
     }
 
     /**
@@ -56,6 +37,5 @@ class CreatePlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plans');
     }
 }
