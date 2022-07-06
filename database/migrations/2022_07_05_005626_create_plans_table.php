@@ -19,12 +19,14 @@ class CreatePlansTable extends Migration
             $table->string('name')->unique();
             $table->text('description');
             $table->decimal('price_month', 10, 2);
-            $table->decimal('price_three_months', 10, 2)->nullable();
-            $table->decimal('price_six_months', 10, 2)->nullable();
+            $table->decimal('price_quarter', 10, 2)->nullable();
+            $table->decimal('price_semester', 10, 2)->nullable();
             $table->decimal('price_year', 10, 2)->nullable();
             $table->decimal('price_signup', 10, 2)->nullable();
             $table->smallInteger('grace_period')->default(5);
             $table->string('grace_interval')->default('day');
+            $table->json('features')->nullable();
+            $table->boolean('active')->default(true);
 
             $table->timestamps();
         });
