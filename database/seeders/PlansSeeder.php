@@ -16,18 +16,21 @@ class PlansSeeder extends Seeder
      */
     public function run()
     {
+        $features = [];
         $feature = new PlanFeature();
         $feature->slug = PlanFeature::FEATURE_QTDE_NOTAS;
         $feature->unlimited = false;
         $feature->value = 50;
         $feature->period = PlanFeature::PERIOD_MONTH;
         $feature->interval = 1;
+        $features[] = $feature;
 
-        $planoBasico = Plan::updateOrCreate([
-            'slug' => 'plano-basico',
+        $planoBasico = Plan::firstOrNew([
             'name' => 'Básico',
-            'description' => 'Plano Básico',
-            'features' => $feature->toArray(),
         ]);
+        $planoBasico->description = 'Plano Básico';
+        $planoBasico->price_month = 99;
+        $planoBasico->features = $features;
+        $planoBasico->save();
     }
 }

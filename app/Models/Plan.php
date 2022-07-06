@@ -9,8 +9,8 @@ class Plan extends Model
 {
     use HasFactory;
 
-    public function features()
-    {
-        $this->hasMany(PlanFeature::class);
-    }
+    protected $casts = [
+        'features' => 'json',
+    ];
+
 }

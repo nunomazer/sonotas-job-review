@@ -21,4 +21,17 @@ class PlanFeature
     public $value;
     public $period;
     public $interval;
+
+    public function toArray()
+    {
+        return [
+            'slug' => $this->slug,
+            'name' => $this->name,
+            'description' => $this->description,
+            'unlimited' => $this->unlimited,
+            'value' => $this->value,
+            'period' => $this->period,
+            'interval' => $this->interval,
+        ];
+    }
 }
