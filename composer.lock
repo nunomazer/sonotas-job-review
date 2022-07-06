@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1366bfce4a25b2fda605fce17b6dc0bb",
+    "content-hash": "f7332df18582035a03dc569e6cb8b192",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -956,6 +956,44 @@
                 }
             ],
             "time": "2022-06-20T21:43:11+00:00"
+        },
+        {
+            "name": "kayo-bruno/states-and-cities-ibge",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kayobruno/laravel-states-and-cities-ibge.git",
+                "reference": "5a40da1138c93a16b66196a8ec17ad83d2d8b6ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kayobruno/laravel-states-and-cities-ibge/zipball/5a40da1138c93a16b66196a8ec17ad83d2d8b6ec",
+                "reference": "5a40da1138c93a16b66196a8ec17ad83d2d8b6ec",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kayo\\StatesAndCitiesIbge\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kayo Bruno",
+                    "email": "kayodw@gmail.com"
+                }
+            ],
+            "description": "Um pacote Laravel que cria e atualiza todos os estados e cidades do Brasil a partir de uma integração com a API do IBGE",
+            "support": {
+                "issues": "https://github.com/kayobruno/laravel-states-and-cities-ibge/issues",
+                "source": "https://github.com/kayobruno/laravel-states-and-cities-ibge/tree/main"
+            },
+            "time": "2021-03-30T00:05:29+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7994,7 +8032,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "kayo-bruno/states-and-cities-ibge": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
