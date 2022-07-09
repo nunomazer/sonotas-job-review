@@ -28,7 +28,11 @@ class CreatePlansTable extends Migration
             $table->json('features')->nullable();
             $table->boolean('active')->default(true);
 
+            $table->string('moneyflow_driver')->nullable();
+            $table->string('moneyflow_cod')->nullable();
+            
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
