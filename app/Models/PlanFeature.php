@@ -17,10 +17,23 @@ class PlanFeature
     public $slug;
     public $name;
     public $description;
-    public $unlimited;
-    public $value;
-    public $period;
-    public $interval;
+    /**
+     * @var bool Whether the feature is unlimited or not. If true value will not be evaluated.
+     */
+    public bool $unlimited;
+    /**
+     * @var int The value of the feature. If unlimited is true, this value will not be evaluated.
+     */
+    public int $value;
+    /**
+     * @var string The interval of time: day, month, week, year.
+     */
+    public string $period;
+    /**
+     * @var int The frequency feature must be renewed. If periodo is month, and frequency is 3, this means Each three months.
+     * This also means that the value of the feature is considered something like 50 notas per 3 months, in ths example.
+     */
+    public int $frequency;
 
     public function toArray()
     {
@@ -31,7 +44,7 @@ class PlanFeature
             'unlimited' => $this->unlimited,
             'value' => $this->value,
             'period' => $this->period,
-            'interval' => $this->interval,
+            'frequency' => $this->frequency,
         ];
     }
 }
