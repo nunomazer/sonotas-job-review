@@ -5,6 +5,7 @@ namespace App\Services\Sped;
 class Sped
 {
     const DOCTYPE_NFSE = 'nfse';
+    const DOCTYPE_NFE = 'nfe';
 
     const REGIME_ISENTO = 0;
     const REGIME_SIMPLES_NACIONAL = 1;
@@ -56,5 +57,10 @@ class Sped
     public function empresa() : ISpedEmpresa
     {
         return $this->driver->empresa();
+    }
+
+    public function nfse() : ISpedNFSe
+    {
+        return $this->driver->nfse();
     }
 }
