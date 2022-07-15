@@ -71,7 +71,7 @@ class PlugnotasEmpresa implements ISpedEmpresa
         ];
     }
 
-    public function cadastrarEmpresa(Empresa $empresa): string
+    public function cadastrar(Empresa $empresa): string
     {
         try {
             $result = $this->httpClient()->request('POST', 'empresa', [
@@ -83,7 +83,7 @@ class PlugnotasEmpresa implements ISpedEmpresa
         dd($result->getBody()->getContents());
     }
 
-    public function alterarEmpresa(Empresa $empresa): string
+    public function alterar(Empresa $empresa): string
     {
         try {
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$empresa->documento, [
@@ -95,8 +95,4 @@ class PlugnotasEmpresa implements ISpedEmpresa
         dd($result->getBody()->getContents());
     }
 
-    public function cadastrarCliente(Cliente $cliente): bool
-    {
-        // TODO: Implement cadastrarCliente() method.
-    }
 }
