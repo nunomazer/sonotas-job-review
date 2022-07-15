@@ -20,13 +20,24 @@ return [
      */
 
     /**
-     * NFSe - Nota Fiscal de Serviço de Empresa, possue o driver default, mas também pode ter um drive configurado
+     * NFSe - Nota Fiscal de Serviço de Empresa, define o driver default, mas também pode ter um driver configurado
      * por nome de cidade. O facade tomara a decisão baseada na existência de cada cidade na configuração ou  cai no fallback default.
      */
     'nfse' => [
         'default' => env('SPED_NFSE_DRIVER_DEFAULT', 'plugnotas'),
         'cidades' => [
             'nome_da_cidade' => env('SPED_NFSE_DRIVER_NOME_DA_CIDADE', 'plugnotas'),
+        ],
+    ],
+
+    /**
+     * NFe - Nota Fiscal de Produtos de Empresa, define o driver default, mas também pode ter um driver configurado
+     * por nome de cidade. O facade tomara a decisão baseada na existência de cada cidade na configuração ou  cai no fallback default.
+     */
+    'nfe' => [
+        'default' => env('SPED_NFE_DRIVER_DEFAULT', 'sbaum'),
+        'cidades' => [
+            'nome_da_cidade' => env('SPED_NFSE_DRIVER_NOME_DA_CIDADE', 'sbaum'),
         ],
     ],
 
