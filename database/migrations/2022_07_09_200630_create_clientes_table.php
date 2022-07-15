@@ -42,7 +42,11 @@ class CreateClientesTable extends Migration
 
             $table->string('email');
 
-            $table->boolean('simples_nacional')->default(true);
+            $table->integer('regime_tributario')->default(1);
+            $table->integer('regime_tributario_especial')->default(0);
+
+            $table->unsignedBigInteger('certificado_id')->nullable();
+            $table->foreign('certificado_id')->references('id')->on('certificados');
 
             $table->timestamps();
             $table->softDeletes();

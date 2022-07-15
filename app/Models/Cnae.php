@@ -5,16 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Plan extends Model
+class Cnae extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'name',
-    ];
-
-    protected $casts = [
-        'features' => 'json',
-    ];
-
 }

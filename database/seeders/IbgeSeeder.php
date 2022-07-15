@@ -16,5 +16,6 @@ class IbgeSeeder extends Seeder
     public function run()
     {
         Artisan::call('ibge:import-states-cities');
+        Artisan::call('ibge:import-cnae');
     }
 }
