@@ -52,7 +52,7 @@ class TesteServices extends Command
         $sped = new Sped(Sped::DOCTYPE_NFSE, 'sao_paulo');
 
         $empresa = Empresa::where('documento', '01713414000120')->first();
-        $sped->empresa()->cadastrarEmpresa($empresa);
+        $sped->empresa()->cadastrar($empresa);
     }
 
     public function spedEmpresaAlterar()
@@ -61,6 +61,6 @@ class TesteServices extends Command
 
         $empresa = Empresa::where('documento', '01713414000120')->first();
         $empresa->nome = 'Winponta ' . rand(1,10000);
-        $sped->empresa()->alterarEmpresa($empresa);
+        $sped->empresa()->alterar($empresa);
     }
 }
