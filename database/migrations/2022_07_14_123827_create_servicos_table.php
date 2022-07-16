@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmpresaNFSConfigTable extends Migration
+class CreateServicosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,21 @@ class CreateEmpresaNFSConfigTable extends Migration
      */
     public function up()
     {
-        Schema::create('empresa_nfs_configuracoes', function (Blueprint $table) {
+        Schema::create('servicos', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
 
-            $table->string('cnae_codigo');
-            $table->foreign('cnae_codigo')->references('codigo')->on('cnaes');
+            $table->unsignedBigInteger('tipo_servico_codigo');
+            $table->foreign('tipo_servico_codigo')->references('codigo')->on('tipo_servicos');
+
+            $table->boolean('ativo')->default(true);
+
+            $table->string('nome');
+            $table->decimal('valor', 20,2);
+            $table->string('descricao',4000)->nullable();
+            $table->string('obs',4000)->nullable();
 
             $table->decimal('cofins', 5,2);
             $table->decimal('csll', 5,2);
@@ -31,15 +38,8 @@ class CreateEmpresaNFSConfigTable extends Migration
 
             $table->boolean('iss_retifo_fonte');
 
-            $table->string('tipo_servico_codigo');
-            $table->foreign('tipo_servico_codigo')->references('codigo')->on('tipo_servicos');
-
             $table->string('municipio_servico_codigo')->nullable();
             $table->string('municipio_servico_descricao')->nullable();
-
-            $table->string('natureza_operacao')->nullable();
-
-            $table->decimal('tributos', 5,2);
 
             $table->boolean('enviar_nota_email_cliente');
 
@@ -48,6 +48,7 @@ class CreateEmpresaNFSConfigTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
     }
 
     /**
@@ -57,6 +58,5 @@ class CreateEmpresaNFSConfigTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicos');
     }
 }

@@ -7,7 +7,7 @@ use App\Models\Servico;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
-class ServicosSeeder extends Seeder
+class TipoServicosSeeder extends Seeder
 {
     /**
      * Run the database seeds.

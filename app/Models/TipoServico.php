@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Serviços cadastrados da empresa
+ * Serviços da tabela de lei LC116
  */
-class Servico extends Model
+class TipoServico extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'codigo',
+        'descricao',
+    ];
 }

@@ -13,7 +13,7 @@ class CreateServicosTable extends Migration
      */
     public function up()
     {
-        Schema::create('servicos', function (Blueprint $table) {
+        Schema::create('tipo_servicos', function (Blueprint $table) {
             $table->id();
 
             $table->string('codigo')->unique();
@@ -31,6 +31,6 @@ class CreateServicosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicos');
+        Schema::dropIfExists('tipo_servicos');
     }
 }
