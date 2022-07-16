@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\ISpedNFSe;
+use App\Services\Sped\RegimesTributarios;
 use App\Services\Sped\Sped;
 
 class PlugnotasNFSe implements ISpedNFSe
@@ -26,7 +27,7 @@ class PlugnotasNFSe implements ISpedNFSe
             'razaoSocial' => $empresa->nome,
             'nomeFantasia' => $empresa->alias,
             'certificado' => $certificado,
-            'simplesNacional' => ($empresa->regime_tributario == Sped::REGIME_SIMPLES_NACIONAL),
+            'simplesNacional' => ($empresa->regime_tributario == RegimesTributarios::SIMPLES_NACIONAL),
             'regimeTributario' => $empresa->regime_tributario,
             //"incentivoFiscal": true,
             //"incentivadorCultural": true,

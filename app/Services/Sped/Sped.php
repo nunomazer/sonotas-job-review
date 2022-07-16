@@ -7,13 +7,6 @@ class Sped
     const DOCTYPE_NFSE = 'nfse';
     const DOCTYPE_NFE = 'nfe';
 
-    const REGIME_ISENTO = 0;
-    const REGIME_SIMPLES_NACIONAL = 1;
-    const REGIME_SIMPLES_NACIONAL_EXCESSO = 2;
-    const REGIME_LUCRO_PRESUMIDO = 3;
-    const REGIME_LUCRO_REAL = 4;
-    const REGIME_MEI = 5;
-
     const REGIME_ESPECIAL_NENHUM = 0;
     const REGIME_ESPECIAL_MICRO_EMPRESA_MUNICIPAL = 1;
     const REGIME_ESPECIAL_ESTIMATIVA = 2;
@@ -40,6 +33,7 @@ class Sped
 
         $this->driver = new $driverClass();
     }
+
 
     /**
      * @return string
