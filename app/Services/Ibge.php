@@ -8,11 +8,9 @@ class Ibge
 {
     public function importCNAE()
     {
-        $httpClient = new \GuzzleHttp\Client([
-            'base_uri' => 'https://servicodados.ibge.gov.br/api/v2/cnae/subclasses',
-        ]);
+        $file = file_get_contents(database_path('seeders/files/cnae_subclasses.json'));
 
-        $ibgeCnaes = json_decode($httpClient->request('GET')->getBody()->getContents(), true);
+        $ibgeCnaes = json_decode($file, true);
 
         Cnae::unguard();
         foreach ($ibgeCnaes as $ibgeCnae) {
