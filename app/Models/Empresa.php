@@ -10,6 +10,8 @@ class Empresa extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function certificado()
     {
         return $this->belongsTo(Certificado::class);
