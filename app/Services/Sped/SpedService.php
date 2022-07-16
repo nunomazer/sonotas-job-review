@@ -4,7 +4,7 @@ namespace App\Services\Sped;
 
 use App\Models\Empresa;
 
-class Sped
+class SpedService
 {
     const DOCTYPE_NFSE = 'nfse';
     const DOCTYPE_NFE = 'nfe';
