@@ -15,7 +15,9 @@ class IbgeSeeder extends Seeder
      */
     public function run()
     {
+        echo 'Seeding states and cities'. PHP_EOL;
         Artisan::call('ibge:import-states-cities');
+        echo 'Seeding CNAE'.PHP_EOL;
         Artisan::call('ibge:import-cnae');
     }
 }
