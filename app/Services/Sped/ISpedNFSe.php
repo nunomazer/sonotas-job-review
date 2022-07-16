@@ -7,6 +7,5 @@ use App\Models\Empresa;
 
 interface ISpedNFSe
 {
-
-
+    public function emitir();
 }

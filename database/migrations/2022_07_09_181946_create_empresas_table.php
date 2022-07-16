@@ -16,6 +16,8 @@ class CreateEmpresasTable extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
 
+            $table->boolean('ativo')->default(true);
+
             $table->bigInteger('owner_user_id')->unsigned();
             $table->foreign('owner_user_id')->references('id')->on('users');
 
@@ -45,6 +47,7 @@ class CreateEmpresasTable extends Migration
 
             $table->unsignedBigInteger('certificado_id')->nullable();
             $table->foreign('certificado_id')->references('id')->on('certificados');
+
 
             $table->timestamps();
             $table->softDeletes();

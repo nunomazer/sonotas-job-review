@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Empresa;
+use App\Models\EmpresaNFSConfig;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\Sped\Sped;
@@ -47,7 +48,6 @@ class TesteSeeder extends Seeder
 
         if (!$empresa) $empresa = new Empresa();
 
-        $empresa = new Empresa();
         $empresa->owner_user_id = $user->id;
         $empresa->documento = $documento;
         $empresa->nome = 'Winponta';
@@ -66,5 +66,27 @@ class TesteSeeder extends Seeder
         $empresa->telefone_ddd = '42';
         $empresa->email = 'ademir.mazer.jr@gmail.com';
         $empresa->save();
+
+        $nfseConf = EmpresaNFSConfig::where('empresa_id', $empresa->id)->first();
+
+        if (!$nfseConf) $nfseConf = new EmpresaNFSConfig();
+
+        $nfseConf->empresa_id = $empresa->id;
+        $nfseConf->cnae_codigo = '6202300';
+        $nfseConf->cofins = 0;
+        $nfseConf->csll = 0;
+        $nfseConf->inss = 0;
+        $nfseConf->ir = 0;
+        $nfseConf->pis = 0;
+        $nfseConf->iss = 4;
+
+        $nfseConf->iss_retifo_fonte = false;
+
+        $nfseConf->servico_codigo = '08.02';
+
+        $nfseConf->tributos = 6;
+
+        $nfseConf->enviar_nota_email_cliente = true;
+        $nfseConf->save();
     }
 }
