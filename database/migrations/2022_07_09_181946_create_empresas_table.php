@@ -48,7 +48,6 @@ class CreateEmpresasTable extends Migration
             $table->unsignedBigInteger('certificado_id')->nullable();
             $table->foreign('certificado_id')->references('id')->on('certificados');
 
-
             $table->timestamps();
             $table->softDeletes();
         });
