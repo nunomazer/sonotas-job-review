@@ -4,16 +4,20 @@ namespace App\Services\Sped\Drivers\Plugnotas;
 
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\RegimesTributarios;
-use App\Services\Sped\Sped;
 
-class PlugnotasEmpresa implements ISpedEmpresa
+class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 {
     use PlugnotasTrait;
 
-    public function toArray(Empresa $empresa) : array
+
+
+    public function toArray() : array
     {
+        $empresa = $this->empresa;
+
         $certificado = '5ecc441a4ea3b318cec7f999';
         if (config('sped.drivers.plugnotas.producao')) {
             $certificado = $empresa->certificado ? $empresa->certificado->sped_id : null;
@@ -72,11 +76,11 @@ class PlugnotasEmpresa implements ISpedEmpresa
         ];
     }
 
-    public function cadastrar(Empresa $empresa): string
+    public function cadastrar(): string
     {
         try {
             $result = $this->httpClient()->request('POST', 'empresa', [
-                'json' => $this->toArray($empresa)
+                'json' => $this->toArray()
             ]);
         } catch (\Exception $exception) {
             dd($exception->getCode());
@@ -84,11 +88,11 @@ class PlugnotasEmpresa implements ISpedEmpresa
         dd($result->getBody()->getContents());
     }
 
-    public function alterar(Empresa $empresa): string
+    public function alterar(): string
     {
         try {
-            $result = $this->httpClient()->request('PATCH', 'empresa/'.$empresa->documento, [
-                'json' => $this->toArray($empresa)
+            $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
+                'json' => $this->toArray()
             ]);
         } catch (\Exception $exception) {
             dd($exception->getCode());

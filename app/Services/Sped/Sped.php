@@ -2,6 +2,8 @@
 
 namespace App\Services\Sped;
 
+use App\Models\Empresa;
+
 class Sped
 {
     const DOCTYPE_NFSE = 'nfse';
@@ -40,7 +42,7 @@ class Sped
         return $this->driver->certificado();
     }
 
-    public function empresa() : ISpedEmpresa
+    public function empresa(Empresa $empresa) : ISpedEmpresa
     {
         return $this->driver->empresa();
     }

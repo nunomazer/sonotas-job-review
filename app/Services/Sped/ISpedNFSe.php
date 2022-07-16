@@ -2,10 +2,10 @@
 
 namespace App\Services\Sped;
 
-use App\Models\Cliente;
-use App\Models\Empresa;
+use App\Models\NFSe;
 
 interface ISpedNFSe
 {
-    public function emitir();
+    public function toArray() : array;
+    public function emitir(NFSe $NFSe);
 }

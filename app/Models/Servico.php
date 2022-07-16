@@ -12,4 +12,12 @@ class Servico extends Model
 {
     use HasFactory;
 
+    /**
+     * Retorna relacionamento com Tipo de serviço, LC116
+     * @return void
+     */
+    public function tipo()
+    {
+        return $this->belongsTo(TipoServico::class);
+    }
 }
