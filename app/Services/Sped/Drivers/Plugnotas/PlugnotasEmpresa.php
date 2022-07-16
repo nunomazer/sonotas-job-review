@@ -11,7 +11,7 @@ class PlugnotasEmpresa implements ISpedEmpresa
 {
     use PlugnotasTrait;
 
-    protected function montaArrayCadastro(Empresa $empresa) : array
+    public function toArray(Empresa $empresa) : array
     {
         $certificado = '5ecc441a4ea3b318cec7f999';
         if (config('sped.drivers.plugnotas.producao')) {
@@ -75,7 +75,7 @@ class PlugnotasEmpresa implements ISpedEmpresa
     {
         try {
             $result = $this->httpClient()->request('POST', 'empresa', [
-                'json' => $this->montaArrayCadastro($empresa)
+                'json' => $this->toArray($empresa)
             ]);
         } catch (\Exception $exception) {
             dd($exception->getCode());
@@ -87,7 +87,7 @@ class PlugnotasEmpresa implements ISpedEmpresa
     {
         try {
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$empresa->documento, [
-                'json' => $this->montaArrayCadastro($empresa)
+                'json' => $this->toArray($empresa)
             ]);
         } catch (\Exception $exception) {
             dd($exception->getCode());

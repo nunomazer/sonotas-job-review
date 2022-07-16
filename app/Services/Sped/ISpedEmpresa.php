@@ -23,4 +23,12 @@ interface ISpedEmpresa
      * @return string
      */
     public function alterar(Empresa $empresa): string;
+
+    /**
+     * Monta o array para enviar a cadastros ou envio da NF, de acordo com o driver correto
+     *
+     * @param Empresa $empresa
+     * @return array
+     */
+    public function toArray(Empresa $empresa) : array;
 }
