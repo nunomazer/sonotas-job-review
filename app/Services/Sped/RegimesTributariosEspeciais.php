@@ -2,7 +2,7 @@
 
 namespace App\Services\Sped;
 
-class RegimesTributarios
+class RegimesTributariosEspeciais
 {
     const NENHUM = 0;
     const MICRO_EMPRESA_MUNICIPAL = 1;
