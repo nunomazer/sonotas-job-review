@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Ibge;
+use App\Services\IbgeService;
 use Illuminate\Console\Command;
 
 class IbgeImportCnae extends Command
@@ -39,7 +39,7 @@ class IbgeImportCnae extends Command
     public function handle()
     {
         $this->info('Importing CNAE...');
-        (new Ibge())->importCnae();
+        (new IbgeService())->importCnae();
         $this->info('Importing CNAE... done!');
     }
 }
