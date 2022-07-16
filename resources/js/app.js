@@ -5,7 +5,6 @@
  */
 
 require('./bootstrap');
-require('@tabler/core');
 
 window.Vue = require('vue').default;
 
