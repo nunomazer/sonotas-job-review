@@ -22,6 +22,7 @@ class CreateNotasServicoTable extends Migration
             $table->unsignedBigInteger('servico_id');
             $table->foreign('servico_id')->references('id')->on('servicos');
 
+            $table->decimal('qtde', 20,2)->default(1);
             $table->decimal('valor', 20,2);
 
             $table->timestamps();
