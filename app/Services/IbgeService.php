@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Cnae;
 
-class Ibge
+class IbgeService
 {
     public function importCNAE()
     {
