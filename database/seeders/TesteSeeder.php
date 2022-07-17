@@ -2,11 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\EmpresaNFSConfig;
 use App\Models\Role;
+use App\Models\Servico;
 use App\Models\User;
-use App\Services\Sped\Sped;
+use App\Services\Sped\RegimesTributarios;
+use App\Services\Sped\RegimesTributariosEspeciais;
+use App\Services\Sped\SpedService;
+use Faker\Factory;
+use Faker\Provider\pt_BR\Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
@@ -43,6 +49,9 @@ class TesteSeeder extends Seeder
 
     public function empresaWP($user)
     {
+        /**
+         * Empresa
+         */
         $documento = '01713414000120';
         $empresa = Empresa::where('documento', $documento)->first();
 
@@ -54,8 +63,8 @@ class TesteSeeder extends Seeder
         $empresa->inscricao_municipal = '9292929';
         $empresa->inscricao_estadual = '922222777';
 //                'certificado' => $empresa->certificado->sped_id,
-        $empresa->regime_tributario = Sped::REGIME_LUCRO_PRESUMIDO;
-        $empresa->regime_tributario_especial = Sped::REGIME_ESPECIAL_NENHUM;
+        $empresa->regime_tributario = RegimesTributarios::LUCRO_PRESUMIDO;
+        $empresa->regime_tributario_especial = RegimesTributariosEspeciais::NENHUM;
         $empresa->bairro = 'Uvaranas';
         $empresa->cep = '84031120';
         $empresa->city_id = 3062;
@@ -67,6 +76,57 @@ class TesteSeeder extends Seeder
         $empresa->email = 'ademir.mazer.jr@gmail.com';
         $empresa->save();
 
+        /**
+         * Cliente
+         */
+        $documentoCliente = '62680927000177';
+        $cliente = Cliente::where('documento', $documentoCliente)->first();
+
+        if (!$cliente) $cliente = new Cliente();
+
+        $cliente->empresa_id = $empresa->id;
+        $cliente->documento = $documentoCliente;
+        $cliente->nome = Factory::create('pt_BR')->name;
+        //$cliente->inscricao_municipal = '9292929';
+        //$cliente->inscricao_estadual = '922222777';
+//                'certificado' => $cliente->certificado->sped_id,
+        $cliente->bairro = 'Uvaranas';
+        $cliente->cep = '84031120';
+        $cliente->city_id = 3062;
+        $cliente->logradouro = 'Januário de Napoli';
+        $cliente->numero = 18;
+        $cliente->tipo_logradouro = 'Rua';
+        $cliente->telefone_num = '991355005';
+        $cliente->telefone_ddd = '42';
+        $cliente->email = 'ademir.mazer.jr@gmail.com';
+        $cliente->save();
+
+        /**
+         * SERVICOS
+         */
+        $servico = Servico::where('empresa_id', $empresa->id)
+            ->where('nome', 'Consultoria em software')->first();
+
+        if (!$servico) $servico = new Servico();
+
+        $servico->empresa_id = $empresa->id;
+        $servico->tipo_servico_codigo = '01.06';
+        $servico->nome = 'Consultoria em software';
+        $servico->valor = 150;
+        $servico->descricao = 'Horas de consultoria em projetos de software';
+        $servico->cofins = 0;
+        $servico->csll = 0;
+        $servico->inss = 0;
+        $servico->ir = 0;
+        $servico->pis = 0;
+        $servico->iss = 4;
+        $servico->iss_retido_fonte = false;
+        $servico->enviar_nota_email_cliente = true;
+        $servico->save();
+
+        /**
+         * NFSE Config da Empresa
+         */
         $nfseConf = EmpresaNFSConfig::where('empresa_id', $empresa->id)->first();
 
         if (!$nfseConf) $nfseConf = new EmpresaNFSConfig();
@@ -82,11 +142,13 @@ class TesteSeeder extends Seeder
 
         $nfseConf->iss_retifo_fonte = false;
 
-        $nfseConf->servico_codigo = '08.02';
+        $nfseConf->tipo_servico_codigo = '08.02';
 
         $nfseConf->tributos = 6;
 
         $nfseConf->enviar_nota_email_cliente = true;
         $nfseConf->save();
+
+
     }
 }
