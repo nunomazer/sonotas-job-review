@@ -11,6 +11,10 @@ use App\Services\Sped\ISpedNFSe;
 
 class PlugnotasDriver implements ISpedDriver
 {
+    public function nome(): string
+    {
+        return 'plugnotas';
+    }
 
     public function certificado(): ISpedCertificado
     {
@@ -26,4 +30,5 @@ class PlugnotasDriver implements ISpedDriver
     {
         return new PlugnotasNFSe($nfse);
     }
+
 }
