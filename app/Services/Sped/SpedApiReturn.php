@@ -6,7 +6,22 @@ class SpedApiReturn
 {
     public $code;
     public $message;
+
     public bool $error = false;
+
+    /**
+     * Dados de retorno da api, para erros 400 (validação de dados) deve existir um campo 'fields' identificando o erro
+     * de cada campo enviado com validação errada, no formato:<br/>
+     * <pre>
+     * "data": [
+     *    "fields": [
+     *       "nome-do-campo": "descrição do erro de validação"
+     *    ]
+     * ]
+     * </pre>
+     *
+     * @var array $data
+     */
     public array $data = [];
 
     /**
