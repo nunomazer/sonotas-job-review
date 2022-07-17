@@ -8,6 +8,7 @@ use App\Models\NFSeItemServico;
 use App\Models\Servico;
 use App\Services\NFSeService;
 use App\Services\Sped\SpedService;
+use App\Services\Sped\Status;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -91,6 +92,7 @@ class TesteServices extends Command
 
         DB::beginTransaction();
         $nfse = new NFSe();
+        $nfse->status = Status::PENDENTE;
         $nfse->empresa_id = $empresa->id;
         $nfse->emitido_em = now();
         $nfse->cliente_id = $cliente->id;
@@ -107,6 +109,6 @@ class TesteServices extends Command
         DB::commit();
 
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, 'sao_paulo');
-        dd($sped->nfse($nfse)->emitir());
+        dd($sped->nfseDriver($nfse)->emitir());
     }
 }
