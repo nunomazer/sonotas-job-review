@@ -21,4 +21,9 @@ class Empresa extends Model
     {
         return $this->belongsTo(Cidade::class, 'city_id', 'id', 'city');
     }
+
+    public function clientes()
+    {
+        return $this->hasMany(Cliente::class);
+    }
 }
