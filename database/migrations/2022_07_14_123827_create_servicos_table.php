@@ -36,7 +36,7 @@ class CreateServicosTable extends Migration
             $table->decimal('pis', 5,2);
             $table->decimal('iss', 5,2);
 
-            $table->boolean('iss_retifo_fonte');
+            $table->boolean('iss_retido_fonte');
 
             $table->string('municipio_servico_codigo')->nullable();
             $table->string('municipio_servico_descricao')->nullable();
