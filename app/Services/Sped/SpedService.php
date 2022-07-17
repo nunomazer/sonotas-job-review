@@ -3,6 +3,7 @@
 namespace App\Services\Sped;
 
 use App\Models\Empresa;
+use App\Models\NFSe;
 
 class SpedService
 {
@@ -53,8 +54,14 @@ class SpedService
         return $this->driver->empresaDriver($empresa);
     }
 
-    public function nfse() : ISpedNFSe
+    /**
+     * Retorna o objeto concreto do driver Sped correto para trabalhar com NFSe e a API Sped
+     *
+     * @param NFSe $nfse
+     * @return ISpedNFSe
+     */
+    public function nfse(NFSe $nfse) : ISpedNFSe
     {
-        return $this->driver->nfse();
+        return $this->driver->nfseDriver($nfse);
     }
 }

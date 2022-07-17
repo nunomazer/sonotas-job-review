@@ -18,6 +18,8 @@ class NFSeService
     {
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->empresa->cidade->name);
         $driverNFSe = $sped->nfse($nfse);
-        $driverNFSe->emitir();
+        $result = $driverNFSe->emitir();
+
+
     }
 }

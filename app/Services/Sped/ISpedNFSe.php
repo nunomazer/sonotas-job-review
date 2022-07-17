@@ -8,5 +8,5 @@ interface ISpedNFSe
 {
     public function __construct(NFSe $nfse);
     public function toArray() : array;
-    public function emitir();
+    public function emitir() : SpedApiReturn;
 }

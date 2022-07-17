@@ -3,6 +3,7 @@
 namespace App\Services\Sped\Drivers\Plugnotas;
 
 use App\Models\Empresa;
+use App\Models\NFSe;
 use App\Services\Sped\ISpedCertificado;
 use App\Services\Sped\ISpedDriver;
 use App\Services\Sped\ISpedEmpresa;
@@ -21,8 +22,8 @@ class PlugnotasDriver implements ISpedDriver
         return new PlugnotasEmpresa($empresa);
     }
 
-    public function nfse(): ISpedNFSe
+    public function nfseDriver(NFSe $nfse): ISpedNFSe
     {
-        return new PlugnotasNFSe();
+        return new PlugnotasNFSe($nfse);
     }
 }

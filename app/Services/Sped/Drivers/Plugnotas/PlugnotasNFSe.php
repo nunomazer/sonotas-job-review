@@ -4,7 +4,9 @@ namespace App\Services\Sped\Drivers\Plugnotas;
 
 use App\Models\NFSe;
 use App\Services\Sped\ISpedNFSe;
+use App\Services\Sped\SpedApiReturn;
 use App\Services\Sped\SpedNFSe;
+use Illuminate\Support\Facades\Log;
 
 class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 {
@@ -17,7 +19,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
         foreach ($this->nfse->itens_servico as $item) {
             $servicos[] = [
                 "idIntegracao" => $item->servico->id,
-                "codigo" => $item->servico->tipo->codigo,
+                "codigo" => $item->servico->tipo_servico_codigo,
                 //"codigoTributacao": "14.10",
                 "discriminacao" => $item->servico->nome . "|" . $item->servico->descricao,
                 //"cnae": "7490104",
@@ -68,15 +70,21 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
         ];
     }
 
-    public function emitir(NFSe $NFSe)
+    public function emitir() : SpedApiReturn
     {
         try {
             $result = $this->httpClient()->request('POST', 'nfse', [
-                'json' => $this->toArray()
+                'json' => [
+                    $this->toArray()
+                ],
             ]);
+
+            return $this->toApiReturn($result);
+
         } catch (\Exception $exception) {
-            dd($exception->getCode());
+            Log::error('Erro ao chamar Plugnotas Emmitir NFSe');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
         }
-        dd($result->getBody()->getContents());
     }
 }

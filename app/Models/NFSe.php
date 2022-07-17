@@ -11,6 +11,10 @@ class NFSe extends Model
 
     protected $table = 'notas_servico';
 
+    protected $casts = [
+        'emitido_em',
+    ];
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
@@ -23,7 +27,7 @@ class NFSe extends Model
 
     public function itens_servico()
     {
-        return $this->hasMany(NFSeItemServico::class);
+        return $this->hasMany(NFSeItemServico::class, 'nota_servico_id');
     }
 
     public function tipo_servico()

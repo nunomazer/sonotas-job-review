@@ -9,6 +9,7 @@ use App\Models\Servico;
 use App\Services\NFSeService;
 use App\Services\Sped\SpedService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class TesteServices extends Command
 {
@@ -46,6 +47,7 @@ class TesteServices extends Command
         $service = $this->anticipate('Escolha o serviço',[
                 'spedEmpresaCadastrar',
                 'spedEmpresaAlterar',
+                'spedNfseEmitir',
             ]);
 
         $this->$service();
@@ -80,5 +82,31 @@ class TesteServices extends Command
         $nfse->valor = $nfse->quantidade * Servico::first()->valor;
 
         dd((new NFSeService())->create($nfse));
+    }
+
+    public function spedNfseEmitir()
+    {
+        $empresa = Empresa::first();
+        $cliente = $empresa->clientes->first();
+
+        DB::beginTransaction();
+        $nfse = new NFSe();
+        $nfse->empresa_id = $empresa->id;
+        $nfse->emitido_em = now();
+        $nfse->cliente_id = $cliente->id;
+        $nfse->valor = Servico::first()->valor;
+        $nfse->save();
+
+        $itemServico = new NFSeItemServico();
+        $itemServico->servico_id = Servico::first()->id;
+        $itemServico->qtde = 1;
+        $itemServico->valor = $itemServico->qtde * Servico::first()->valor;
+
+        $nfse->itens_servico()->save($itemServico);
+
+        DB::commit();
+
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, 'sao_paulo');
+        dd($sped->nfse($nfse)->emitir());
     }
 }

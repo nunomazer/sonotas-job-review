@@ -18,6 +18,6 @@ class Servico extends Model
      */
     public function tipo()
     {
-        return $this->belongsTo(TipoServico::class);
+        return $this->belongsTo(TipoServico::class, 'tipo_servico_codigo');
     }
 }
