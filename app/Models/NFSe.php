@@ -12,7 +12,8 @@ class NFSe extends Model
     protected $table = 'notas_servico';
 
     protected $casts = [
-        'emitido_em',
+        'emitido_em' => 'datetime',
+        'status_historico' => 'json',
     ];
 
     public function empresa()
