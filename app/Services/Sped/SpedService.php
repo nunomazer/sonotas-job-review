@@ -33,7 +33,7 @@ class SpedService
     /**
      * @return string
      */
-    public function getDriver(): ISpedDriver
+    public function driver(): ISpedDriver
     {
         return $this->driver;
     }
@@ -60,7 +60,7 @@ class SpedService
      * @param NFSe $nfse
      * @return ISpedNFSe
      */
-    public function nfse(NFSe $nfse) : ISpedNFSe
+    public function nfseDriver(NFSe $nfse) : ISpedNFSe
     {
         return $this->driver->nfseDriver($nfse);
     }
