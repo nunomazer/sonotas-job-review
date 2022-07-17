@@ -16,7 +16,7 @@ interface ISpedEmpresa
      * @param Empresa $empresa
      * @return string
      */
-    public function cadastrar(): string;
+    public function cadastrar(): SpedApiReturn;
 
     /**
      * Alterar uma empresa (Nosso cliente) no sistema emissor.
@@ -24,7 +24,7 @@ interface ISpedEmpresa
      * @param Empresa $empresa
      * @return string
      */
-    public function alterar(): string;
+    public function alterar(): SpedApiReturn;
 
     /**
      * Monta o array para enviar a cadastros ou envio da NF, de acordo com o driver correto

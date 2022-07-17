@@ -4,6 +4,7 @@ namespace App\Services\Sped\Drivers\Plugnotas;
 
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Services\Sped\SpedApiReturn;
 use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\RegimesTributarios;
@@ -75,7 +76,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
         ];
     }
 
-    public function cadastrar(): string
+    public function cadastrar(): SpedApiReturn
     {
         try {
             $result = $this->httpClient()->request('POST', 'empresa', [
@@ -91,7 +92,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
         }
     }
 
-    public function alterar(): string
+    public function alterar(): SpedApiReturn
     {
         try {
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [

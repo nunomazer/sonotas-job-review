@@ -62,11 +62,11 @@ trait PlugnotasTrait
 
         $apiReturn->message = $content['message'];
 
-        $apiReturn->data = isset($result['data']) ? $result['data'] : [];
+        $apiReturn->data = isset($content['data']) ? $content['data'] : [];
 
-        $apiReturn->protocol = isset($result['protocol']) ? $result['protocol'] : null;
+        $apiReturn->protocol = isset($content['protocol']) ? $content['protocol'] : null;
 
-        $objs = isset($result['documents']) ? $result['documents'] : [];
+        $objs = isset($content['documents']) ? $content['documents'] : [];
         foreach ($objs as $obj) {
             $apiReturn->objects[] = [
                 'idSoNotas' => $obj['idIntegracao'],

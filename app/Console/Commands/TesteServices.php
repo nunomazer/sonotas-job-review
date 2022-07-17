@@ -3,7 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Empresa;
-use App\Services\Sped\Sped;
+use App\Models\NFSe;
+use App\Models\NFSeItemServico;
+use App\Models\Servico;
+use App\Services\NFSeService;
+use App\Services\Sped\SpedService;
 use Illuminate\Console\Command;
 
 class TesteServices extends Command
@@ -49,18 +53,32 @@ class TesteServices extends Command
 
     public function spedEmpresaCadastrar()
     {
-        $sped = new Sped(Sped::DOCTYPE_NFSE, 'sao_paulo');
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, 'sao_paulo');
 
         $empresa = Empresa::where('documento', '01713414000120')->first();
-        $sped->empresa()->cadastrar($empresa);
+        dd($sped->empresaDriver($empresa)->cadastrar());
     }
 
     public function spedEmpresaAlterar()
     {
-        $sped = new Sped(Sped::DOCTYPE_NFSE, 'sao_paulo');
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, 'sao_paulo');
 
         $empresa = Empresa::where('documento', '01713414000120')->first();
         $empresa->nome = 'Winponta ' . rand(1,10000);
-        $sped->empresa()->alterar($empresa);
+        dd($sped->empresaDriver($empresa)->alterar());
+    }
+
+    public function nfseCriar()
+    {
+        $itemServico = new NFSeItemServico();
+        $itemServico->servico_id = Servico::first()->id;
+
+        $nfse = new NFSe();
+        $nfse->empresa_id = Empresa::first()->id;
+        $nfse->itens_servico()->save($itemServico);
+        $nfse->quantidade = 1;
+        $nfse->valor = $nfse->quantidade * Servico::first()->valor;
+
+        dd((new NFSeService())->create($nfse));
     }
 }
