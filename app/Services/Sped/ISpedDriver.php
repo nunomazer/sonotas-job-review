@@ -7,6 +7,14 @@ use App\Models\NFSe;
 
 interface ISpedDriver
 {
+    /**
+     * Retorna o nome do driver, ele é usado para instanciar o driver quando necessário e também para gravar esta informação
+     * junto ao registro do documento fiscal
+     *
+     * @return string
+     */
+    public function nome() : string;
+
     //public function getDriver(): ISpedDriver;
     public function certificado() : ISpedCertificado;
 
