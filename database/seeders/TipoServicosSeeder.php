@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\Servico;
+use App\Models\TipoServico;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -20,7 +21,7 @@ class TipoServicosSeeder extends Seeder
         $servicosBase = json_decode($file, true);
 
         foreach ($servicosBase as $s) {
-            Servico::updateOrCreate([
+            TipoServico::updateOrCreate([
                 'codigo' => $s['codigo'],
             ], [
                 'descricao' => $s['descricao'],
