@@ -43,5 +43,5 @@ class SpedApiReturn
      * </ul>
      * @var array $objects
      */
-    public $objects;
+    public $objects = [];
 }

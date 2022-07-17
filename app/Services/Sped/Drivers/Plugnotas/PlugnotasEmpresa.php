@@ -7,12 +7,11 @@ use App\Models\Empresa;
 use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\RegimesTributarios;
+use Illuminate\Support\Facades\Log;
 
 class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 {
     use PlugnotasTrait;
-
-
 
     public function toArray() : array
     {
@@ -82,10 +81,14 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             $result = $this->httpClient()->request('POST', 'empresa', [
                 'json' => $this->toArray()
             ]);
+
+            return $this->toApiReturn($result);
+
         } catch (\Exception $exception) {
-            dd($exception->getCode());
+            Log::error('Erro ao chamar Plugnotas Cadastrar Empresa');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
         }
-        dd($result->getBody()->getContents());
     }
 
     public function alterar(): string
@@ -94,10 +97,14 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
                 'json' => $this->toArray()
             ]);
+
+            return $this->toApiReturn($result);
+
         } catch (\Exception $exception) {
-            dd($exception->getCode());
+            Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
         }
-        dd($result->getBody()->getContents());
     }
 
 }
