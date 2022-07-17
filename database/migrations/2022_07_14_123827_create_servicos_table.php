@@ -19,7 +19,7 @@ class CreateServicosTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
 
-            $table->unsignedBigInteger('tipo_servico_codigo');
+            $table->string('tipo_servico_codigo');
             $table->foreign('tipo_servico_codigo')->references('codigo')->on('tipo_servicos');
 
             $table->boolean('ativo')->default(true);
