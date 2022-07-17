@@ -18,6 +18,8 @@ class CreateNotasServicoTable extends Migration
 
             $table->string('driver')->nullable();
             $table->string('driver_id')->nullable()->comment('Identificação ou protocolo de retorno do driver');
+            $table->string('status')->index()->comment('Status do fluxo pendente/enviado/processamento/erro/gerado');
+            $table->jsonb('status_dados')->nullable()->comment('Alguns status definem uma descrição, mensagem, dados extras, podem ser o erro ou retorno satisfatório com meta dados do retorno');
 
             $table->dateTime('emitido_em');
 
