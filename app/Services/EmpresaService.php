@@ -46,7 +46,7 @@ class EmpresaService
     public function cadastrarSped(Empresa $empresa)
     {
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
-        $driverNFSe = $sped->empresa($empresa);
+        $driverNFSe = $sped->empresaDriver($empresa);
         $driverNFSe->cadastrar();
     }
 
@@ -59,7 +59,7 @@ class EmpresaService
     public function alterarSped(Empresa $empresa)
     {
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
-        $driverNFSe = $sped->empresa($empresa);
+        $driverNFSe = $sped->empresaDriver($empresa);
         $driverNFSe->alterar();
     }
 }

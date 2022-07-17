@@ -42,9 +42,15 @@ class SpedService
         return $this->driver->certificado();
     }
 
-    public function empresa(Empresa $empresa) : ISpedEmpresa
+    /**
+     * Retorna o objeto concreto do driver Sped correto para trabalhar com empresa e a API Sped
+     *
+     * @param Empresa $empresa model eloquent da Empresa
+     * @return ISpedEmpresa
+     */
+    public function empresaDriver(Empresa $empresa) : ISpedEmpresa
     {
-        return $this->driver->empresa();
+        return $this->driver->empresaDriver($empresa);
     }
 
     public function nfse() : ISpedNFSe

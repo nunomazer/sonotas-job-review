@@ -2,6 +2,7 @@
 
 namespace App\Services\Sped\Drivers\Plugnotas;
 
+use App\Models\Empresa;
 use App\Services\Sped\ISpedCertificado;
 use App\Services\Sped\ISpedDriver;
 use App\Services\Sped\ISpedEmpresa;
@@ -15,9 +16,9 @@ class PlugnotasDriver implements ISpedDriver
         return new PlugnotasCertificado();
     }
 
-    public function empresa(): ISpedEmpresa
+    public function empresaDriver(Empresa $empresa): ISpedEmpresa
     {
-        return new PlugnotasEmpresa();
+        return new PlugnotasEmpresa($empresa);
     }
 
     public function nfse(): ISpedNFSe
