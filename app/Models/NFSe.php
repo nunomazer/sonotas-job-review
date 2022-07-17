@@ -23,7 +23,7 @@ class NFSe extends Model
 
     public function itens_servico()
     {
-        return $this->hasMany(NFSeServico::class);
+        return $this->hasMany(NFSeItemServico::class);
     }
 
     public function tipo_servico()

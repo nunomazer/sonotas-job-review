@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Model pivot de ligação de Notas de Serviço com Serviço
  */
-class NFSeServico extends Model
+class NFSeItemServico extends Model
 {
     use HasFactory;
 
