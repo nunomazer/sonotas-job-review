@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\ClienteAlteradoEvent;
+use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
@@ -21,6 +23,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        ClienteCriadoEvent::class => [
+
+        ],
+
+        ClienteAlteradoEvent::class => [
+
         ],
 
         EmpresaCriadaEvent::class => [
