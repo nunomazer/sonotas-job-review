@@ -157,11 +157,11 @@ class TesteSeeder extends Seeder
 
     public function empresaWPIntegraEduzz($empresa)
     {
-        $eduzzDriver = (new IntegraService())->driver('eduzz');
+        $eduzzDriver = (new IntegraService())->driver('eduzz', []);
 
         $fields = [
-            'public_key' => env('MAZER_EDUZZ_PUBLIC_KEY'),
-            'api_key' => env('MAZER_EDUZZ_API_KEY'),
+            'publickey' => env('MAZER_EDUZZ_PUBLIC_KEY'),
+            'apikey' => env('MAZER_EDUZZ_API_KEY'),
             'email' => env('MAZER_EDUZZ_EMAIL'),
         ];
 
