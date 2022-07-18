@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Empresa;
+use App\Models\Integracao;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
 use App\Models\Servico;
@@ -52,6 +53,8 @@ class TesteServices extends Command
                 'spedNfseEmitir',
                 'nfseServiceCriar',
                 'integraPlatformsList',
+                'integraEduzzAuth',
+                'integraEduzzGetServicos',
             ]);
 
         $this->$service();
@@ -143,9 +146,17 @@ class TesteServices extends Command
 
     public function integraPlatformsList()
     {
-        foreach ((new IntegraService())->platforms() as $p) {
+        foreach ((new IntegraService())->platformsDriverClasses() as $p) {
             echo $p::$name . PHP_EOL;
             dump($p::$fields);
         }
+    }
+
+    public function integraEduzzGetServicos()
+    {
+        $empresaIntegracao = Integracao::first();
+
+        $integracao = (new IntegraService())->driver('eduzz', $empresaIntegracao->fields);
+        dd($integracao->getServicos());
     }
 }
