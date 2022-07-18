@@ -120,7 +120,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'query' => $query,
         ]);
 
-        $result = json_decode($result->getBody()->getContents());
+        $result = json_decode($result->getBody()->getContents(), true);
 
         return $result;
     }
