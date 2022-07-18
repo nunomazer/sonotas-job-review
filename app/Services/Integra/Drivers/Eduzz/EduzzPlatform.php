@@ -41,8 +41,8 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         return [
             'email' => $this->config['email'],
-            'public_key' => $this->config['public_key'],
-            'api_key' => $this->config['api_key'],
+            'publickey' => $this->config['publickey'],
+            'apikey' => $this->config['apikey'],
         ];
     }
 
