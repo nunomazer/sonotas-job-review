@@ -8,14 +8,20 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NFSeCriadaEvent
+/**
+ * Evento disparado quando uma nova nota fiscal de serviços é criada no banco de dados, a princípio quem dispara este
+ * evento é o NFSe service, pois não deveríamos ter nenhuma nota criada no banco fora da lógica do service
+ */
+class NFSeCriadaEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public NFSe $nfse;
+
     /**
      * Create a new event instance.
      *

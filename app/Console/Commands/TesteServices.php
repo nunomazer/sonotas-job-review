@@ -49,6 +49,7 @@ class TesteServices extends Command
                 'spedEmpresaCadastrar',
                 'spedEmpresaAlterar',
                 'spedNfseEmitir',
+                'nfseServiceCriar',
             ]);
 
         $this->$service();
@@ -110,5 +111,31 @@ class TesteServices extends Command
 
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, 'sao_paulo');
         dd($sped->nfseDriver($nfse)->emitir());
+    }
+
+    public function nfseServiceCriar()
+    {
+        $empresa = Empresa::first();
+        $cliente = $empresa->clientes->first();
+
+        $nfse = new NFSe();
+        $nfse->status = Status::PENDENTE;
+        $nfse->empresa_id = $empresa->id;
+        $nfse->emitido_em = now();
+        $nfse->cliente_id = $cliente->id;
+        $nfse->valor = Servico::first()->valor;
+
+        $itemServico = new NFSeItemServico();
+        $itemServico->servico_id = Servico::first()->id;
+        $itemServico->qtde = 1;
+        $itemServico->valor = $itemServico->qtde * Servico::first()->valor;
+
+        $result = (new NFSeService())->create($nfse->toArray(), [$itemServico]);
+
+        if ($result) {
+            dd($result);
+        }
+
+        $this->error('Verifique o log pois um erro ocorreu');
     }
 }

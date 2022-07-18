@@ -44,4 +44,9 @@ class SpedApiReturn
      * @var array $objects
      */
     public $objects = [];
+
+    public function toArray()
+    {
+        return (array)$this;
+    }
 }
