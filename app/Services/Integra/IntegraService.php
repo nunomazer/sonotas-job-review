@@ -3,6 +3,7 @@
 namespace App\Services\Integra;
 
 use App\Services\Integra\Drivers\Eduzz\EduzzPlatform;
+use Illuminate\Support\Str;
 
 class IntegraService
 {
@@ -25,7 +26,7 @@ class IntegraService
     public function driver(string $platform) : Platform
     {
         foreach ($this->platforms as $p) {
-            if ($p::$name == $platform) return new $p();
+            if (Str::lower($p::$name) == Str::lower($platform)) return new $p();
         }
 
         throw new \Exception("Plataforma de integração {$p} não encontrada");
