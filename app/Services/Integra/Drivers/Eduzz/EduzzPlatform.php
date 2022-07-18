@@ -100,7 +100,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     public function httpClient(): Client
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => config('sped.drivers.plugnotas.base_url'),
+            'base_uri' => config('integra.drivers.eduzz.base_url'),
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
