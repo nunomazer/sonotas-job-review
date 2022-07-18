@@ -157,10 +157,24 @@ class TesteSeeder extends Seeder
 
     public function empresaWPIntegraEduzz($empresa)
     {
-        $eduzzDriver = (new IntegraService())->platforms()[0]::$name;
+        $eduzzDriver = (new IntegraService())->driver('eduzz');
+
+        $fields = [
+            'public_key' => env('MAZER_EDUZZ_PUBLIC_KEY'),
+            'api_key' => env('MAZER_EDUZZ_API_KEY'),
+            'email' => env('MAZER_EDUZZ_EMAIL'),
+        ];
+
         $integracao = new Integracao();
         $integracao->empresa_id = $empresa->id;
         $integracao->name = 'Integração com Eduzz';
-        $integracao->platform =
+        $integracao->fields = $fields;
+        $integracao->platform = $eduzzDriver->name();
+        $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
+        $integracao->data_inicio = now();
+        $integracao->transmissao_automatica = false;
+        $integracao->transmissao_periodo = '1H';
+        $integracao->transmissao_apenas_dias_uteis = false;
+        $integracao->save();
     }
 }
