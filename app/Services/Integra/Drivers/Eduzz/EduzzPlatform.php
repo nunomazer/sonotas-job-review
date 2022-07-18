@@ -2,12 +2,13 @@
 
 namespace App\Services\Integra\Drivers\Eduzz;
 
-use App\Services\Integra\PlatformSetting;
+use App\Services\Integra\PlatformAbstract;
 
-class EduzzPlatform extends PlatformSetting
+class EduzzPlatform extends PlatformAbstract
 {
-    protected $name = 'Eduzz';
-    protected array $fields = [
+    public static $name = 'Eduzz';
+
+    public static array $fields = [
         [
             'name' => 'public_key',
             'label' => 'Public Key',

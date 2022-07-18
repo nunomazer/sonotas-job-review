@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
 use App\Models\Servico;
+use App\Services\Integra\IntegraService;
 use App\Services\NFSeService;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\Status;
@@ -50,6 +51,7 @@ class TesteServices extends Command
                 'spedEmpresaAlterar',
                 'spedNfseEmitir',
                 'nfseServiceCriar',
+                'integraPlatformsList',
             ]);
 
         $this->$service();
@@ -137,5 +139,13 @@ class TesteServices extends Command
         }
 
         $this->error('Verifique o log pois um erro ocorreu');
+    }
+
+    public function integraPlatformsList()
+    {
+        foreach ((new IntegraService())->platforms() as $p) {
+            echo $p::$name . PHP_EOL;
+            dump($p::$fields);
+        }
     }
 }

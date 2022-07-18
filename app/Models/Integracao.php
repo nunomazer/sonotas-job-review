@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmpresaIntegra extends Model
+/**
+ * Modelo de configuração da integração com plataformas de vendas / compras / erp ...
+ */
+class Integracao extends Model
 {
     use HasFactory;
 

@@ -20,7 +20,7 @@ class CreateEmpresaIntegrasTable extends Migration
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->string('name');
             $table->string('platform');
-            $table->jsonb('fields');
+            $table->jsonb('fields')->comment('Campos usados pela integração, de acordo com os fields criados nas classes concretas');
             $table->boolean('ativo')->default(true);
             $table->string('tipo_documento');
             $table->date('data_inicio');

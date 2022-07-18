@@ -2,17 +2,17 @@
 
 namespace App\Services\Integra;
 
-abstract class PlatformSetting
+abstract class PlatformAbstract
 {
-    protected $name = 'Set this in subclass';
-    protected array $fields = [];
+    public static $name = 'Set this in subclass';
+    public static array $fields = [];
 
-    public function getName()
+    public function name()
     {
         return $this->name;
     }
 
-    public function getFields()
+    public function fields()
     {
         return $this->fields;
     }
