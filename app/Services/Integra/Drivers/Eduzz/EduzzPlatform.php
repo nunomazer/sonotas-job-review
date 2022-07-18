@@ -14,12 +14,12 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
     public static array $fields = [
         [
-            'name' => 'public_key',
+            'name' => 'publickey',
             'label' => 'Public Key',
             'required' => true,
         ],
         [
-            'name' => 'api_key',
+            'name' => 'apikey',
             'label' => 'Api Key',
             'required' => true,
         ],
