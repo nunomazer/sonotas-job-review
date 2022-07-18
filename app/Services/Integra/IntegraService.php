@@ -11,7 +11,13 @@ class IntegraService
         EduzzPlatform::class,
     ];
 
-    public function platforms() : array
+    /**
+     * Retorna um array com o nome (namespace completo) das classes dos drivers de plataformas, para poder acessar
+     * dados de $name e $fields
+     *
+     * @return string[]
+     */
+    public function platformsDriverClasses() : array
     {
         return $this->platforms;
     }
