@@ -9,19 +9,19 @@ abstract class Platform implements IIntegraDriver
 
     public function name() : string
     {
-        return $this->name;
+        return self::$name;
     }
 
     public function fields() : array
     {
-        return $this->fields;
+        return self::$fields;
     }
 
     public function toArray() : array
     {
         return [
-            'name' => $this->name,
-            'fields' => $this->fields,
+            'name' => self::$name,
+            'fields' => self::$fields,
         ];
     }
 }
