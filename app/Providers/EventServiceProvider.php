@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\ClienteAlteradoEvent;
+use App\Events\ClienteCriadoEvent;
+use App\Events\EmpresaAlteradaEvent;
+use App\Events\EmpresaCriadaEvent;
+use App\Events\NFSeCriadaEvent;
+use App\Listeners\AlteraEmpresaDriverSped;
+use App\Listeners\CadastraEmpresaDriverSped;
+use App\Listeners\EmiteNFSeDriverSped;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +25,26 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        ClienteCriadoEvent::class => [
+
+        ],
+
+        ClienteAlteradoEvent::class => [
+
+        ],
+
+        EmpresaCriadaEvent::class => [
+            CadastraEmpresaDriverSped::class,
+        ],
+
+        EmpresaAlteradaEvent::class => [
+            AlteraEmpresaDriverSped::class,
+        ],
+
+        NFSeCriadaEvent::class => [
+            EmiteNFSeDriverSped::class,
         ],
     ];
 
