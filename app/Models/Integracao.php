@@ -13,4 +13,15 @@ class Integracao extends Model
     use HasFactory;
 
     protected $table = 'empresa_integracoes';
+
+    protected $guarded = [
+        'id'
+    ];
+
+    protected $casts = [
+        'fields' => 'json',
+        'data_inicio' => 'date',
+        'transmissao_automatica' => 'boolean',
+        'transmissao_apenas_dias_uteis' => 'boolean',
+    ];
 }
