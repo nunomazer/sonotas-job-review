@@ -5,9 +5,11 @@ namespace Database\Seeders;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\EmpresaNFSConfig;
+use App\Models\Integracao;
 use App\Models\Role;
 use App\Models\Servico;
 use App\Models\User;
+use App\Services\Integra\IntegraService;
 use App\Services\Sped\RegimesTributarios;
 use App\Services\Sped\RegimesTributariosEspeciais;
 use App\Services\Sped\SpedService;
@@ -27,7 +29,8 @@ class TesteSeeder extends Seeder
     public function run()
     {
         $user = $this->userAntonio();
-        $this->empresaWP($user);
+        $empresa = $this->empresaWP($user);
+        $this->empresaWPIntegraEduzz($empresa);
     }
 
     public function userAntonio()
@@ -149,6 +152,15 @@ class TesteSeeder extends Seeder
         $nfseConf->enviar_nota_email_cliente = true;
         $nfseConf->save();
 
+        return $empresa;
+    }
 
+    public function empresaWPIntegraEduzz($empresa)
+    {
+        $eduzzDriver = (new IntegraService())->platforms()[0]::$name;
+        $integracao = new Integracao();
+        $integracao->empresa_id = $empresa->id;
+        $integracao->name = 'Integração com Eduzz';
+        $integracao->platform =
     }
 }

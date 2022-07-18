@@ -2,9 +2,10 @@
 
 namespace App\Services\Integra\Drivers\Eduzz;
 
-use App\Services\Integra\PlatformAbstract;
+use App\Services\Integra\IIntegraDriver;
+use App\Services\Integra\Platform;
 
-class EduzzPlatform extends PlatformAbstract
+class EduzzPlatform extends Platform implements IIntegraDriver
 {
     public static $name = 'Eduzz';
 
