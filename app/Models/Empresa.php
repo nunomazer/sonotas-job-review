@@ -12,6 +12,11 @@ class Empresa extends Model
 
     protected $guarded = ['id'];
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_user_id', 'id');
+    }
+
     public function certificado()
     {
         return $this->belongsTo(Certificado::class);

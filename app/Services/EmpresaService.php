@@ -30,7 +30,8 @@ class EmpresaService
                 'empresa_id' => $empresa->id,
             ]);
 
-            $role = Role::where('name', Role::OWNER);
+            $role = Role::findByName(Role::OWNER);
+            $empresa->owner->assignRole($role);
 
         DB::commit();
 
