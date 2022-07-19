@@ -56,3 +56,21 @@ A aplicação está desenvolvida para que a camada de domínio resolva a lógica
 
 As classes de domínio estão localizadas na pasta `Services` e devem possuir o nome do domínio com prefixo _Service_, 
 por exemplo: `EmpresaService`.
+
+### Single Source of Truth
+
+Garantir que apenas um local execute uma lógica do negócio.
+
+Por exemplo, alteração em registro de banco de dados:
+> Sempre pelos métodos oferecidos pelos Services, não realizar operações de alteração diretamnte
+em models eloquent por controladores. 
+
+## Permissões
+
+Gerenciamento de permissões pelo pacote [Spatie Laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction).
+
+Controlamos as permissões em nível de papéis (_roles_), verifique o modelo `Role` que 
+possui constantes com os nomes utilizados. 
+
+> _Se necessário no futuro podemos definir um controle mais granular por permissões, que usarão o mesmo pacote_.
+
