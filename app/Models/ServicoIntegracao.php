@@ -14,6 +14,8 @@ class ServicoIntegracao extends Model
 {
     use HasFactory;
 
+    protected $table = 'servico_integracao';
+
     protected $guarded = ['id'];
     /**
      * Retorna relacionamento com Tipo de serviço, LC116

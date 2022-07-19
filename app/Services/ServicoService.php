@@ -51,9 +51,8 @@ class ServicoService
         $servicosApi = $driver->getServicos();
 
         $servicos = [];
-        DB::transaction(function () use ($driverName, $servicosApi, $servicos) {
+        DB::transaction(function () use ($driverName, $empresa, $servicosApi, &$servicos) {
             foreach ($servicosApi as $servicoApi) {
-                dump($servicoApi);
                 $servicoIntegracao = ServicoIntegracao
                     ::where('driver', $driverName)
                     ->where('driver_id', $servicoApi['driver_id'])
@@ -65,6 +64,7 @@ class ServicoService
                     $servico = $servicoIntegracao->servico;
                 }
 
+                $servico->empresa_id = $empresa->id;
                 $servico->nome = $servicoApi['nome'];
                 $servico->descricao = $servicoApi['descricao'];
                 $servico->valor = $servicoApi['valor'];
@@ -75,9 +75,11 @@ class ServicoService
                 }
 
                 $servicoIntegracao->servico_id = $servico->id;
-                $servicoIntegracao->driver = $driver;
-                $servicoIntegracao->driver_id = $servicosApi['driver_id'];
+                $servicoIntegracao->driver = $driverName;
+                $servicoIntegracao->driver_id = $servicoApi['driver_id'];
                 $servicoIntegracao->save();
+
+                $servicos[] = $servico;
             }
         });
 
