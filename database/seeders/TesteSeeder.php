@@ -9,6 +9,7 @@ use App\Models\Integracao;
 use App\Models\Role;
 use App\Models\Servico;
 use App\Models\User;
+use App\Services\EmpresaService;
 use App\Services\Integra\IntegraService;
 use App\Services\Sped\RegimesTributarios;
 use App\Services\Sped\RegimesTributariosEspeciais;
@@ -77,7 +78,14 @@ class TesteSeeder extends Seeder
         $empresa->telefone_num = '991355005';
         $empresa->telefone_ddd = '42';
         $empresa->email = 'ademir.mazer.jr@gmail.com';
-        $empresa->save();
+        //$empresa->save();
+
+        if ($empresa->id) {
+            $empresa->save();
+        } else {
+            $empresaService = new EmpresaService();
+            $empresa = $empresaService->create($empresa->toArray());
+        }
 
         /**
          * Cliente
@@ -169,7 +177,7 @@ class TesteSeeder extends Seeder
         $integracao->empresa_id = $empresa->id;
         $integracao->name = 'Integração com Eduzz';
         $integracao->fields = $fields;
-        $integracao->platform = $eduzzDriver->name();
+        $integracao->driver = $eduzzDriver->name();
         $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
         $integracao->data_inicio = now();
         $integracao->transmissao_automatica = false;
