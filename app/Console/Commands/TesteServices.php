@@ -9,6 +9,7 @@ use App\Models\NFSeItemServico;
 use App\Models\Servico;
 use App\Services\Integra\IntegraService;
 use App\Services\NFSeService;
+use App\Services\ServicoService;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\Status;
 use Illuminate\Console\Command;
@@ -55,6 +56,7 @@ class TesteServices extends Command
                 'integraPlatformsList',
                 'integraEduzzAuth',
                 'integraEduzzGetServicos',
+                'servicoServiceSyncPlatform',
             ]);
 
         $this->$service();
@@ -158,5 +160,14 @@ class TesteServices extends Command
 
         $integracao = (new IntegraService())->driver('eduzz', $empresaIntegracao->fields);
         dd($integracao->getServicos());
+    }
+
+    public function servicoServiceSyncPlatform()
+    {
+        $servicoService = new ServicoService();
+
+        $empresa = Empresa::first();
+
+        dd($servicoService->syncFromPlatform($empresa, 'eduzz'));
     }
 }
