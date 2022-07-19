@@ -6,5 +6,7 @@ use Spatie\Permission\Models\Role as SpatieModel;
 
 class Role extends SpatieModel
 {
-    const SYSTEM_ADMIN = 'system-admin';
+    const SYSADMIN = 'sys-admin';
+    const OWNER = 'owner';
+    const MANAGER = 'manager';
 }
