@@ -5,18 +5,34 @@ namespace App\Services;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Models\Empresa;
+use App\Models\Role;
+use App\Models\UserEmpresa;
+use App\Services\Integra\IntegraService;
+use App\Services\Integra\Platform;
 use App\Services\Sped\SpedService;
+use Illuminate\Support\Facades\DB;
 
 class EmpresaService
 {
     /**
      * Cria um novo registro de empresa no banco de dados
+     *
      * @param $empresa
      * @return Empresa
      */
-    public function create($empresa) : Empresa
+    public function create(array $empresa) : Empresa
     {
-        $empresa = Empresa::create($empresa);
+        DB::beginTransaction();
+            $empresa = Empresa::create($empresa);
+
+            $userEmpresa = UserEmpresa::create([
+                'user_id' => $empresa->owner_user_id,
+                'empresa_id' => $empresa->id,
+            ]);
+
+            $role = Role::where('name', Role::OWNER);
+
+        DB::commit();
 
         EmpresaCriadaEvent::dispatch($empresa);
 
@@ -61,5 +77,22 @@ class EmpresaService
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
         $driverNFSe = $sped->empresaDriver($empresa);
         $driverNFSe->alterar();
+    }
+
+    /**
+     * Resolve e retorna uma instância para o driver de integração da plataforma informada
+     *
+     * @param Empresa $empresa
+     * @param string $driver Nome do driver da plataforma
+     * @return Platform
+     * @throws \Throwable
+     */
+    public function driverIntegracao(Empresa $empresa, string $driver) : Platform
+    {
+        $empresaIntegracao = $empresa->integracoes()->where('driver', $driver)->first();
+
+        throw_if($empresaIntegracao== null, "Integração {$driver} não encontrada para a empresa {$empresa->nome}");
+
+        return (new IntegraService())->driver($driver, $empresaIntegracao->fields);
     }
 }
