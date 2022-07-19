@@ -11,7 +11,7 @@ Sistema emissor de NFe
 ## Laravel Mix
 - npm run dev
 
-## Preparando o ambiente de desenvolvimento/testes
+## Ambiente de desenvolvimento/testes
 
 ### Migrations
 
@@ -30,7 +30,7 @@ testes
 php artisan db:seed --class=TesteSeeder
 ```
 
-## Comando de testes por funcionalidade
+### Comando de testes por funcionalidade
 
 Para facilitar os testes por funcionalidades, principalmente das pontas de integração,
 rodar o comando a seguir e escolher o nome da função interna de teste:
@@ -41,7 +41,7 @@ php artisan teste:service
 
 Você deve iniciar a digitação do nome do método de teste ou clicar com a seta para cima para as opções serem mostradas uma a uma.
 
-### Implementando testes no comando
+#### Implementando testes no comando
 
 Adicione testes para serem chamados por linha de comando quando desejar:
 
@@ -50,3 +50,9 @@ Adicione testes para serem chamados por linha de comando quando desejar:
 
 **ATENÇÃO**: este método/estratégia não substitui a implementação de testes unitários e de integração.
 
+## Arquitetura
+
+A aplicação está desenvolvida para que a camada de domínio resolva a lógica central dos fluxos do negócio.
+
+As classes de domínio estão localizadas na pasta `Services` e devem possuir o nome do domínio com prefixo _Service_, 
+por exemplo: `EmpresaService`.
