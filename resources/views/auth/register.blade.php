@@ -8,6 +8,7 @@
             </a>
         </div>
         <form class="card card-md" action="{{ route('register') }}" method="POST" autocomplete="off">
+            @csrf
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Criar nova conta</h2>
                 <div class="mb-3">
@@ -76,6 +77,11 @@
                             </a>
                         </span>
                     </div>
+                    @if ($errors->has('password_confirmation'))
+                        <span class="invalid-feedback">
+                            <strong>{{ $errors->first('password_confirmation') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="mb-3">
                     <label class="form-check">

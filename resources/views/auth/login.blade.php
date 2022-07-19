@@ -8,6 +8,7 @@
             </a>
         </div>
         <form action="{{ route('login') }}" class="card card-md" method="POST" autocomplete="off">
+            @csrf
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Login</h2>
                 <div class="mb-3">

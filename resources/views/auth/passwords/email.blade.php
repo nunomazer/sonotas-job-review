@@ -8,6 +8,7 @@
             </a>
         </div>
         <form class="card card-md" action="{{ route('password.email') }}" method="POST" autocomplete="off">
+            @csrf
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Esqueceu a senha</h2>
                 <p class="text-muted mb-4">Digite seu endereço de e-mail e sua senha será redefinida e enviada para você.
