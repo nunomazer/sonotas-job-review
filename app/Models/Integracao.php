@@ -24,4 +24,9 @@ class Integracao extends Model
         'transmissao_automatica' => 'boolean',
         'transmissao_apenas_dias_uteis' => 'boolean',
     ];
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }
