@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Services\Integra\IntegraService;
+use App\Services\Integra\Platform;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Serviços cadastrados da empresa
  */
-class Servico extends Model
+class ServicoIntegracao extends Model
 {
     use HasFactory;
 
@@ -22,13 +24,9 @@ class Servico extends Model
         return $this->belongsTo(TipoServico::class, 'tipo_servico_codigo');
     }
 
-    public function integracoes()
+    public function servico()
     {
-        return $this->hasMany(ServicoIntegracao::class);
+        return $this->belongsTo(Servico::class);
     }
 
-    public function empresa()
-    {
-        return $this->belongsTo(Empresa::class);
-    }
 }

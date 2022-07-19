@@ -3,10 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Models\Empresa;
+use App\Models\Integracao;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
 use App\Models\Servico;
+use App\Services\Integra\IntegraService;
 use App\Services\NFSeService;
+use App\Services\ServicoService;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\Status;
 use Illuminate\Console\Command;
@@ -50,6 +53,10 @@ class TesteServices extends Command
                 'spedEmpresaAlterar',
                 'spedNfseEmitir',
                 'nfseServiceCriar',
+                'integraPlatformsList',
+                'integraEduzzAuth',
+                'integraEduzzGetServicos',
+                'servicoServiceSyncPlatform',
             ]);
 
         $this->$service();
@@ -137,5 +144,30 @@ class TesteServices extends Command
         }
 
         $this->error('Verifique o log pois um erro ocorreu');
+    }
+
+    public function integraPlatformsList()
+    {
+        foreach ((new IntegraService())->platformsDriverClasses() as $p) {
+            echo $p::$name . PHP_EOL;
+            dump($p::$fields);
+        }
+    }
+
+    public function integraEduzzGetServicos()
+    {
+        $empresaIntegracao = Integracao::first();
+
+        $integracao = (new IntegraService())->driver('eduzz', $empresaIntegracao->fields);
+        dd($integracao->getServicos());
+    }
+
+    public function servicoServiceSyncPlatform()
+    {
+        $servicoService = new ServicoService();
+
+        $empresa = Empresa::first();
+
+        dd($servicoService->syncFromPlatform($empresa, 'eduzz'));
     }
 }

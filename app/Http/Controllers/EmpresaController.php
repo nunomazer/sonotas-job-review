@@ -7,7 +7,7 @@ use App\Services\EmpresaService;
 
 class EmpresaController extends Controller
 {
-    protected $empresaService;
+    protected EmpresaService $empresaService;
 
     public function __construct()
     {

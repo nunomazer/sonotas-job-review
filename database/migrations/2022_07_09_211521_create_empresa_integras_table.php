@@ -19,8 +19,8 @@ class CreateEmpresaIntegrasTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->string('name');
-            $table->string('platform');
-            $table->jsonb('fields');
+            $table->string('driver')->comment('Nome do driver de integracao para a plataforma');
+            $table->jsonb('fields')->comment('Campos configurador e usados pela integração, de acordo com os fields criados nas classes concretas');
             $table->boolean('ativo')->default(true);
             $table->string('tipo_documento');
             $table->date('data_inicio');

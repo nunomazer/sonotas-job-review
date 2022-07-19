@@ -29,12 +29,15 @@ class CreateServicosTable extends Migration
             $table->string('descricao',4000)->nullable();
             $table->string('obs',4000)->nullable();
 
-            $table->decimal('cofins', 5,2);
-            $table->decimal('csll', 5,2);
-            $table->decimal('inss', 5,2);
-            $table->decimal('ir', 5,2);
-            $table->decimal('pis', 5,2);
-            $table->decimal('iss', 5,2);
+            $table->string('driver')->nullable()->comment('Nome do driver de integração com plataforma externa');
+            $table->string('driver_id')->index()->nullable('Id do  serviço no driver de integração com plataforma externa');
+
+            $table->decimal('cofins', 5,2)->nullable();
+            $table->decimal('csll', 5,2)->nullable();
+            $table->decimal('inss', 5,2)->nullable();
+            $table->decimal('ir', 5,2)->nullable();
+            $table->decimal('pis', 5,2)->nullable();
+            $table->decimal('iss', 5,2)->nullable();
 
             $table->boolean('iss_retido_fonte');
 

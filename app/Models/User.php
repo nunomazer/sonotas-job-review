@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * Usuários do sistema, cuidar para atribuir apenas a role SYSADMIN a usuários com acesso técnico administrativo completo
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -42,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function empresas()
+    {
+        return $this->hasManyThrough(Empresa::class, UserEmpresa::class);
+    }
 }

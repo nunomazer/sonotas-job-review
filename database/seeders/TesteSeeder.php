@@ -5,9 +5,12 @@ namespace Database\Seeders;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\EmpresaNFSConfig;
+use App\Models\Integracao;
 use App\Models\Role;
 use App\Models\Servico;
 use App\Models\User;
+use App\Services\EmpresaService;
+use App\Services\Integra\IntegraService;
 use App\Services\Sped\RegimesTributarios;
 use App\Services\Sped\RegimesTributariosEspeciais;
 use App\Services\Sped\SpedService;
@@ -27,7 +30,8 @@ class TesteSeeder extends Seeder
     public function run()
     {
         $user = $this->userAntonio();
-        $this->empresaWP($user);
+        $empresa = $this->empresaWP($user);
+        $this->empresaWPIntegraEduzz($empresa);
     }
 
     public function userAntonio()
@@ -74,7 +78,14 @@ class TesteSeeder extends Seeder
         $empresa->telefone_num = '991355005';
         $empresa->telefone_ddd = '42';
         $empresa->email = 'ademir.mazer.jr@gmail.com';
-        $empresa->save();
+        //$empresa->save();
+
+        if ($empresa->id) {
+            $empresa->save();
+        } else {
+            $empresaService = new EmpresaService();
+            $empresa = $empresaService->create($empresa->toArray());
+        }
 
         /**
          * Cliente
@@ -149,6 +160,29 @@ class TesteSeeder extends Seeder
         $nfseConf->enviar_nota_email_cliente = true;
         $nfseConf->save();
 
+        return $empresa;
+    }
 
+    public function empresaWPIntegraEduzz($empresa)
+    {
+        $eduzzDriver = (new IntegraService())->driver('eduzz', []);
+
+        $fields = [
+            'publickey' => env('MAZER_EDUZZ_PUBLIC_KEY'),
+            'apikey' => env('MAZER_EDUZZ_API_KEY'),
+            'email' => env('MAZER_EDUZZ_EMAIL'),
+        ];
+
+        $integracao = new Integracao();
+        $integracao->empresa_id = $empresa->id;
+        $integracao->name = 'Integração com Eduzz';
+        $integracao->fields = $fields;
+        $integracao->driver = $eduzzDriver->name();
+        $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
+        $integracao->data_inicio = now();
+        $integracao->transmissao_automatica = false;
+        $integracao->transmissao_periodo = '1H';
+        $integracao->transmissao_apenas_dias_uteis = false;
+        $integracao->save();
     }
 }
