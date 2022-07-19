@@ -70,7 +70,8 @@ em models eloquent por controladores.
 Gerenciamento de permissões pelo pacote [Spatie Laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction).
 
 Controlamos as permissões em nível de papéis (_roles_), verifique o modelo `Role` que 
-possui constantes com os nomes utilizados. 
+possui constantes com os nomes utilizados e o racional de cada papel. 
 
 > _Se necessário no futuro podemos definir um controle mais granular por permissões, que usarão o mesmo pacote_.
+
 
