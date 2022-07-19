@@ -12,6 +12,8 @@ class UserEmpresa extends Model
 {
     use HasRoles;
 
+    protected $table = 'user_empresa';
+
     /**
      * The attributes that are mass assignable.
      *
