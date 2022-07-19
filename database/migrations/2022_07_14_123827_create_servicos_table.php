@@ -19,7 +19,7 @@ class CreateServicosTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
 
-            $table->string('tipo_servico_codigo');
+            $table->string('tipo_servico_codigo')->nullable();
             $table->foreign('tipo_servico_codigo')->references('codigo')->on('tipo_servicos');
 
             $table->boolean('ativo')->default(true);
@@ -39,12 +39,12 @@ class CreateServicosTable extends Migration
             $table->decimal('pis', 5,2)->nullable();
             $table->decimal('iss', 5,2)->nullable();
 
-            $table->boolean('iss_retido_fonte');
+            $table->boolean('iss_retido_fonte')->default(false);
 
             $table->string('municipio_servico_codigo')->nullable();
             $table->string('municipio_servico_descricao')->nullable();
 
-            $table->boolean('enviar_nota_email_cliente');
+            $table->boolean('enviar_nota_email_cliente')->default(false);
 
             $table->string('ultimo_rps_liberado')->nullable();
 
