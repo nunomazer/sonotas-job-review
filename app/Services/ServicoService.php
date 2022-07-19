@@ -2,101 +2,101 @@
 
 namespace App\Services;
 
-use App\Events\EmpresaAlteradaEvent;
-use App\Events\EmpresaCriadaEvent;
 use App\Models\Empresa;
 use App\Models\Servico;
+use App\Models\ServicoIntegracao;
 use App\Services\Integra\IntegraService;
+use App\Services\Integra\Platform;
 use App\Services\Sped\SpedService;
+use Illuminate\Support\Facades\DB;
 
 class ServicoService
 {
     /**
-     * Cria um novo registro de empresa no banco de dados
-     * @param $empresa
+     * Cria um novo registro de serviço no banco de dados
+     * @param array $servico
      * @return Empresa
      */
-    public function create($empresa) : Empresa
+    public function create(array $servico) : Servico
     {
-        $empresa = Empresa::create($empresa);
+        $servico = Servico::create($servico);
 
-        EmpresaCriadaEvent::dispatch($empresa);
-
-        return $empresa;
+        return $servico;
     }
 
     /**
-     * Altera o registro de empresa no banco de dados
-     * @param $empresa
+     * Altera o registro de serviço no banco de dados
+     * @param $servico
      * @return Empresa
      */
-    public function update(Empresa $empresa) : Empresa
+    public function update(Servico $servico) : Servico
     {
-        $empresa->save();
+        $servico->save();
 
-        EmpresaAlteradaEvent::dispatch($empresa);
-
-        return $empresa;
-    }
-
-    /**
-     * Cadastra a empresa nos serviços Sped para cada tipo de documento e cidade
-     *
-     * @param Empresa $empresa
-     * @return void
-     */
-    public function cadastrarSped(Empresa $empresa)
-    {
-        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
-        $driverNFSe = $sped->empresaDriver($empresa);
-        $driverNFSe->cadastrar();
-    }
-
-    /**
-     * Altera a empresa nos serviços Sped para cada tipo de documento e cidade
-     *
-     * @param Empresa $empresa
-     * @return void
-     */
-    public function alterarSped(Empresa $empresa)
-    {
-        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
-        $driverNFSe = $sped->empresaDriver($empresa);
-        $driverNFSe->alterar();
+        return $servico;
     }
 
     /**
      * Sincroniza os serviços importando da plataforma de integração e salvando novos ou alterando os existentes
      * pelo driver id no banco de dados.
      *
-     * @param string $driver Nome do driver a ser utilizado
-     * @param array $config Configuração de conexão do usuário para integração
+     * @param Empresa $empresa Empresa para a qual o sync de serviços deve ser realizado
+     * @param string $driver Nome do driver de plataforma para sincronizar
      * @return array Serviços importados e sincronizados da api de integração, já salvos no banco de dados
      */
-    public function syncFromPlatform($driver, array $config) : array
+    public function syncFromPlatform(Empresa $empresa, string $driverName) : array
     {
-        $integra = new IntegraService();
-        $driver = $integra->driver($driver, $config);
+        $driver = (new EmpresaService())->driverIntegracao($empresa, $driverName);
 
         $servicosApi = $driver->getServicos();
 
         $servicos = [];
-        foreach ($servicosApi as $servicoApi) {
-            $servico = Servico::where('driver_api', $servicosApi['driver_id'])->first();
+        DB::transaction(function () use ($driverName, $servicosApi, $servicos) {
+            foreach ($servicosApi as $servicoApi) {
+                dump($servicoApi);
+                $servicoIntegracao = ServicoIntegracao
+                    ::where('driver', $driverName)
+                    ->where('driver_id', $servicoApi['driver_id'])
+                    ->first();
 
-            if ($servico == null) {
-                $servico = new Servico();
+                if ($servicoIntegracao == null) {
+                    $servico = new Servico();
+                } else {
+                    $servico = $servicoIntegracao->servico;
+                }
+
+                $servico->nome = $servicoApi['nome'];
+                $servico->descricao = $servicoApi['descricao'];
+                $servico->valor = $servicoApi['valor'];
+                $servico->save();
+
+                if ($servicoIntegracao == null) {
+                    $servicoIntegracao = new ServicoIntegracao();
+                }
+
+                $servicoIntegracao->servico_id = $servico->id;
+                $servicoIntegracao->driver = $driver;
+                $servicoIntegracao->driver_id = $servicosApi['driver_id'];
+                $servicoIntegracao->save();
             }
-
-            $servico->driver = $driver->name();
-            $servico->driver_api = $servicoApi['driver_api'];
-            $servico->nome = $servicoApi['nome'];
-            $servico->descricao = $servicoApi['descricao'];
-            $servico->valor = $servicoApi['valor'];
-
-            $servico->save();
-        }
+        });
 
         return $servicos;
+    }
+
+    /**
+     * Resolve e retorna uma instância para o driver da plataforma de integração de um serviço específico.
+     *
+     * @param ServicoIntegracao $servicoIntegracao Objeto model de relacionamento com as informações de integração do serviço, não é o model do serviço
+     * @return Platform
+     */
+    public function driver(ServicoIntegracao $servicoIntegracao) : Platform
+    {
+        $integra = new IntegraService();
+
+        return $integra->driver(
+            $servicoIntegracao->integracao->driver,
+            $servicoIntegracao->servico->empresa->integracoes->where('driver', $this->driver)->fields
+        );
     }
 }
