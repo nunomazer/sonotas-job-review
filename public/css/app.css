@@ -10966,7 +10966,7 @@ Navbar brand
 
 .navbar-brand-image {
   display: block;
-  height: 2rem;
+  height: 3rem;
   width: auto;
 }
 
@@ -10975,8 +10975,8 @@ Navbar toggler
  */
 .navbar-toggler {
   border: 0;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   position: relative;
   display: flex;
   align-items: center;
@@ -11205,7 +11205,7 @@ Navbar vertical
 }
 @media (min-width: 576px) {
   .navbar-vertical.navbar-expand-sm .navbar-brand {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     justify-content: center;
   }
 }
@@ -11328,7 +11328,7 @@ Navbar vertical
 }
 @media (min-width: 768px) {
   .navbar-vertical.navbar-expand-md .navbar-brand {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     justify-content: center;
   }
 }
@@ -11451,7 +11451,7 @@ Navbar vertical
 }
 @media (min-width: 992px) {
   .navbar-vertical.navbar-expand-lg .navbar-brand {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     justify-content: center;
   }
 }
@@ -11574,7 +11574,7 @@ Navbar vertical
 }
 @media (min-width: 1200px) {
   .navbar-vertical.navbar-expand-xl .navbar-brand {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     justify-content: center;
   }
 }
@@ -11697,7 +11697,7 @@ Navbar vertical
 }
 @media (min-width: 1400px) {
   .navbar-vertical.navbar-expand-xxl .navbar-brand {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     justify-content: center;
   }
 }
@@ -11815,7 +11815,7 @@ Navbar vertical
   right: 0;
 }
 .navbar-vertical.navbar-expand .navbar-brand {
-  padding: 0.75rem 0;
+  padding: 0.25rem 0;
   justify-content: center;
 }
 .navbar-vertical.navbar-expand .navbar-collapse {
