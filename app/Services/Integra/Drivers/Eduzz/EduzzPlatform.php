@@ -7,6 +7,7 @@ use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 
 class EduzzPlatform extends Platform implements IIntegraDriver
 {
@@ -37,15 +38,6 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected $token_until = null;
 
-    protected function getApiQueryParams() : array
-    {
-        return [
-            'email' => $this->config['email'],
-            'publickey' => $this->config['publickey'],
-            'apikey' => $this->config['apikey'],
-        ];
-    }
-
     private function setTokensFromResult($result)
     {
         if (isset($result['data']['token'])) {
@@ -72,7 +64,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         ]);
 
         $result = $http->post('/credential/generate_token',[
-            'query' => $this->getApiQueryParams(),
+            'query' => [
+                'email' => $this->config['email'],
+                'publickey' => $this->config['publickey'],
+                'apikey' => $this->config['apikey'],
+            ]
         ]);
 
         $result = json_decode($result->getBody()->getContents(), true);
@@ -109,11 +105,17 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         ]);
     }
 
+    /**
+     * Chama o endpoint que retorna a lista de conteúdos - os serviços cadastrados na Eduzz
+     * @param $page
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function callContentList($page = null) : array
     {
         $http = $this->httpClient();
 
-        $query = $this->getApiQueryParams();
+        $query = [];
         if ($page) $query['page'] = $page;
 
         $result = $http->get('/content/content_list', [
@@ -148,5 +150,37 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         }
 
         return $servicos;
+    }
+
+    /**
+     * Chama o endpoint que retorna a lista de documentos fiscais - as vendas cadastradas na Eduzz
+     *
+     * @param $page
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function callTaxDocumentList($from, $page = 1) : array
+    {
+        $http = $this->httpClient();
+
+        $query = [];
+        $query['start_date'] = $from;
+        if ($page) $query['page'] = $page;
+
+        $result = $http->get('/fiscal/get_taxdocumentlist', [
+            'query' => $query,
+        ]);
+
+        $result = json_decode($result->getBody()->getContents(), true);
+
+        return $result;
+    }
+
+    public function getVendas(string $from, $page = 1): array
+    {
+        $from = Str::substr($from, 0, 10);
+        $result = $this->callTaxDocumentList($from, $page);
+
+        return $result;
     }
 }

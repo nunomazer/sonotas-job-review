@@ -48,16 +48,19 @@ class TesteServices extends Command
      */
     public function handle()
     {
-        $service = $this->anticipate('Escolha o serviço',[
-                'spedEmpresaCadastrar',
-                'spedEmpresaAlterar',
-                'spedNfseEmitir',
-                'nfseServiceCriar',
-                'integraPlatformsList',
-                'integraEduzzAuth',
-                'integraEduzzGetServicos',
-                'servicoServiceSyncPlatform',
-            ]);
+        $choices = collect([
+            'spedEmpresaCadastrar' => 'Sped Cadastrar Empresa',
+            'spedEmpresaAlterar' => 'Sped Empresa Alterar',
+            'spedNfseEmitir' => 'Sped NFSe Emitir',
+            'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
+            'integraPlatformsList' => 'Integra: Lista Plataformas',
+            'integraEduzzAuth' => 'Integra: Eduzz Auth (gera token)',
+            'integraEduzzGetServicos' => 'Integra: Eduzz Get Serviços',
+            'integraGetVendas' => 'Integra: Eduzz Get Vendas',
+            'servicoServiceSyncPlatform' => 'Servico Service: Sync Plataforma (Eduzz)',
+        ])->sort();
+
+        $service = $this->choice('Escolha o serviço', $choices->toArray());
 
         $this->$service();
     }
@@ -169,5 +172,14 @@ class TesteServices extends Command
         $empresa = Empresa::first();
 
         dd($servicoService->syncFromPlatform($empresa, 'eduzz'));
+    }
+
+    public function integraGetVendas()
+    {
+        $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
+        $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
+
+        $integracao = (new IntegraService())->driver('eduzz', $empresaIntegracao->fields);
+        dd($integracao->getVendas('2022-01-01 00:00'));
     }
 }
