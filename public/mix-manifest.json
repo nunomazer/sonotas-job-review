@@ -1,3 +1,7 @@
 {
-    "/js/app.js": "/js/app.js"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/images/sonotas_logo.png": "/images/sonotas_logo.png",
+    "/images/sonotas_logo_fundo_escuro.png": "/images/sonotas_logo_fundo_escuro.png",
+    "/images/sonotas_logo_horizontal.png": "/images/sonotas_logo_horizontal.png"
 }
