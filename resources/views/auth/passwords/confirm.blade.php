@@ -1,10 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.app', [
+    'class' => 'border-top-wide border-primary d-flex flex-column'
+])
 
 @section('content')
     <div class="container-tight py-4">
         <div class="text-center mb-4">
             <a href="#" class="navbar-brand navbar-brand-autodark">
-                <img src="{{ mix('images/sonotas_logo.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
+                <img src="{{ mix('images/sonotas_logo_horizontal_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
             </a>
         </div>
     </div>

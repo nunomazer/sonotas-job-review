@@ -47,7 +47,7 @@
   --tblr-body-bg-rgb: 248, 250, 252;
   --tblr-font-sans-serif: "Nunito", sans-serif;
   --tblr-font-monospace:  Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --tblr-gradient: linear-gradient(90deg, #89288f 0%, #17308e 100%);
+  --tblr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --tblr-body-font-family: var(--tblr-font-sans-serif);
   --tblr-body-font-size: 0.9rem;
   --tblr-body-font-weight: 400;
