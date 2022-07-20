@@ -37,18 +37,24 @@
     <meta property="og:title" content="">
     <meta property="og:url" content="{{ mix('images/sonotas_logo.png') }}">
     <meta property="og:description" content="">
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
+    
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="{{ $class }} theme-light">
+<body class="{{ $class ?? '' }} theme-light">
     <div class="page page-center" id="app">
-        @yield('content')
+        {{-- @auth() --}}
+            @include('layouts.page_templates.auth')
+        {{-- @endauth() --}}
+        {{-- @guest()
+            @include('layouts.page_templates.guest')
+        @endguest --}}
     </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
 </body>
 
 </html>
