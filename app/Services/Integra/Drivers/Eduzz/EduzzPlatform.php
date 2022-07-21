@@ -181,6 +181,54 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $from = Str::substr($from, 0, 10);
         $result = $this->callTaxDocumentList($from, $page);
 
-        return $result;
+        $paginator = $result['paginator'];
+        $page = $page;
+        $vendas = [];
+        while ($page <= $paginator['totalPages']) {
+            $vendasApi = $result['data'];
+
+            foreach ($vendasApi as $vendaApi) {
+                $vendas[] = [
+                    'driver_id' => $vendaApi['document_id'],
+                    'venda' => [
+                        'nome' => $vendaApi['document_name'],
+                        'status' => $vendaApi['document_status'],
+                        'tipo' => $vendaApi['document_type'],
+                        'valor' => $vendaApi['document_basevalue'],
+                        'data_emissao' => $vendaApi['document_emissiondate'],
+                        'data_referencia' => $vendaApi['document_referencedate'],
+                        'data_processamento' => $vendaApi['document_processingdate'],
+                    ],
+                    'cliente' => [
+                        'nome' => $vendaApi['destination_company_name'],
+                        'tipo_pessoa' => $vendaApi['destination_taxtype'],
+                        'documento' => $vendaApi['destination_taxid'],
+                        'email' => $vendaApi['destination_email'],
+                        'logradouro' => $vendaApi['destination_street'],
+                        'numero' => $vendaApi['destination_number'],
+                        'complemento' => $vendaApi['destination_complement'],
+                        'bairro' => $vendaApi['destination_district'],
+                        'cep' => $vendaApi['destination_zipcode'],
+                        'cidade' => $vendaApi['destination_city'],
+                        'estado' => $vendaApi['destination_uf'],
+                        'telefone' => $vendaApi['destination_tel'],
+                    ],
+                    'servicos' => [
+                        [
+                            'driver_id' => $vendaApi['content_id'],
+                        ]
+                    ],
+                    'dados_origem' => $vendaApi,
+                ];
+            }
+
+            $page++;
+
+            if ($page <= $paginator['totalPages']) {
+                $result = $this->callTaxDocumentList($from, $page);
+            }
+        }
+
+        return $vendas;
     }
 }
