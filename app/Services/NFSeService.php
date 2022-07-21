@@ -3,8 +3,12 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
+use App\Models\Cliente;
+use App\Models\Empresa;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
+use App\Models\Servico;
+use App\Models\ServicoIntegracao;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\Status;
 use Illuminate\Support\Facades\DB;
@@ -89,5 +93,97 @@ class NFSeService
         $historico = ($nfse) ? $nfse->status_historico : [];
         $historico[$status] = array_merge(['created_at' => now()->format('Y-m-d H:i:s')], $dados);
         return $historico;
+    }
+
+    /**
+     * Sincroniza as vendas importando da plataforma de integração e salvando novas NFSe
+     * pelo driver id no banco de dados.
+     *
+     * @param Empresa $empresa Empresa para a qual o sync de serviços deve ser realizado
+     * @param string $driver Nome do driver de plataforma para sincronizar
+     * @return array NFSe importadas e sincronizados da api de integração, já salvos no banco de dados
+     */
+    public function syncFromPlatform(Empresa $empresa, string $driverName, $from) : array
+    {
+        $driver = (new EmpresaService())->driverIntegracao($empresa, $driverName);
+
+        $vendasApi = $driver->getVendas($from);
+
+        $vendas = [];
+        DB::transaction(function () use ($driverName, $empresa, $vendasApi, &$vendas) {
+            foreach ($vendasApi as $vendaApi) {
+                $nfse = NFSe
+                    ::where('driver', $driverName)
+                    ->where('driver_id', $vendaApi['driver_id'])
+                    ->first();
+
+                /**
+                 * Somente inserção de novas vendas vindas da Api que ainda não foram criadas como NFSe do nosso lado
+                 */
+                if ($nfse == null) {
+                    $nfse = $this->hydrateNFSeFromApi($empresa, $driverName, $vendaApi);
+                    $itensServico = $this->hydrateItensServicoFromApi($empresa, $driverName, $vendaApi);
+                    $vendas[] = $this->create($nfse, $itensServico);
+                }
+            }
+        });
+
+        return $vendas;
+    }
+
+    /**
+     * Monta uma instância de NFSe a partir de um retorno da Api de Integração
+     *
+     * @param Empresa $empresa
+     * @param string $driverName
+     * @param array $vendaApi
+     * @return NFSe
+     */
+    protected function hydrateNFSeFromApi(Empresa $empresa, string $driverName, array $vendaApi) : NFSe
+    {
+        $nfse = new NFSe();
+
+        $nfse->empresa_id = $empresa->id;
+        $nfse->emitido_em = $vendaApi['data_emissao'];
+        $nfse->valor = $vendaApi['valor'];
+
+        $nfse->driver = $driverName;
+        $nfse->driver_id = $vendaApi['driver_id'];
+        $nfse->driver_dados = $vendaApi['driver_dados'];
+
+        $cliente = Cliente::getByDoc($vendaApi['cliente']['documento']);
+
+        if ($cliente == null) {
+            $cliente = (new ClienteService())->create($vendaApi);
+        }
+
+        $nfse->cliente_id;
+
+        return $nfse;
+    }
+
+    /**
+     * Monta um array com instâncias de Itens de servico de NFSe a partir de um retorno da Api de Integração
+     *
+     * @param Empresa $empresa
+     * @param string $driverName
+     * @param array $vendaApi
+     * @return array<NFSeItemServico>
+     */
+    protected function hydrateItensServicoFromApi(Empresa $empresa, string $driverName, array $vendaApi) : array
+    {
+        $itensServico = [];
+        foreach ($vendaApi['servicos'] as $servico) {
+            $servicoIntegracao = ServicoIntegracao::where('driver_id', $servico['driver_id'])->first();
+
+            throw_if($servicoIntegracao == null, 'Servico com id ' . $servico['driver_id'] . ' na ' . $driverName . ' não encontrado em nossa base, é necessário importar');
+
+            $itemServico = new NFSeItemServico();
+            $itemServico->servico_id = $servicoIntegracao->servico->id;
+
+            $itensServico[] = $itemServico;
+        }
+
+        return $itensServico;
     }
 }

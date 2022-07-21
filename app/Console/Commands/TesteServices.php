@@ -53,6 +53,7 @@ class TesteServices extends Command
             'spedEmpresaAlterar' => 'Sped Empresa Alterar',
             'spedNfseEmitir' => 'Sped NFSe Emitir',
             'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
+            'nfseServiceSyncPlatform' => 'NFSe Service: Sincronizar da plataforma Eduzz',
             'integraPlatformsList' => 'Integra: Lista Plataformas',
             'integraEduzzAuth' => 'Integra: Eduzz Auth (gera token)',
             'integraEduzzGetServicos' => 'Integra: Eduzz Get Serviços',
@@ -181,5 +182,14 @@ class TesteServices extends Command
 
         $integracao = (new IntegraService())->driver('eduzz', $empresaIntegracao->fields);
         dd($integracao->getVendas('2022-01-01 00:00'));
+    }
+
+    public function nfseServiceSyncPlatform()
+    {
+        $nfseService = new NFSeService();
+
+        $empresa = Empresa::first();
+
+        dd($nfseService->syncFromPlatform($empresa, 'eduzz', '2022-07-01'));
     }
 }
