@@ -143,6 +143,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                     'nome' => $servicoApi['title'],
                     'descricao' => $servicoApi['description'],
                     'valor' => $servicoApi['price'],
+                    'dados_origem' => $servicoApi,
                 ];
             }
 
