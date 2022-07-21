@@ -186,9 +186,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $from = Str::substr($from, 0, 10);
         $result = $this->callTaxDocumentList($from, $page);
 
-        $paginator = $result['paginator'];
-        $page = $page;
         $vendas = [];
+
+        if (count($result['data']) == 0) return $vendas;
+
+        $paginator = $result['paginator'];
         while ($page <= $paginator['totalPages']) {
             $vendasApi = $result['data'];
 
