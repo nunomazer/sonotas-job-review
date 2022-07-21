@@ -9,6 +9,8 @@ class Cliente extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function cidade()
     {
         return $this->belongsTo(Cidade::class, 'city_id', 'id', 'city');
