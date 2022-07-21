@@ -77,6 +77,7 @@ class ServicoService
                 $servicoIntegracao->servico_id = $servico->id;
                 $servicoIntegracao->driver = $driverName;
                 $servicoIntegracao->driver_id = $servicoApi['driver_id'];
+                $servicoIntegracao->driver_dados = $servicoApi['driver_dados'];
                 $servicoIntegracao->save();
 
                 $servicos[] = $servico;

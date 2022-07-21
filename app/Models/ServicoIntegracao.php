@@ -17,6 +17,11 @@ class ServicoIntegracao extends Model
     protected $table = 'servico_integracao';
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'driver_dados' => 'json',
+    ];
+
     /**
      * Retorna relacionamento com Tipo de serviço, LC116
      * @return void

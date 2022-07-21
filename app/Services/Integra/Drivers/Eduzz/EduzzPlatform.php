@@ -143,7 +143,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                     'nome' => $servicoApi['title'],
                     'descricao' => $servicoApi['description'],
                     'valor' => $servicoApi['price'],
-                    'dados_origem' => $servicoApi,
+                    'driver_dados' => $servicoApi,
                 ];
             }
 
@@ -223,7 +223,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                             'driver_id' => $vendaApi['content_id'],
                         ]
                     ],
-                    'dados_origem' => $vendaApi,
+                    'driver_dados' => $vendaApi,
                 ];
             }
 

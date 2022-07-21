@@ -13,6 +13,7 @@ class Servico extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
     /**
      * Retorna relacionamento com Tipo de serviço, LC116
      * @return void
