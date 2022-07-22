@@ -19,6 +19,7 @@ use Faker\Provider\pt_BR\Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class TesteSeeder extends Seeder
 {
@@ -47,7 +48,7 @@ class TesteSeeder extends Seeder
 
         $user->name = 'Ademir Mazer Junior';
         $user->email = $email;
-        $user->password = Crypt::encrypt('123456');
+        $user->password = Hash::make('123456');
         $user->phone_number = '99110011';
         $user->phone_area_code = '55';
         $user->save();
@@ -199,7 +200,7 @@ class TesteSeeder extends Seeder
 
         $user->name = 'Lucas Mkt Digital';
         $user->email = $email;
-        $user->password = Crypt::encrypt('123456');
+        $user->password = Hash::make('123456');
         $user->phone_number = '99110011';
         $user->phone_area_code = '45';
         $user->save();
