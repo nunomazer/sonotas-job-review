@@ -53,12 +53,13 @@ class TesteServices extends Command
             'spedEmpresaAlterar' => 'Sped Empresa Alterar',
             'spedNfseEmitir' => 'Sped NFSe Emitir',
             'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
-            'nfseServiceSyncPlatform' => 'NFSe Service: Sincronizar da plataforma Eduzz',
+            'nfseServiceSyncPlatformEmpresaMktDigital' => 'NFSe Service: Sincronizar da plataforma Eduzz emrpesa Mkt Digital',
             'integraPlatformsList' => 'Integra: Lista Plataformas',
             'integraEduzzAuth' => 'Integra: Eduzz Auth (gera token)',
             'integraEduzzGetServicos' => 'Integra: Eduzz Get Serviços',
             'integraGetVendas' => 'Integra: Eduzz Get Vendas',
-            'servicoServiceSyncPlatform' => 'Servico Service: Sync Plataforma (Eduzz)',
+            'servicoServiceSyncPlatformAdemir' => 'Servico Service: Sync Serviços Plataforma (Eduzz) Ademir',
+            'servicoServiceSyncPlatformMktDigital' => 'Servico Service: Sync Serviços Plataforma (Eduzz) empresa mkt Digital',
         ])->sort();
 
         $service = $this->choice('Escolha o serviço', $choices->toArray());
@@ -166,7 +167,7 @@ class TesteServices extends Command
         dd($integracao->getServicos());
     }
 
-    public function servicoServiceSyncPlatform()
+    public function servicoServiceSyncPlatformAdemir()
     {
         $servicoService = new ServicoService();
 
@@ -184,11 +185,22 @@ class TesteServices extends Command
         dd($integracao->getVendas('2022-01-01 00:00'));
     }
 
-    public function nfseServiceSyncPlatform()
+    public function servicoServiceSyncPlatformMktDigital()
+    {
+        $servicoService = new ServicoService();
+
+        $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
+        $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
+
+        dd($servicoService->syncFromPlatform($empresa, 'eduzz'));
+    }
+
+    public function nfseServiceSyncPlatformEmpresaMktDigital()
     {
         $nfseService = new NFSeService();
 
-        $empresa = Empresa::first();
+        $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
+        $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
 
         dd($nfseService->syncFromPlatform($empresa, 'eduzz', '2022-07-01'));
     }
