@@ -5,10 +5,10 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Visão Geral
+                    @yield('page-pretitle', 'Visão Geral')
                 </div>
                 <h2 class="page-title">
-                    Dashboard
+                    @yield('page-title', 'Dashboard')
                 </h2>
             </div>
             <!-- Page title actions -->
