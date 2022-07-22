@@ -34,7 +34,7 @@
                         </span>
                     </label>
                     <div class="input-group input-group-flat">
-                        <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                        <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                             placeholder="Digite sua senha" autocomplete="off">
                         <span class="input-group-text">
                             <a href="#" class="link-secondary" data-bs-toggle="tooltip">
