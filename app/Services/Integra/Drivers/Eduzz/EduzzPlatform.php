@@ -3,8 +3,10 @@
 namespace App\Services\Integra\Drivers\Eduzz;
 
 use App\Models\Servico;
+use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
+use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
@@ -211,14 +213,17 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                         'tipo_pessoa' => $vendaApi['destination_taxtype'],
                         'documento' => $vendaApi['destination_taxid'],
                         'email' => $vendaApi['destination_email'],
-                        'logradouro' => $vendaApi['destination_street'],
-                        'numero' => $vendaApi['destination_number'],
-                        'complemento' => $vendaApi['destination_complement'],
-                        'bairro' => $vendaApi['destination_district'],
-                        'cep' => $vendaApi['destination_zipcode'],
-                        'cidade' => $vendaApi['destination_city'],
-                        'estado' => $vendaApi['destination_uf'],
-                        'telefone' => $vendaApi['destination_tel'],
+                        'tipo_logradouro' => $this->resolveTipoLogradouro($vendaApi),
+                        'logradouro' => $vendaApi['destination_street'] ?? '',
+                        'numero' => $vendaApi['destination_number'] ?? '',
+                        'complemento' => $vendaApi['destination_complement'] ?? '',
+                        'bairro' => $vendaApi['destination_district'] ?? '',
+                        'cep' => $vendaApi['destination_zipcode'] ?? '',
+                        'cidade' => $vendaApi['destination_city'] ?? '',
+                        'city_id' => $this->resolveCidadeId($vendaApi),
+                        'estado' => $vendaApi['destination_uf'] ?? '',
+                        'telefone_ddd' => Str::substr($vendaApi['destination_tel'], 0,2),
+                        'telefone_num' => Str::substr($vendaApi['destination_tel'], 2),
                     ],
                     'servicos' => [
                         [
@@ -237,5 +242,19 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         }
 
         return $vendas;
+    }
+
+    protected function resolveTipoLogradouro(array $venda) : string
+    {
+        $tipoLogService = new TipoLogradouroService();
+
+        return $tipoLogService->resolvePeloLogradouro($venda['destination_street']);
+    }
+
+    protected function resolveCidadeId(array $venda) : int
+    {
+        $cidadeService = new CidadeService();
+
+        return $cidadeService->resolveIdPeloNome($venda['destination_city']);
     }
 }
