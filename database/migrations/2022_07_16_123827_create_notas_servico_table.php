@@ -32,6 +32,7 @@ class CreateNotasServicoTable extends Migration
             $table->decimal('valor', 20,2);
 
             $table->index(['driver_id', 'empresa_id']);
+            $table->index(['driver', 'driver_id', 'empresa_id']);
 
             $table->timestamps();
             $table->softDeletes();

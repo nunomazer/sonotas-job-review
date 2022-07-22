@@ -19,6 +19,7 @@ class ClienteService
      */
     public function create($cliente) : Cliente
     {
+        $cliente['tipo_logradouro'] = $this->validaTipoLogradouro($cliente);
         $cliente = Cliente::create($cliente);
 
         ClienteCriadoEvent::dispatch($cliente);
@@ -39,5 +40,17 @@ class ClienteService
 
         return $cliente;
     }
+
+    protected function validaTipoLogradouro(array $cliente) : string
+    {
+        $tipoLogService = new TipoLogradouroService();
+
+        if (isset($cliente['tipo_logradouro'])) {
+            return $tipoLogService->validoOuResolve($cliente['tipo_logradouro'], $cliente['logradouro']);
+        }
+
+        return $tipoLogService->resolvePeloLogradouro($cliente['logradouro']);
+    }
+
 
 }

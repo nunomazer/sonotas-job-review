@@ -3,10 +3,13 @@
 namespace App\Services\Integra\Drivers\Eduzz;
 
 use App\Models\Servico;
+use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
+use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 
 class EduzzPlatform extends Platform implements IIntegraDriver
 {
@@ -37,15 +40,6 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected $token_until = null;
 
-    protected function getApiQueryParams() : array
-    {
-        return [
-            'email' => $this->config['email'],
-            'publickey' => $this->config['publickey'],
-            'apikey' => $this->config['apikey'],
-        ];
-    }
-
     private function setTokensFromResult($result)
     {
         if (isset($result['data']['token'])) {
@@ -72,7 +66,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         ]);
 
         $result = $http->post('/credential/generate_token',[
-            'query' => $this->getApiQueryParams(),
+            'query' => [
+                'email' => $this->config['email'],
+                'publickey' => $this->config['publickey'],
+                'apikey' => $this->config['apikey'],
+            ]
         ]);
 
         $result = json_decode($result->getBody()->getContents(), true);
@@ -109,11 +107,17 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         ]);
     }
 
+    /**
+     * Chama o endpoint que retorna a lista de conteúdos - os serviços cadastrados na Eduzz
+     * @param $page
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function callContentList($page = null) : array
     {
         $http = $this->httpClient();
 
-        $query = $this->getApiQueryParams();
+        $query = [];
         if ($page) $query['page'] = $page;
 
         $result = $http->get('/content/content_list', [
@@ -141,12 +145,118 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                     'nome' => $servicoApi['title'],
                     'descricao' => $servicoApi['description'],
                     'valor' => $servicoApi['price'],
+                    'driver_dados' => $servicoApi,
                 ];
             }
 
             $page++;
+
+            if ($page <= $paginator['totalPages']) {
+                $result = $this->callTaxDocumentList($from, $page);
+            }
         }
 
         return $servicos;
+    }
+
+    /**
+     * Chama o endpoint que retorna a lista de documentos fiscais - as vendas cadastradas na Eduzz
+     *
+     * @param $page
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function callTaxDocumentList($from, $page = 1) : array
+    {
+        $http = $this->httpClient();
+
+        $query = [];
+        $query['start_date'] = $from;
+        if ($page) $query['page'] = $page;
+
+        $result = $http->get('/fiscal/get_taxdocumentlist', [
+            'query' => $query,
+        ]);
+
+        $result = json_decode($result->getBody()->getContents(), true);
+
+        return $result;
+    }
+
+    public function getVendas(string $from, $page = 1): array
+    {
+        $from = Str::substr($from, 0, 10);
+        $result = $this->callTaxDocumentList($from, $page);
+
+        $vendas = [];
+
+        if (count($result['data']) == 0) return $vendas;
+
+        $paginator = $result['paginator'];
+        while ($page <= $paginator['totalPages']) {
+            $vendasApi = $result['data'];
+
+            foreach ($vendasApi as $vendaApi) {
+                $vendas[] = [
+                    'driver_id' => $vendaApi['document_id'],
+                    'venda' => [
+                        'nome' => $vendaApi['document_name'],
+                        'status' => $vendaApi['document_status'],
+                        'tipo' => $vendaApi['document_type'],
+                        'valor' => $vendaApi['document_basevalue'],
+                        'data_emissao' => $vendaApi['document_emissiondate'],
+                        'data_referencia' => $vendaApi['document_referencedate'],
+                        'data_processamento' => $vendaApi['document_processingdate'],
+                    ],
+                    'cliente' => [
+                        'nome' => $vendaApi['destination_company_name'],
+                        'tipo_pessoa' => $vendaApi['destination_taxtype'],
+                        'documento' => $vendaApi['destination_taxid'],
+                        'email' => $vendaApi['destination_email'],
+                        'tipo_logradouro' => $this->resolveTipoLogradouro($vendaApi),
+                        'logradouro' => $vendaApi['destination_street'] ?? '',
+                        'numero' => $vendaApi['destination_number'] ?? '',
+                        'complemento' => $vendaApi['destination_complement'] ?? '',
+                        'bairro' => $vendaApi['destination_district'] ?? '',
+                        'cep' => $vendaApi['destination_zipcode'] ?? '',
+                        'cidade' => $vendaApi['destination_city'] ?? '',
+                        'city_id' => $this->resolveCidadeId($vendaApi),
+                        'estado' => $vendaApi['destination_uf'] ?? '',
+                        'telefone_ddd' => Str::substr($vendaApi['destination_tel'], 0,2),
+                        'telefone_num' => Str::substr($vendaApi['destination_tel'], 2),
+                    ],
+                    'servicos' => [
+                        [
+                            'driver_id' => $vendaApi['content_id'],
+                            'valor' => $vendaApi['document_basevalue'],
+                            'qtde' => 1,
+                        ]
+                    ],
+                    'driver_dados' => $vendaApi,
+                ];
+            }
+
+            $page++;
+
+            if ($page <= $paginator['totalPages']) {
+                $result = $this->callTaxDocumentList($from, $page);
+            }
+        }
+
+        return $vendas;
+    }
+
+    protected function resolveTipoLogradouro(array $venda) : string
+    {
+        $tipoLogService = new TipoLogradouroService();
+
+        return $tipoLogService->resolvePeloLogradouro($venda['destination_street']);
+    }
+
+    protected function resolveCidadeId(array $venda) : int
+    {
+        $cidadeService = new CidadeService();
+
+        return $cidadeService->resolveIdPeloNome($venda['destination_city']);
     }
 }
