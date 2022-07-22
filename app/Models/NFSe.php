@@ -11,13 +11,22 @@ class NFSe extends Model
 
     protected $table = 'notas_servico';
 
-    protected $guarded = [
-        'id',
+    protected $fillable = [
+        'driver',
+        'driver_id',
+        'status',
+        'status_historico',
+        'emitido_em',
+        'empresa_id',
+        'cliente_id',
+        'valor',
+        'driver_dados',
     ];
 
     protected $casts = [
         'emitido_em' => 'datetime',
         'status_historico' => 'json',
+        'driver_dados' => 'json,'
     ];
 
     public function empresa()
