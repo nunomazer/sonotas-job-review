@@ -16,9 +16,10 @@ class TipoLogradouroService
      * @param string $default
      * @return string
      */
-    public function validoOuResolve(string $tipo, string $logradouro, string $default = 'Rua') : string
+    public function validoOuResolve(?string $tipo, ?string $logradouro, string $default = 'Rua') : string
     {
-       if (in_array(Str::lower($tipo), Str::lower(TipoLogradouro::tipos)) === false) {
+        $tipos = array_map(function ($t) { return Str::lower($t); }, TipoLogradouro::tipos);
+       if (in_array(Str::lower($tipo ?? ''), $tipos) === false) {
            return $this->resolvePeloLogradouro($logradouro, $default);
        }
 
@@ -35,7 +36,7 @@ class TipoLogradouroService
     public function resolvePeloLogradouro(?string $logradouro, string $default = 'Rua') : string
     {
         foreach (TipoLogradouro::tipos as $tipo) {
-            if (Str::contains(Str::lower($logradouro), Str::lower($tipo))) {
+            if (Str::contains(Str::lower($logradouro ?? ''), Str::lower($tipo))) {
                 return $tipo;
             }
         }
