@@ -26,7 +26,7 @@ class NFSe extends Model
     protected $casts = [
         'emitido_em' => 'datetime',
         'status_historico' => 'json',
-        'driver_dados' => 'json,'
+        'driver_dados' => 'json',
     ];
 
     public function empresa()

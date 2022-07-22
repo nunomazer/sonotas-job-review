@@ -123,7 +123,7 @@ class NFSeService
                 if ($nfse == null) {
                     $nfse = $this->hydrateNFSeFromApi($empresa, $driverName, $vendaApi);
                     $itensServico = $this->hydrateItensServicoFromApi($empresa, $driverName, $vendaApi);
-                    $vendas[] = $this->create($nfse, $itensServico);
+                    $vendas[] = $this->create($nfse->toArray(), $itensServico);
                 }
             }
         });
@@ -144,8 +144,8 @@ class NFSeService
         $nfse = new NFSe();
 
         $nfse->empresa_id = $empresa->id;
-        $nfse->emitido_em = $vendaApi['data_emissao'];
-        $nfse->valor = $vendaApi['valor'];
+        $nfse->emitido_em = $vendaApi['venda']['data_emissao'];
+        $nfse->valor = $vendaApi['venda']['valor'];
 
         $nfse->driver = $driverName;
         $nfse->driver_id = $vendaApi['driver_id'];
@@ -154,10 +154,12 @@ class NFSeService
         $cliente = Cliente::getByDoc($vendaApi['cliente']['documento']);
 
         if ($cliente == null) {
-            $cliente = (new ClienteService())->create($vendaApi);
+            $cliente = (new ClienteService())->create(
+                array_merge(['empresa_id'=> $empresa->id], $vendaApi['cliente'])
+            );
         }
 
-        $nfse->cliente_id;
+        $nfse->cliente_id = $cliente->id;
 
         return $nfse;
     }
@@ -180,6 +182,8 @@ class NFSeService
 
             $itemServico = new NFSeItemServico();
             $itemServico->servico_id = $servicoIntegracao->servico->id;
+            $itemServico->qtde = $servico['qtde'];
+            $itemServico->valor = $servico['valor'];
 
             $itensServico[] = $itemServico;
         }
