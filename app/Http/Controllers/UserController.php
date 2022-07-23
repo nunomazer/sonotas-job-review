@@ -12,5 +12,7 @@ class UserController extends Controller
     public function showProfile(User $user)
     {
         $this->authorize('accessAndEdit', $user);
+
+        return view('pages.profile.show', compact('user'));
     }
 }
