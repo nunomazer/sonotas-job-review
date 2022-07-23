@@ -12,6 +12,10 @@ class Empresa extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'ativo' => 'boolean',
+    ];
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_user_id', 'id');

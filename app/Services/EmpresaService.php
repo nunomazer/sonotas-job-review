@@ -6,10 +6,12 @@ use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Models\Empresa;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Services\Integra\IntegraService;
 use App\Services\Integra\Platform;
 use App\Services\Sped\SpedService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class EmpresaService
@@ -95,5 +97,16 @@ class EmpresaService
         throw_if($empresaIntegracao== null, "Integração {$driver} não encontrada para a empresa {$empresa->nome}");
 
         return (new IntegraService())->driver($driver, $empresaIntegracao->fields);
+    }
+
+    /**
+     * Retorna a lista de empresas que o usuário é proprietário na plataforma
+     *
+     * @param User $user
+     * @return Collection
+     */
+    public function getEmpresasOwner(User $user) : Collection
+    {
+        return Empresa::where('owner_user_id', $user->id)->get();
     }
 }

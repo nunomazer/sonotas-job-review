@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -21,3 +22,5 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/profile/{user}', [UserController::class, 'showProfile'])->name('profile');
+
+Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
