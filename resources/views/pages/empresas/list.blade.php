@@ -14,21 +14,34 @@
         </div>
         <div class="card-body">
             <div id="table-default" class="table-responsive">
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th><button class="table-sort" data-sort="sort-name">Ativa</button></th>
-                        <th><button class="table-sort" data-sort="sort-name">Nome</button></th>
+                        <th class="table-sort" data-sort="sort-name">Ativa</th>
+                        <th class="table-sort" data-sort="sort-name">Nome</th>
+                        <th>Integrações</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody class="table-tbody">
                         @foreach($empresas as $empresa)
                             <tr>
                                 <td>
-                                    {{ $empresa->ativo }}
+                                    {{ $empresa->ativo ? 'Sim' : 'Não' }}
                                 </td>
                                 <td>
                                     {{ $empresa->nome }}
+                                </td>
+                                <td>
+                                    @foreach($empresa->integracoes as $integracao)
+                                        <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
+                                            {{ $integracao->driver }}
+                                        </a>
+                                        <br/>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-sm">Nova Integração</a>
                                 </td>
                             </tr>
                         @endforeach

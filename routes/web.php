@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IntegracoesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/profile/{user}', [UserController::class, 'showProfile'])->name('profile');
 
+Route::get('/empresas/{empresa}/integracoes/{integracao}', [IntegracoesController::class, 'edit'])->name('empresas.integracoes.edit');
+
 Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
+
