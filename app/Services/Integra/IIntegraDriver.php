@@ -17,6 +17,13 @@ interface IIntegraDriver
     public function toArray() : array;
 
     /**
+     * Retorna o label do campo de pelo seu nome
+     * @param string $name
+     * @return string
+     */
+    public function fieldLabel(string $name) : string;
+
+    /**
      * Recupera da plataforma integrada a lista de serviços, no formato de um array de models Servico
      *
      * @return array

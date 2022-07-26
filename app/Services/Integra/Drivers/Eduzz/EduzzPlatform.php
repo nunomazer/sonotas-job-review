@@ -95,7 +95,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      * de segurança no cabeçalho, caso não tenha um token ele gera
      * @return Client
      */
-    public function httpClient(): Client
+    protected function httpClient(): Client
     {
         return new \GuzzleHttp\Client([
             'base_uri' => config('integra.drivers.eduzz.base_url'),

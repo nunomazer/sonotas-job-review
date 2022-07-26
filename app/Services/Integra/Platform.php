@@ -24,6 +24,14 @@ abstract class Platform implements IIntegraDriver
         return $this::$fields;
     }
 
+    public function fieldLabel(string $name): string
+    {
+        foreach (static::$fields as $field) {
+            if (strtolower($field['name']) == strtolower($name)) return $field['label'];
+        }
+        return '';
+    }
+
     public function toArray() : array
     {
         return [
