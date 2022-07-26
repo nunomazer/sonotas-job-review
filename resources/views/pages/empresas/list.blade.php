@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-header">
             <div class="card-actions">
-                <a href="#" class="btn btn-primary">
+                <a href="#" class="btn btn-sm btn-primary">
                     Nova empresa
                 </a>
             </div>
