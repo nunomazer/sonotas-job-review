@@ -28,8 +28,11 @@ class PlansSeeder extends Seeder
         $planoBasico = Plan::firstOrNew([
             'name' => 'Básico',
         ]);
-        $planoBasico->description = 'Plano Básico';
+        $planoBasico->description = 'Plano Básico com pagamento mensal';
         $planoBasico->price_month = 99;
+        $planoBasico->price_quarter = (99*3)*0.97;
+        $planoBasico->price_semester = (99*6)*0.93;
+        $planoBasico->price_year = (99*12)*0.88;
         $planoBasico->features = $features;
         $planoBasico->save();
     }

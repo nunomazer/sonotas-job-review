@@ -60,7 +60,7 @@
 
 
 
-                @foreach($integracao->fields as $field => $value)
+                    @foreach($integracao->fields as $field => $value)
                         <div class="mb-3 col-6">
                             <label for="{{$field}}" class="form-label">{{$driver->fieldLabel($field)}}</label>
                             <input type="text" class="form-control" name="field[{{$field}}]" aria-describedby="nameHelp"
