@@ -27,4 +27,12 @@ class MoneyFlowService
     {
         return $this->driver;
     }
+
+    /**
+     * @return IMoneyFlowPlano
+     */
+    public function planoDriver() : IMoneyFlowPlano
+    {
+        return $this->driver->planoDriver();
+    }
 }
