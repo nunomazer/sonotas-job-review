@@ -6,8 +6,10 @@ use App\Models\Empresa;
 use App\Models\Integracao;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
+use App\Models\Plan;
 use App\Models\Servico;
 use App\Services\Integra\IntegraService;
+use App\Services\MoneyFlow\MoneyFlowService;
 use App\Services\NFSeService;
 use App\Services\ServicoService;
 use App\Services\Sped\SpedService;
@@ -52,6 +54,7 @@ class TesteServices extends Command
             'spedEmpresaCadastrar' => 'Sped Cadastrar Empresa',
             'spedEmpresaAlterar' => 'Sped Empresa Alterar',
             'spedNfseEmitir' => 'Sped NFSe Emitir',
+            'moneyServicePlanUpdateOrCreate' => 'Money Flow Plano Update or Create',
             'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
             'nfseServiceSyncPlatformEmpresaMktDigital' => 'NFSe Service: Sincronizar da plataforma Eduzz emrpesa Mkt Digital',
             'integraPlatformsList' => 'Integra: Lista Plataformas',
@@ -203,5 +206,15 @@ class TesteServices extends Command
         $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
 
         dd($nfseService->syncFromPlatform($empresa, 'eduzz', '2022-07-01'));
+    }
+
+    public function moneyServicePlanUpdateOrCreate()
+    {
+        $mfService = new MoneyFlowService();
+
+        $planoDriver = $mfService->planoDriver();
+
+        $plan = Plan::first();
+        dd($planoDriver->updateOrCreate($plan));
     }
 }
