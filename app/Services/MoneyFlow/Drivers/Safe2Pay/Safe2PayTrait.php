@@ -26,12 +26,16 @@ trait Safe2PayTrait
 
         $baseUri = 'https://' . $apiSubDomain . '.' . config('moneyflow.drivers.safe2pay.base_url');
 
+        $envToken = (isset($this->has_sandbox) && $this->has_sandbox) ? 'sandbox' : 'production';
+
+        $token = config('moneyflow.drivers.safe2pay.api_token_'.$envToken);
+
         return new \GuzzleHttp\Client([
             'base_uri' => $baseUri,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'X-API-KEY' => config('moneyflow.drivers.safe2pay.api_token'),
+                'X-API-KEY' => $token,
             ],
         ]);
     }
