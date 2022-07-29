@@ -22,8 +22,12 @@ trait Safe2PayTrait
      */
     public function httpClient(): Client
     {
+        $apiSubDomain = $this->api_sub_domain ?? 'api';
+
+        $baseUri = 'https://' . $apiSubDomain . '.' . config('moneyflow.drivers.safe2pay.base_url');
+
         return new \GuzzleHttp\Client([
-            'base_uri' => config('moneyflow.drivers.safe2pay.base_url'),
+            'base_uri' => $baseUri,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
