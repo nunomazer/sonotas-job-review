@@ -11,7 +11,7 @@ use App\Services\Integra\IntegraService;
 use App\Services\NFSeService;
 use App\Services\ServicoService;
 use App\Services\Sped\SpedService;
-use App\Services\Sped\Status;
+use App\Services\Sped\SpedStatus;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -105,7 +105,7 @@ class TesteServices extends Command
 
         DB::beginTransaction();
         $nfse = new NFSe();
-        $nfse->status = Status::PENDENTE;
+        $nfse->status = SpedStatus::PENDENTE;
         $nfse->empresa_id = $empresa->id;
         $nfse->emitido_em = now();
         $nfse->cliente_id = $cliente->id;
@@ -131,7 +131,7 @@ class TesteServices extends Command
         $cliente = $empresa->clientes->first();
 
         $nfse = new NFSe();
-        $nfse->status = Status::PENDENTE;
+        $nfse->status = SpedStatus::PENDENTE;
         $nfse->empresa_id = $empresa->id;
         $nfse->emitido_em = now();
         $nfse->cliente_id = $cliente->id;

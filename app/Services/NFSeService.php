@@ -10,7 +10,7 @@ use App\Models\NFSeItemServico;
 use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Services\Sped\SpedService;
-use App\Services\Sped\Status;
+use App\Services\Sped\SpedStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -30,8 +30,8 @@ class NFSeService
         try {
             DB::beginTransaction();
 
-                $nfse['status'] = Status::PENDENTE;
-                $nfse['status_historico'] = $this->addStatusDados(null, Status::PENDENTE, ['message' => 'Registro criado no banco de dados']);
+                $nfse['status'] = SpedStatus::PENDENTE;
+                $nfse['status_historico'] = $this->addStatusDados(null, SpedStatus::PENDENTE, ['message' => 'Registro criado no banco de dados']);
 
                 $nfse = NFSe::create($nfse);
 
@@ -63,14 +63,14 @@ class NFSeService
 
             throw_if($result->code > 300, 'Erro no retorno da API Plugnotas: ' . $result->message);
 
-            $nfse->status = Status::PROCESSAMENTO;
+            $nfse->status = SpedStatus::PROCESSAMENTO;
             $nfse->driver_id = $result->objects[0]['idApi'];
             $nfse->status_historico = $this->addStatusDados($nfse, $nfse->status, $result->toArray());
             $nfse->save();
 
         } catch (\Exception $exception) {
-            $nfse->status = Status::ERRO;
-            $nfse->status_historico = $this->addStatusDados($nfse, Status::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
+            $nfse->status = SpedStatus::ERRO;
+            $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
             $nfse->save();
 
             Log::error($exception);
