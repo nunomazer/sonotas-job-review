@@ -37,7 +37,7 @@
     <meta property="og:title" content="Só Notas">
     <meta property="og:url" content="{{ mix('images/sonotas_logo.png') }}">
     <meta property="og:description" content="Emissor de Documentos Fiscais">
-    
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>

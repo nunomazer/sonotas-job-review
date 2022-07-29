@@ -34,10 +34,16 @@
                                 </td>
                                 <td>
                                     @foreach($empresa->integracoes as $integracao)
-                                        <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
-                                            {{ $integracao->driver }}
-                                        </a>
-                                        <br/>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                {{ $integracao->ativo ? '(ativo)' : '()' }}
+                                            </div>
+                                            <div class="col-10">
+                                                <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
+                                                    {{ $integracao->driver }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </td>
                                 <td>

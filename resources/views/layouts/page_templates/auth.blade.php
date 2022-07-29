@@ -4,6 +4,8 @@
 
     <div class="page-body">
         <div class="container-xl">
+            @include('layouts.partials.messages')
+
             @yield('content')
         </div>
     </div>

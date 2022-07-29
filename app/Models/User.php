@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function empresas()
     {
-        return $this->hasManyThrough(Empresa::class, UserEmpresa::class);
+        return $this->hasManyThrough(Empresa::class, UserEmpresa::class, 'user_id', 'id', 'id', 'id');
     }
 }
