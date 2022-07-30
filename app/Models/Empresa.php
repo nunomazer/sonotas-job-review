@@ -37,6 +37,11 @@ class Empresa extends Model
         return $this->hasMany(Cliente::class);
     }
 
+    public function servicos()
+    {
+        return $this->hasMany(Servico::class);
+    }
+
     public function integracoes()
     {
         return $this->hasMany(Integracao::class);
