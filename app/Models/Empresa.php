@@ -46,4 +46,9 @@ class Empresa extends Model
     {
         return $this->hasMany(Integracao::class);
     }
+
+    public function configuracao_nfs()
+    {
+        return $this->hasOne(EmpresaNFSConfig::class);
+    }
 }

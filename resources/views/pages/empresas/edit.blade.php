@@ -28,7 +28,7 @@
                 <div class="row">
 
                     <div class="mb-3 col-6">
-                        <label for="name" class="form-label">Nome</label>
+                        <label for="name" class="form-label required">Nome</label>
                         <input type="text" class="form-control" name="nome"
                                required value="{{ old('nome', $empresa->nome ?? '') }}"
                         >
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="mb-3 col-4">
-                        <label for="name" class="form-label">Fantasia</label>
+                        <label for="name" class="form-label required">Fantasia</label>
                         <input type="text" class="form-control" name="alias"
                                required value="{{ old('alias', $empresa->alias) }}"
                         >
@@ -58,7 +58,7 @@
                 <div class="row">
 
                     <div class="mb-3 col-8">
-                        <label class="form-label">E-mail</label>
+                        <label class="form-label required">E-mail</label>
                         <input type="text" class="form-control" name="email"
                                required value="{{ old('email', $empresa->email) }}"
                         >
@@ -66,16 +66,16 @@
                     </div>
 
                     <div class="mb-3 col-1">
-                        <label class="form-label">DDD</label>
+                        <label class="form-label required">DDD</label>
                         <input type="number" class="form-control" name="telefone_ddd"
-                               value="{{ old('telefone_dds', $empresa->telefone_ddd) }}"
+                               required value="{{ old('telefone_dds', $empresa->telefone_ddd) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-3">
-                        <label class="form-label">Número do telefone</label>
+                        <label class="form-label required">Número do telefone</label>
                         <input type="number" class="form-control" name="telefone_num"
-                               value="{{ old('telefone_num', $empresa->telefone_num) }}"
+                               required value="{{ old('telefone_num', $empresa->telefone_num) }}"
                         >
                     </div>
 
@@ -84,7 +84,7 @@
                 <div class="row">
 
                     <div class="mb-3 col-4">
-                        <label for="documento" class="form-label">CNPJ / CPF</label>
+                        <label for="documento" class="form-label required">CNPJ / CPF</label>
                         <input type="text" class="form-control" name="documento"
                                required value="{{ old('documento', $empresa->documento) }}"
                         >
@@ -107,9 +107,37 @@
 
                 </div>
 
+                <div class="row">
+
+                    <div class="mb-3 col-4">
+                        <label class="form-label required">Regime Tributário</label>
+                        <select class="form-select" required name="regime_tributario">
+                            @foreach(\App\Services\Sped\RegimesTributarios::toArray() as $regime)
+                                <option value="{{$regime['valor']}}"
+                                    {{ old('regime_tributario', $model->regime_tributario ?? '') == $regime['valor'] ? 'selected' : '' }}>
+                                    {{$regime['nome']}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-4">
+                        <label class="form-label required">Regime Tributário Especial</label>
+                        <select class="form-select" required name="regime_tributario_especial">
+                            @foreach(\App\Services\Sped\RegimesTributariosEspeciais::toArray() as $regime)
+                                <option value="{{$regime['valor']}}"
+                                    {{ old('regime_tributario_especial', $model->regime_tributario_especial ?? '') == $regime['valor'] ? 'selected' : '' }}>
+                                    {{$regime['nome']}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+
                 @include('pages.partials.campos-endereco', ['model' => $empresa])
 
-                @include('pages.empresas.partials.config-nfse', ['model' => $empresa])
+                @include('pages.empresas.partials.config-nfse', ['model' => $empresa->configuracao_nfs])
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="{{ route('empresas.list') }}" class="btn btn-secondary">

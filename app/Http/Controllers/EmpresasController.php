@@ -37,6 +37,7 @@ class EmpresasController extends Controller
 
     public function update(Empresa $empresa)
     {
-        return view('pages.empresas.edit', compact('empresa'));
+        return redirect()->route('empresas.list', )
+            ->with(['success' => 'Empresa '.$empresa->nome.' atualizada com successo !']);
     }
 }
