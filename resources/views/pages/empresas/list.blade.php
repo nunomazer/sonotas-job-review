@@ -17,9 +17,13 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th class="table-sort" data-sort="sort-name">Ativa</th>
                         <th class="table-sort" data-sort="sort-name">Nome</th>
-                        <th>Integrações</th>
+                        <th>
+                            Plano
+                        </th>
+                        <th>
+                            Integrações
+                        </th>
                         <th></th>
                     </tr>
                     </thead>
@@ -27,38 +31,36 @@
                         @foreach($empresas as $empresa)
                             <tr>
                                 <td>
-                                    {{ $empresa->ativo ? 'Sim' : 'Não' }}
+                                    <span class="mx-1 {{ $empresa->ativo ? 'status-green' : '' }}">
+                                        <span class="status-dot"></span>
+                                    </span>
+
+                                    <a href="{{route('empresas.edit', $empresa)}}">
+                                        {{ $empresa->nome }}
+                                    </a>
                                 </td>
                                 <td>
-                                    {{ $empresa->nome }}
+                                    @if($empresa->plano)
+                                    @else
+                                        <a href="#" class="btn btn-sm btn-warning">
+                                            Assinar plano
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>
                                     @foreach($empresa->integracoes as $integracao)
-                                        {{ $integracao->ativo ? '(ativo)' : '(inativo)' }}
+                                        <span class="mx-1 {{ $integracao->ativo ? 'status-green' : '' }}">
+                                            <span class="status-dot"></span>
+                                        </span>
                                         <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
                                             {{ $integracao->driver }}
                                         </a>
                                     @endforeach
                                 </td>
                                 <td>
-                                    @if ($empresa->onboarding()->inProgress())
-                                        <ol>
-                                            @foreach ($empresa->onboarding()->steps as $step)
-                                                <li>
-                                                    @if($step->complete())
-                                                        <i class="fa fa-check-square-o fa-fw"></i>
-                                                        <s>{{ $step->title }}</s>
-                                                    @else
-                                                        <i class="fa fa-square-o fa-fw"></i>
-                                                        {{ $step->title }} <br/>
-                                                        <a class="btn btn-sm" href="{{ $step->link }}" {{ $step->complete() ? 'disabled' : '' }}>
-                                                            {{ $step->cta }}
-                                                        </a>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ol>
-                                    @endif
+                                    <a href="{{route('empresas.edit', $empresa)}}" class="btn btn-sm">
+                                        Nova integração
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
