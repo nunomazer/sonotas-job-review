@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Plan;
 use App\Models\PlanFeature;
 use App\Models\Role;
+use App\Services\MoneyFlow\MoneyFlowService;
+use App\Services\PlanoService;
 use Illuminate\Database\Seeder;
 
 class PlansSeeder extends Seeder
@@ -16,6 +18,7 @@ class PlansSeeder extends Seeder
      */
     public function run()
     {
+
         $features = [];
         $feature = new PlanFeature();
         $feature->slug = PlanFeature::FEATURE_QTDE_NOTAS;
@@ -25,15 +28,69 @@ class PlansSeeder extends Seeder
         $feature->frequency = 1;
         $features[] = $feature;
 
-        $planoBasico = Plan::firstOrNew([
-            'name' => 'Básico',
+        $this->setBasicoMensal($features);
+        $this->setBasicoTrimestral($features);
+        $this->setBasicoSemestral($features);
+        $this->setBasicoAnual($features);
+    }
+
+    private function setBasicoMensal(array $features)
+    {
+        $planoService = new PlanoService();
+
+        $planoBasicoMensal = Plan::firstOrNew([
+            'name' => 'Básico Mensal',
         ]);
-        $planoBasico->description = 'Plano Básico com pagamento mensal';
-        $planoBasico->price_month = 99;
-        $planoBasico->price_quarter = (99*3)*0.97;
-        $planoBasico->price_semester = (99*6)*0.93;
-        $planoBasico->price_year = (99*12)*0.88;
-        $planoBasico->features = $features;
-        $planoBasico->save();
+        $planoBasicoMensal->description = 'Plano Básico com pagamento mensal';
+        $planoBasicoMensal->price = 97;
+        $planoBasicoMensal->frequence = 'month';
+        $planoBasicoMensal->features = $features;
+
+        $planoService->updateOrCreate($planoBasicoMensal);
+    }
+
+    private function setBasicoTrimestral(array $features)
+    {
+        $planoService = new PlanoService();
+
+        $planoBasicoTrimestral = Plan::firstOrNew([
+            'name' => 'Básico Trimestral',
+        ]);
+        $planoBasicoTrimestral->description = 'Plano Básico com pagamento trimestral';
+        $planoBasicoTrimestral->price = 277;
+        $planoBasicoTrimestral->frequence = 'quarter';
+        $planoBasicoTrimestral->features = $features;
+
+        $planoService->updateOrCreate($planoBasicoTrimestral);
+    }
+
+    private function setBasicoSemestral(array $features)
+    {
+        $planoService = new PlanoService();
+
+        $planoBasicoSemestral = Plan::firstOrNew([
+            'name' => 'Básico Semestral',
+        ]);
+        $planoBasicoSemestral->description = 'Plano Básico com pagamento semestral';
+        $planoBasicoSemestral->price = 517;
+        $planoBasicoSemestral->frequence = 'quarter';
+        $planoBasicoSemestral->features = $features;
+
+        $planoService->updateOrCreate($planoBasicoSemestral);
+    }
+
+    private function setBasicoAnual(array $features)
+    {
+        $planoService = new PlanoService();
+
+        $planoBasicoAnual = Plan::firstOrNew([
+            'name' => 'Básico Anual',
+        ]);
+        $planoBasicoAnual->description = 'Plano Básico com pagamento anual';
+        $planoBasicoAnual->price = 970;
+        $planoBasicoAnual->frequence = 'quarter';
+        $planoBasicoAnual->features = $features;
+
+        $planoService->updateOrCreate($planoBasicoAnual);
     }
 }

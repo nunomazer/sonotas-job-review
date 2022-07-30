@@ -42,6 +42,8 @@ class Safe2PayPlano implements IMoneyFlowPlano
 
     private function create(Plan $plan) : ?Plan
     {
+        if ($plan->driver_id) return $plan;
+
         $planDriver = [
             'PlanOption' => 2,
             'PlanFrequence' => self::CODESNAMES[$plan->frequence],
