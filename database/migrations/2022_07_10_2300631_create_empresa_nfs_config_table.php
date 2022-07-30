@@ -29,7 +29,7 @@ class CreateEmpresaNFSConfigTable extends Migration
             $table->decimal('pis', 5,2);
             $table->decimal('iss', 5,2);
 
-            $table->boolean('iss_retifo_fonte');
+            $table->boolean('iss_retido_fonte');
 
             $table->string('tipo_servico_codigo');
             $table->foreign('tipo_servico_codigo')->references('codigo')->on('tipo_servicos');

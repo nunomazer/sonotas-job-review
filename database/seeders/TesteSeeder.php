@@ -156,7 +156,7 @@ class TesteSeeder extends Seeder
         $nfseConf->pis = 0;
         $nfseConf->iss = 4;
 
-        $nfseConf->iss_retifo_fonte = false;
+        $nfseConf->iss_retido_fonte = false;
 
         $nfseConf->tipo_servico_codigo = '08.02';
 
@@ -308,7 +308,7 @@ class TesteSeeder extends Seeder
         $nfseConf->pis = 0;
         $nfseConf->iss = 4;
 
-        $nfseConf->iss_retifo_fonte = false;
+        $nfseConf->iss_retido_fonte = false;
 
         $nfseConf->tipo_servico_codigo = '08.02';
 

@@ -109,6 +109,8 @@
 
                 @include('pages.partials.campos-endereco', ['model' => $empresa])
 
+                @include('pages.empresas.partials.config-nfse', ['model' => $empresa])
+
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="{{ route('empresas.list') }}" class="btn btn-secondary">
                     Voltar
