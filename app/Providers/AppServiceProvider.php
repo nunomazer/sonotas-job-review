@@ -37,14 +37,14 @@ class AppServiceProvider extends ServiceProvider
                 return false;
             });
 
-        OnboardFacade::addStep('Escolher plano')
+        OnboardFacade::addStep('Adquirir plano')
             ->link('/empresas')
             ->cta('Escolher o plano')
             ->completeIf(function (Empresa $empresa) {
                 return false;
             });
 
-        OnboardFacade::addStep('Pagar assinatura')
+        OnboardFacade::addStep('Ativar assinatura')
             ->link('/empresas')
             ->cta('Pagar assinatura')
             ->completeIf(function (Empresa $empresa) {
@@ -56,6 +56,17 @@ class AppServiceProvider extends ServiceProvider
             ->cta('Nova integração')
             ->completeIf(function (Empresa $empresa) {
                 return $empresa->integracoes()->count();
+            });
+
+        OnboardFacade::addStep('Importar produtos/serviços')
+            ->link('/empresas')
+            ->cta('Importar')
+            ->completeIf(function (Empresa $empresa) {
+                if ($empresa->servicos()->count()) {
+                    return $empresa->servicos()->first()->integracoes()->count();
+                }
+
+                return false;
             });
     }
 }
