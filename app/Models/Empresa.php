@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kayo\StatesAndCitiesIbge\Models\City;
+use Spatie\Onboard\GetsOnboarded;
 
 class Empresa extends Model
 {
-    use HasFactory;
+    use HasFactory, GetsOnboarded;
 
     protected $guarded = ['id'];
 

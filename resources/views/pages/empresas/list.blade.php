@@ -34,20 +34,31 @@
                                 </td>
                                 <td>
                                     @foreach($empresa->integracoes as $integracao)
-                                        <div class="row">
-                                            <div class="col-2">
-                                                {{ $integracao->ativo ? '(ativo)' : '()' }}
-                                            </div>
-                                            <div class="col-10">
-                                                <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
-                                                    {{ $integracao->driver }}
-                                                </a>
-                                            </div>
-                                        </div>
+                                        {{ $integracao->ativo ? '(ativo)' : '(inativo)' }}
+                                        <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
+                                            {{ $integracao->driver }}
+                                        </a>
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-sm">Nova Integração</a>
+                                    @if ($empresa->onboarding()->inProgress())
+                                        <ol>
+                                            @foreach ($empresa->onboarding()->steps as $step)
+                                                <li>
+                                                    @if($step->complete())
+                                                        <i class="fa fa-check-square-o fa-fw"></i>
+                                                        <s>{{ $step->title }}</s>
+                                                    @else
+                                                        <i class="fa fa-square-o fa-fw"></i>
+                                                        {{ $step->title }} <br/>
+                                                        <a class="btn btn-sm" href="{{ $step->link }}" {{ $step->complete() ? 'disabled' : '' }}>
+                                                            {{ $step->cta }}
+                                                        </a>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ol>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
