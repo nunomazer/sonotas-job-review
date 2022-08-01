@@ -19,4 +19,11 @@ interface IMoneyFlowDriver
      */
     public function planoDriver() : IMoneyFlowPlano;
 
+    /**
+     * Retorna o objeto concreto do driver MoneyFlow correto para trabalhar com Cartões de Crédito
+     *
+     * @return IMoneyFlowCartaoCredito
+     */
+    public function cartaoCreditoDriver() : IMoneyFlowCartaoCredito;
+
 }

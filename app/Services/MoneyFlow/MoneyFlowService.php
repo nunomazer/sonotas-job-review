@@ -35,4 +35,12 @@ class MoneyFlowService
     {
         return $this->driver->planoDriver();
     }
+
+    /**
+     * @return IMoneyFlowCartaoCredito
+     */
+    public function cartaoCreditoDriver() : IMoneyFlowCartaoCredito
+    {
+        return $this->driver->cartaoCreditoDriver();
+    }
 }

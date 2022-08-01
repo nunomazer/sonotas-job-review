@@ -55,6 +55,7 @@ class TesteServices extends Command
             'spedEmpresaAlterar' => 'Sped Empresa Alterar',
             'spedNfseEmitir' => 'Sped NFSe Emitir',
             'moneyServicePlanUpdateOrCreate' => 'Money Flow Plano Update or Create',
+            'moneyServiceTokenize' => 'Money Flow Tokenizar um Cartão do .env',
             'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
             'nfseServiceSyncPlatformEmpresaMktDigital' => 'NFSe Service: Sincronizar da plataforma Eduzz emrpesa Mkt Digital',
             'integraPlatformsList' => 'Integra: Lista Plataformas',
@@ -216,5 +217,19 @@ class TesteServices extends Command
 
         $plan = Plan::first();
         dd($planoDriver->updateOrCreate($plan));
+    }
+
+    public function moneyServiceTokenize()
+    {
+        $mfService = new MoneyFlowService();
+
+        $ccDriver = $mfService->cartaoCreditoDriver();
+
+        dd($ccDriver->tokenize(
+            env('CC_TEST_HOLDER'),
+            env('CC_TEST_NUMBER'),
+            env('CC_TEST_VALIDATE'),
+            env('CC_TEST_SECURITY_CODE'),
+        ));
     }
 }
