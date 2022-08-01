@@ -17,7 +17,7 @@ class EmpresaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return auth()->user()->can('update', $this->empresa);
     }
 
     protected function prepareForValidation()
