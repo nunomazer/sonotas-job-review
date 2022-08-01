@@ -44,7 +44,7 @@ class Safe2PayPlano implements IMoneyFlowPlano
     {
         if ($plan->driver_id) return $plan;
 
-        $planDriver = [
+        $playload = [
             'PlanOption' => 2,
             'PlanFrequence' => self::CODESNAMES[$plan->frequence],
             'Name' => $plan->name,
@@ -59,7 +59,7 @@ class Safe2PayPlano implements IMoneyFlowPlano
 
         try {
             $result = $http->post('/Recurrence/V1/Plans', [
-                'json' => $planDriver,
+                'json' => $playload,
             ]);
 
             $result = json_decode($result->getBody()->getContents(), true);
