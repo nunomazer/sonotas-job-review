@@ -66,7 +66,7 @@ class SpedRegimesTributariosEspeciais
     public static function getNome(int $valor): string
     {
         foreach (self::$regimes as $regime) {
-            if ($regime['valor'] = $valor) return $regime['nome'];
+            if ($regime['valor'] == $valor) return $regime['nome'];
         }
 
         return false;
