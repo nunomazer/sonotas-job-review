@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\TipoLogradouro;
-use App\Services\Sped\RegimesTributarios;
-use App\Services\Sped\RegimesTributariosEspeciais;
+use App\Services\Sped\SpedRegimesTributarios;
+use App\Services\Sped\SpedRegimesTributariosEspeciais;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

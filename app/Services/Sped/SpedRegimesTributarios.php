@@ -2,7 +2,7 @@
 
 namespace App\Services\Sped;
 
-class RegimesTributarios
+class SpedRegimesTributarios
 {
     const ISENTO = 0;
     const SIMPLES_NACIONAL = 1;

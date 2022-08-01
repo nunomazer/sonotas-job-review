@@ -11,8 +11,8 @@ use App\Models\Servico;
 use App\Models\User;
 use App\Services\EmpresaService;
 use App\Services\Integra\IntegraService;
-use App\Services\Sped\RegimesTributarios;
-use App\Services\Sped\RegimesTributariosEspeciais;
+use App\Services\Sped\SpedRegimesTributarios;
+use App\Services\Sped\SpedRegimesTributariosEspeciais;
 use App\Services\Sped\SpedService;
 use Faker\Factory;
 use Faker\Provider\pt_BR\Text;
@@ -72,8 +72,8 @@ class TesteSeeder extends Seeder
         $empresa->inscricao_municipal = '9292929';
         $empresa->inscricao_estadual = '922222777';
 //                'certificado' => $empresa->certificado->sped_id,
-        $empresa->regime_tributario = RegimesTributarios::LUCRO_PRESUMIDO;
-        $empresa->regime_tributario_especial = RegimesTributariosEspeciais::NENHUM;
+        $empresa->regime_tributario = SpedRegimesTributarios::LUCRO_PRESUMIDO;
+        $empresa->regime_tributario_especial = SpedRegimesTributariosEspeciais::NENHUM;
         $empresa->bairro = 'Uvaranas';
         $empresa->cep = '84031120';
         $empresa->city_id = 3062;
@@ -224,8 +224,8 @@ class TesteSeeder extends Seeder
         $empresa->inscricao_municipal = '9999222200';
         //$empresa->inscricao_estadual = '922222777';
 //                'certificado' => $empresa->certificado->sped_id,
-        $empresa->regime_tributario = RegimesTributarios::SIMPLES_NACIONAL;
-        $empresa->regime_tributario_especial = RegimesTributariosEspeciais::NENHUM;
+        $empresa->regime_tributario = SpedRegimesTributarios::SIMPLES_NACIONAL;
+        $empresa->regime_tributario_especial = SpedRegimesTributariosEspeciais::NENHUM;
         $empresa->bairro = 'Centro';
         $empresa->cep = '85031120';
         $empresa->city_id = 3060;

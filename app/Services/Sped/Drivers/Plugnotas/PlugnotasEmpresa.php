@@ -7,7 +7,7 @@ use App\Models\Empresa;
 use App\Services\Sped\SpedApiReturn;
 use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
-use App\Services\Sped\RegimesTributarios;
+use App\Services\Sped\SpedRegimesTributarios;
 use Illuminate\Support\Facades\Log;
 
 class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
@@ -30,7 +30,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             'razaoSocial' => $empresa->nome,
             'nomeFantasia' => $empresa->alias,
             'certificado' => $certificado,
-            'simplesNacional' => ($empresa->regime_tributario == RegimesTributarios::SIMPLES_NACIONAL),
+            'simplesNacional' => ($empresa->regime_tributario == SpedRegimesTributarios::SIMPLES_NACIONAL),
             'regimeTributario' => $empresa->regime_tributario,
             //"incentivoFiscal": true,
             //"incentivadorCultural": true,
