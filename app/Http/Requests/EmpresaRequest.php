@@ -52,4 +52,15 @@ class EmpresaRequest extends FormRequest
                                 => ['required', Rule::in(RegimesTributariosEspeciais::toArrayValores())],
         ];
     }
+
+    public function withValidator($validator)
+    {
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                if ($this->owner_user_id != $this->empresa->owner_user_id) {
+                    $validator->errors()->add('Proprietário da Empresa', 'O proprietário da empresa não pode ser alterado desta maneira!');
+                }
+            });
+        }
+    }
 }
