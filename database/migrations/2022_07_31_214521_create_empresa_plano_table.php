@@ -22,9 +22,9 @@ class CreateEmpresaPlanoTable extends Migration
             $table->unsignedInteger('plan_id');
             $table->foreign('plan_id')->references('id')->on('plans');
 
-            $table->string('driver')->comment('Nome do driver de integracao para a plataforma de cobrança');
-            $table->string('driver_id')->comment('Id da assinatura ou cobrança recorrente criada no driver');
-            $table->string('status')->comment('Status da assinatura gerenciado pelos drivers correspondente ao service');
+            $table->string('driver')->nullable()->comment('Nome do driver de integracao para a plataforma de cobrança');
+            $table->string('driver_id')->nullable()->comment('Id da assinatura ou cobrança recorrente criada no driver');
+            $table->integer('status')->nullable()->comment('Status da assinatura gerenciado pelos drivers correspondente ao service');
 
             $table->timestamps();
             $table->softDeletes();
