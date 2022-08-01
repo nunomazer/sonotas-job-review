@@ -13,19 +13,18 @@ class CreateEmpresaPlanoTable extends Migration
      */
     public function up()
     {
-        Schema::create('empresa_plano', function (Blueprint $table) {
+        Schema::create('empresa_assinatura', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
 
-            $table->unsignedBigInteger('plan_id');
+            $table->unsignedInteger('plan_id');
             $table->foreign('plan_id')->references('id')->on('plans');
 
             $table->string('driver')->comment('Nome do driver de integracao para a plataforma de cobrança');
             $table->string('driver_id')->comment('Id da assinatura ou cobrança recorrente criada no driver');
-
-            $table->unique(['empresa_id', 'driver']);
+            $table->string('status')->comment('Status da assinatura gerenciado pelos drivers correspondente ao service');
 
             $table->timestamps();
             $table->softDeletes();
