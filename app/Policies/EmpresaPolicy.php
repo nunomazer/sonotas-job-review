@@ -21,10 +21,22 @@ class EmpresaPolicy
         //
     }
 
+    protected function isEmpresaIdRelatedToUser(Empresa $empresa)
+    {
+        return in_array($empresa->id, auth()->user()->empresas->pluck('id')->toArray());
+    }
+
+    public function update(User $user, Empresa $empresa)
+    {
+        if (auth()->user()->hasRole(Role::SYSADMIN)) return true;
+
+        return $this->isEmpresaIdRelatedToUser($empresa);
+    }
+
     public function updateConfigNFSe(User $user, Empresa $empresa)
     {
         if (auth()->user()->hasRole(Role::SYSADMIN)) return true;
 
-        return in_array($empresa->id, auth()->user()->empresas->pluck('id')->toArray());
+        return $this->isEmpresaIdRelatedToUser($empresa);
     }
 }
