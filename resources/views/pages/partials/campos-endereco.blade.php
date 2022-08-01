@@ -44,6 +44,14 @@
 <div class="row">
 
     <div class="mb-3 col-2">
+        <label class="form-label">Bairro</label>
+        <input type="text" class="form-control" name="bairro"
+               required
+               value="{{ old('cep', $model->bairro) }}"
+        >
+    </div>
+
+    <div class="mb-3 col-2">
         <label class="form-label">CEP</label>
         <input type="text" class="form-control" name="cep"
                required
@@ -51,7 +59,7 @@
         >
     </div>
 
-    <div class="mb-3 col-10">
+    <div class="mb-3 col-8">
         <label class="form-label">Cidade</label>
         <select class="form-select" name="city_id">
             @foreach(\App\Models\Cidade::all() as $cidade)

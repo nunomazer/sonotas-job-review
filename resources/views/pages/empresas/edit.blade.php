@@ -25,6 +25,8 @@
 
                 @csrf
 
+                <input type="hidden" name="owner_user_id" value="{{$empresa->owner_user_id}}">
+
                 <div class="row">
 
                     <div class="mb-3 col-6">
@@ -136,8 +138,6 @@
                 </div>
 
                 @include('pages.partials.campos-endereco', ['model' => $empresa])
-
-                @include('pages.empresas.partials.config-nfse', ['model' => $empresa->configuracao_nfs])
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="{{ route('empresas.list') }}" class="btn btn-secondary">

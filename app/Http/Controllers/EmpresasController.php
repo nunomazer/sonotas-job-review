@@ -37,8 +37,10 @@ class EmpresasController extends Controller
         return view('pages.empresas.edit', compact('empresa'));
     }
 
-    public function update(Empresa $empresa)
+    public function update(EmpresaRequest $request, Empresa $empresa)
     {
+        $empresa->fill($request->toArray());
+        $empresa = $this->empresaService->update($empresa);
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Empresa '.$empresa->nome.' atualizada com successo !']);
@@ -67,7 +69,6 @@ class EmpresasController extends Controller
     {
         $nfseConfig->fill($request->toArray());
         $empresa = $this->empresaService->updateConfigNFSe($empresa, $nfseConfig);
-
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Configurações de NFSe da empresa '.$empresa->nome.' atualizadas com successo !']);
