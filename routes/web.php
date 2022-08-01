@@ -28,6 +28,11 @@ Route::get('/empresas/{empresa}/integracoes/{integracao}/edit', [IntegracoesCont
 Route::post('/empresas/{empresa}/integracoes', [IntegracoesController::class, 'store'])->name('empresas.integracoes.store');
 Route::put('/empresas/{empresa}/integracoes/{integracao}', [IntegracoesController::class, 'update'])->name('empresas.integracoes.upate');
 
+Route::get('/empresas/{empresa}/configuracao-nfse/edit', [EmpresasController::class, 'createConfigNFSe'])->name('empresas.nfse.create');
+Route::get('/empresas/{empresa}/configuracao-nfse/{nfseConfig}/edit', [EmpresasController::class, 'editConfigNFSe'])->name('empresas.nfse.edit');
+Route::post('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'storeConfigNFSe'])->name('empresas.nfse.store');
+Route::put('/empresas/{empresa}/configuracao-nfse/{nfseConfig}', [EmpresasController::class, 'updateConfigNFSe'])->name('empresas.nfse.update');
+
 Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
 Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
 Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');

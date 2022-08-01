@@ -9,5 +9,7 @@ class EmpresaNFSConfig extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $table = 'empresa_nfs_configuracoes';
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Models\Empresa;
+use App\Models\EmpresaNFSConfig;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
@@ -57,7 +58,39 @@ class EmpresaService
     }
 
     /**
-     * Cadastra a empresa nos serviços Sped para cada tipo de documento e cidade
+     * Cria o registro de configuração padrão para a NFSe da Empresa
+     *
+     * @param Empresa $empresa
+     * @param array $nfseConfig
+     * @return Empresa
+     */
+    public function createConfigNFSe(Empresa $empresa, array $nfseConfig) : Empresa
+    {
+        $empresa->configuracao_nfse()->create($nfseConfig);
+
+        EmpresaAlteradaEvent::dispatch($empresa);
+
+        return $empresa;
+    }
+
+    /**
+     * Altera o registro de configuração padrão para a NFSe da Empresa
+     *
+     * @param Empresa $empresa
+     * @param array $nfseConfig
+     * @return Empresa
+     */
+    public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig) : Empresa
+    {
+        $empresa->configuracao_nfse->update($nfseConfig->toArray());
+
+        EmpresaAlteradaEvent::dispatch($empresa);
+
+        return $empresa;
+    }
+
+    /**
+     * Cadastra a empresa nos serviços Sped (driver) para cada tipo de documento e cidade
      *
      * @param Empresa $empresa
      * @return void
