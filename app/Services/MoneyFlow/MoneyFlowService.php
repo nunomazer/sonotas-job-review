@@ -43,4 +43,12 @@ class MoneyFlowService
     {
         return $this->driver->cartaoCreditoDriver();
     }
+
+    /**
+     * @return IMoneyFlowAssinatura
+     */
+    public function assinaturaDriver() : IMoneyFlowAssinatura
+    {
+        return $this->driver->assinaturaDriver();
+    }
 }

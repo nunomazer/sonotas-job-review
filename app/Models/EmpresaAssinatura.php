@@ -13,6 +13,10 @@ class EmpresaAssinatura extends Model
 
     protected $table = 'empresa_assinatura';
 
+    protected $casts = [
+        'status_historico' => 'json',
+    ];
+
     public function plano()
     {
         return $this->belongsTo(Plan::class);

@@ -4,13 +4,17 @@ namespace App\Services;
 
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
+use App\Models\CartaoCredito;
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
+use App\Models\Plan;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Services\Integra\IntegraService;
 use App\Services\Integra\Platform;
+use App\Services\MoneyFlow\MoneyFlowService;
 use App\Services\Sped\SpedService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -141,5 +145,23 @@ class EmpresaService
     public function getEmpresasOwner(User $user) : Collection
     {
         return Empresa::where('owner_user_id', $user->id)->get();
+    }
+
+    public function createAssinatura(Empresa $empresa, Plan $plan, CartaoCredito $cc) : Empresa
+    {
+        $moneyFlowService = new MoneyFlowService();
+
+        $cartaoDriver = $moneyFlowService->cartaoCreditoDriver();
+        $token = $cartaoDriver->tokenize($cc->holder, $cc->number, $cc->validate, $cc->security_code);
+
+        $assinatura = EmpresaAssinatura::create([
+            'empresa_id' => $empresa->id,
+            'plan_id' => $plan->id,
+        ]);
+
+        $assinaturaDriver = $moneyFlowService->assinaturaDriver();
+        $result = $assinaturaDriver->create($empresa, $plan, ['cartao_credito'=>$token]);
+
+        return $empresa;
     }
 }

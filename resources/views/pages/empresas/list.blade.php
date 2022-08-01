@@ -42,7 +42,7 @@
                                 <td>
                                     @if($empresa->plano)
                                     @else
-                                        <a href="#" class="btn btn-sm btn-warning">
+                                        <a href="{{route('empresas.assinatura.create', $empresa)}}" class="btn btn-sm btn-warning">
                                             Assinar plano
                                         </a>
                                     @endif

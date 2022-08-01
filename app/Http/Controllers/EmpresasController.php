@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmpresaAssinaturaRequest;
 use App\Http\Requests\EmpresaConfigNFSeRequest;
 use App\Http\Requests\EmpresaRequest;
+use App\Models\CartaoCredito;
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
+use App\Models\Plan;
 use App\Services\EmpresaService;
 
 class EmpresasController extends Controller
@@ -72,6 +76,28 @@ class EmpresasController extends Controller
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Configurações de NFSe da empresa '.$empresa->nome.' atualizadas com successo !']);
+    }
+
+    public function createAssinatura(Empresa $empresa)
+    {
+        $plans = Plan::where('active', true)->get();
+        return view('pages.empresas.edit-assinatura', compact('empresa', 'plans'));
+    }
+
+    public function storeAssinatura(EmpresaAssinaturaRequest $request, Empresa $empresa)
+    {
+        $cc = new CartaoCredito();
+        $cc->number = $request->cartao_credito;
+        $cc->holder = $request->nome;
+        $cc->validate = $request->validade;
+        $cc->security_code = $request->codigo;
+
+        $plan = Plan::find($request->plan_id);
+
+        $empresa = $this->empresaService->createAssinatura($empresa, $plan, $cc);
+
+        return redirect()->route('empresas.list', )
+            ->with(['success' => 'Escolha de plano feita com sucesso para empresa '.$empresa->nome]);
     }
 
 }

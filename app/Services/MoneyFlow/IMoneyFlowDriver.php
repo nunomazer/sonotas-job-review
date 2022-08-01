@@ -26,4 +26,11 @@ interface IMoneyFlowDriver
      */
     public function cartaoCreditoDriver() : IMoneyFlowCartaoCredito;
 
+    /**
+     * Retorna o objeto concreto do driver MoneyFlow correto para trabalhar com Assinaturas de Cobranças Recorrentes
+     *
+     * @return IMoneyFlowAssinatura
+     */
+    public function assinaturaDriver() : IMoneyFlowAssinatura;
+
 }

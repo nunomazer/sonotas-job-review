@@ -2,6 +2,7 @@
 
 namespace App\Services\MoneyFlow\Drivers\Safe2Pay;
 
+use App\Services\MoneyFlow\IMoneyFlowAssinatura;
 use App\Services\MoneyFlow\IMoneyFlowCartaoCredito;
 use App\Services\MoneyFlow\IMoneyFlowDriver;
 use App\Services\MoneyFlow\IMoneyFlowPlano;
@@ -22,5 +23,10 @@ class Safe2PayDriver implements IMoneyFlowDriver
     public function cartaoCreditoDriver(): IMoneyFlowCartaoCredito
     {
         return new Safe2PayCartaoCredito();
+    }
+
+    public function assinaturaDriver(): IMoneyFlowAssinatura
+    {
+        return new Safe2PayAssinatura();
     }
 }

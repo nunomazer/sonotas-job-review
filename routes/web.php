@@ -33,6 +33,9 @@ Route::get('/empresas/{empresa}/configuracao-nfse/{nfseConfig}/edit', [EmpresasC
 Route::post('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'storeConfigNFSe'])->name('empresas.nfse.store');
 Route::put('/empresas/{empresa}/configuracao-nfse/{nfseConfig}', [EmpresasController::class, 'updateConfigNFSe'])->name('empresas.nfse.update');
 
+Route::get('/empresas/{empresa}/assinatura/create', [EmpresasController::class, 'createAssinatura'])->name('empresas.assinatura.create');
+Route::post('/empresas/{empresa}/assinatura', [EmpresasController::class, 'storeAssinatura'])->name('empresas.assinatura.store');
+
 Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
 Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
 Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');

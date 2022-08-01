@@ -3,6 +3,7 @@
 namespace App\Services\MoneyFlow;
 
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
 use App\Models\Plan;
 
 interface IMoneyFlowAssinatura
@@ -18,7 +19,7 @@ interface IMoneyFlowAssinatura
      *    'cartao_credito': 'string com o token'
      * ]
      * </pre>
-     * @return Plan
+     * @return EmpresaAssinatura
      */
-    public function create(Empresa $empresa, Plan $plan, array $config) : ?Plan;
+    public function create(Empresa $empresa, Plan $plan, array $config) : ?EmpresaAssinatura;
 }

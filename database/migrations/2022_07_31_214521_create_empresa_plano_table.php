@@ -38,6 +38,5 @@ class CreateEmpresaPlanoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresa_integras');
     }
 }
