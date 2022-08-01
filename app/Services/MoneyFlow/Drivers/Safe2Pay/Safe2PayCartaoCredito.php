@@ -28,7 +28,7 @@ class Safe2PayCartaoCredito implements IMoneyFlowCartaoCredito
         $result = json_decode($result->getBody()->getContents(), true);
 
         if ($result['HasError'] ?? false) {
-            dd($result);
+            throw new \Exception($result['Error'], $result['ErrorCode']);
         }
 
         return $result['ResponseDetail']['Token'];
