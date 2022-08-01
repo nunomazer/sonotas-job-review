@@ -15,12 +15,10 @@ interface IMoneyFlowAssinatura
      * @param array config Configurações para a assinatura:<br/>
      * <pre>
      * [
-     *    'cartao_credito': [
-     *       'numero': '9999999'
-     *    ]
+     *    'cartao_credito': 'string com o token'
      * ]
      * </pre>
      * @return Plan
      */
-    public function updateOrCreate(Empresa $empresa, Plan $plan) : Plan;
+    public function create(Empresa $empresa, Plan $plan, array $config) : ?Plan;
 }

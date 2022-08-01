@@ -56,4 +56,9 @@ class Empresa extends Model
     {
         return $this->hasOne(EmpresaNFSConfig::class);
     }
+
+    public function assinatura()
+    {
+        return $this->hasOne(EmpresaAssinatura::class);
+    }
 }
