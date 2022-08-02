@@ -13,7 +13,7 @@ interface IMoneyFlowAssinatura
      * Cria uma nova assinatura, ou cobrança recorrente no driver de cobrança
      *
      * @param Empresa $empresa
-     * @param Plan $plan
+     * @param EmpresaAssinatura $assinatura Model de assinatura pronto que já deve existir como registro no banco de dados
      * @param array config Configurações para a assinatura:<br/>
      * <pre>
      * [
@@ -22,7 +22,7 @@ interface IMoneyFlowAssinatura
      * </pre>
      * @return EmpresaAssinatura
      */
-    public function create(Empresa $empresa, Plan $plan, array $config) : ?EmpresaAssinatura;
+    public function create(Empresa $empresa, EmpresaAssinatura $assinatura, array $config) : ?EmpresaAssinatura;
 
     /**
      * Retorna o nome do status da assinatura

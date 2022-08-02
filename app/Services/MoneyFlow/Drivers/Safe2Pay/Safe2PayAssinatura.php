@@ -18,24 +18,23 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
     protected $api_sub_domain = 'services';
     protected $has_sandbox = false;
 
-    public function create(Empresa $empresa, Plan $plan, array $config): ?EmpresaAssinatura
+    public function create(Empresa $empresa, EmpresaAssinatura $assinatura, array $config): ?EmpresaAssinatura
     {
-        throw_if( ! $plan->driver_id, 'O plano informado para assinatura não possui o id do driver Safe2Pay');
-
         $payload = [
-            'PaymentMethod' => 2, // TODO verificar e adequar para boleto, por hora somente cartão
+            'Plan' => $assinatura->plano->id,
+            'PaymentMethod' => '2', // TODO verificar e adequar para boleto, por hora somente cartão
             'Customer' => [
-                'Name' => $empresa->nome,
-                'Identity' => $empresa->documento,
+                'name' => $empresa->nome,
+                'identity' => $empresa->documento,
                 'Email' => $empresa->email,
                 'Address' => [
                     'Street' => $empresa->logradouro,
-                    'Number' => $empresa->numero,
+                    'Number' => (string)$empresa->numero,
                     'District' => $empresa->bairro,
                     'ZipCode' => $empresa->cep,
-                    'Complement' => $empresa->complemento,
+                    'Complement' => $empresa->complemento ?? '',
                     'City' => [
-                        'CodeIBGE' => $empresa->cidade->ibge_id
+                        'CodeIBGE' => (string)$empresa->cidade->ibge_id
                     ],
                 ],
             ],
@@ -46,16 +45,12 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
         $http = $this->httpClient();
 
         try {
-            $result = $http->post('/Recurrence/V1/Plans/' . $plan->driver_id . '/Subscriptions', [
+            $result = $http->post('/Recurrence/V1/Plans/' . $assinatura->plano->driver_id . '/Subscriptions', [
                 'json' => $payload,
                 'http_errors' => false,
             ]);
 
             $result = json_decode($result->getBody()->getContents(), true);
-
-            $assinatura = EmpresaAssinatura::where('empresa_id', $empresa->id)
-                ->where('plan_id', $plan->id)
-                ->first();
 
             $historico = $assinatura->statu_historico;
 
@@ -67,7 +62,9 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
 
                 $historico[now()->format('Y-m-d H:i:s')] = 'Pagamento disparado';
             } else {
-                Log::error('Erros no retorno de criação de assinatura safe2pay', $result);
+                Log::debug('Erros no retorno de criação de assinatura safe2pay');
+                Log::debug(json_encode($payload));
+                Log::error(json_encode($result));
 
                 foreach ($result['Errors'] as $error) {
                     $historico[now()->format('Y-m-d H:i:s')] = $error['Message'];

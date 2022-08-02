@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\MoneyFlow\MoneyFlowAssinaturaStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kayo\StatesAndCitiesIbge\Models\City;
@@ -59,6 +60,15 @@ class Empresa extends Model
 
     public function assinatura()
     {
-        return $this->hasOne(EmpresaAssinatura::class);
+        return $this->hasOne(EmpresaAssinatura::class)
+            ->where('status', MoneyFlowAssinaturaStatus::ATIVA)
+            ->orWhere('status', MoneyFlowAssinaturaStatus::ATRASADA)
+            ->orWhere('status', MoneyFlowAssinaturaStatus::PENDENTE)
+            ->orWhere('status', MoneyFlowAssinaturaStatus::INADIMPLENTE);
+    }
+
+    public function assinaturas()
+    {
+        return $this->hasMany(EmpresaAssinatura::class);
     }
 }

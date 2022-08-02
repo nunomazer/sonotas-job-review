@@ -157,7 +157,7 @@ class EmpresaService
      */
     public function cancelAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura) : Empresa
     {
-        $assinatura->ativo = false;
+        //$assinatura-> = false;
         $assinatura->save();
 
 
@@ -167,9 +167,7 @@ class EmpresaService
     {
         $moneyFlowService = new MoneyFlowService();
 
-        $assinaturaAnterior = EmpresaAssinatura::where('ativo', true)
-            ->where('empresa_id', $empresa->id)
-            ->first();
+        $assinaturaAnterior = $empresa->assinatura;
 
         if ($assinaturaAnterior) {
             $this->cancelAssinatura($empresa, $assinaturaAnterior);
@@ -184,7 +182,7 @@ class EmpresaService
         ]);
 
         $assinaturaDriver = $moneyFlowService->assinaturaDriver();
-        $result = $assinaturaDriver->create($empresa, $plan, ['cartao_credito'=>$token]);
+        $result = $assinaturaDriver->create($empresa, $assinatura, ['cartao_credito'=>$token]);
 
         return $empresa;
     }
