@@ -5,6 +5,7 @@ namespace App\Services\MoneyFlow;
 use App\Models\Empresa;
 use App\Models\EmpresaAssinatura;
 use App\Models\Plan;
+use PhpParser\Node\Scalar\String_;
 
 interface IMoneyFlowAssinatura
 {
@@ -22,4 +23,12 @@ interface IMoneyFlowAssinatura
      * @return EmpresaAssinatura
      */
     public function create(Empresa $empresa, Plan $plan, array $config) : ?EmpresaAssinatura;
+
+    /**
+     * Retorna o nome do status da assinatura
+     *
+     * @param EmpresaAssinatura $assinatura
+     * @return string
+     */
+    public function getStatusNome(EmpresaAssinatura $assinatura) : string;
 }

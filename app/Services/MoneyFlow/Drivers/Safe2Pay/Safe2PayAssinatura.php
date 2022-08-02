@@ -82,4 +82,10 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
         }
     }
 
+    public function getStatusNome(EmpresaAssinatura $assinatura): string
+    {
+        if($assinatura->status == null) return 'Sem pagamento identificado';
+
+        return MoneyFlowAssinaturaStatus::getNome($assinatura->status);
+    }
 }
