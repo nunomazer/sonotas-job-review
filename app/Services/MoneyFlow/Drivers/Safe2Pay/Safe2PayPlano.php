@@ -34,7 +34,9 @@ class Safe2PayPlano implements IMoneyFlowPlano
         $http = $this->httpClient();
 
         if($plan->driver_id) {
-
+            // não tem update no Safe2Pay para planos
+            // decidir se desabilita e recria, mas ao desabilitar um plano no Safe2Pay
+            // as assinaturas relacionadas são canceladas
         }
 
         return $this->create($plan);
@@ -42,6 +44,7 @@ class Safe2PayPlano implements IMoneyFlowPlano
 
     private function create(Plan $plan) : ?Plan
     {
+        // não deixa gravar novamente no Safe2Pay pq ele cria um novo plano com id diferente
         if ($plan->driver_id) return $plan;
 
         $playload = [
