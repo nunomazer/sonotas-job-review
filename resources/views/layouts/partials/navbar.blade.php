@@ -251,16 +251,11 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('servicos.list') }}">
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
-                            </svg>
-                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hammer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385"></path>
+                            <path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0z"></path>
+                        </svg>
                         <span class="nav-link-title">
                             Serviços
                         </span>
@@ -270,13 +265,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('notas-servico.list') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-receipt-tax" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                               <line x1="9" y1="14" x2="15" y2="8"></line>
+                               <circle cx="9.5" cy="8.5" r=".5" fill="currentColor"></circle>
+                               <circle cx="14.5" cy="13.5" r=".5" fill="currentColor"></circle>
+                               <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
                             </svg>
                         </span>
                         <span class="nav-link-title">
@@ -288,13 +282,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('profile', [auth()->user()]) }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                               <circle cx="12" cy="12" r="9"></circle>
+                               <circle cx="12" cy="10" r="3"></circle>
+                               <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                         </span>
                         <span class="nav-link-title">

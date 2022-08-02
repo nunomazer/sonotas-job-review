@@ -7,9 +7,7 @@
     <div class="card">
         <div class="card-header">
             <div class="card-actions">
-                <a href="#" class="btn btn-sm btn-primary">
-                    Nova venda
-                </a>
+
             </div>
         </div>
         <div class="card-body">
