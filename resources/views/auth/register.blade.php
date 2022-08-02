@@ -9,6 +9,9 @@
                 <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
             </a>
         </div>
+
+        @include('layouts.partials.messages')
+
         <form class="card card-md" action="{{ route('register') }}" method="POST" autocomplete="off">
             @csrf
             <div class="card-body">

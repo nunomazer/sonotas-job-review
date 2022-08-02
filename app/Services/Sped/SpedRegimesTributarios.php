@@ -2,44 +2,39 @@
 
 namespace App\Services\Sped;
 
-class RegimesTributariosEspeciais
+class SpedRegimesTributarios
 {
-    const NENHUM = 0;
-    const MICRO_EMPRESA_MUNICIPAL = 1;
-    const ESTIMATIVA = 2;
-    const SOCIEDADE_PROFISSIONAIS = 3;
-    const COOPERATIVA = 4;
+    const ISENTO = 0;
+    const SIMPLES_NACIONAL = 1;
+    const SIMPLES_NACIONAL_EXCESSO = 2;
+    const LUCRO_PRESUMIDO = 3;
+    const LUCRO_REAL = 4;
     const MEI = 5;
-    const ME_MEPP = 6;
 
     private static $regimes = [
         [
-            'nome' => 'Nenhum',
+            'nome' => 'Isento',
             'valor'=> 0,
         ],
         [
-            'nome' => 'Micro Empresa Municipal',
+            'nome' => 'Simples Nacional',
             'valor'=> 1,
         ],
         [
-            'nome' => 'Estimativa',
+            'nome' => 'Simples Nacional Excesso',
             'valor'=> 2,
         ],
         [
-            'nome' => 'Sociedade de Profissionais',
+            'nome' => 'Lucro Presumido',
             'valor'=> 3,
         ],
         [
-            'nome' => 'Cooperativa',
+            'nome' => 'Lucro Real',
             'valor'=> 4,
         ],
         [
             'nome' => 'MEI',
             'valor'=> 5,
-        ],
-        [
-            'nome' => 'MEI MEPP',
-            'valor'=> 6,
         ],
     ];
 
@@ -66,7 +61,7 @@ class RegimesTributariosEspeciais
     public static function getNome(int $valor): string
     {
         foreach (self::$regimes as $regime) {
-            if ($regime['valor'] = $valor) return $regime['nome'];
+            if ($regime['valor'] == $valor) return $regime['nome'];
         }
 
         return false;

@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class UsersSeeder extends Seeder
 {
@@ -34,7 +35,7 @@ class UsersSeeder extends Seeder
 
         $user->name = 'Ademir Mazer Junior';
         $user->email = $email;
-        $user->password = Crypt::encrypt('Senha@321');
+        $user->password = Hash::make('Senha@321');
         $user->phone_number = '991355005';
         $user->phone_area_code = '42';
         $user->save();
@@ -51,7 +52,7 @@ class UsersSeeder extends Seeder
 
         $user->name = 'Lucas Amaral';
         $user->email = $email;
-        $user->password = Crypt::encrypt('Senha@321');
+        $user->password = Hash::make('Senha@321');
         $user->phone_number = '999999999';
         $user->phone_area_code = '41';
         $user->save();
@@ -68,7 +69,7 @@ class UsersSeeder extends Seeder
 
         $user->name = 'Rayan Chemin';
         $user->email = $email;
-        $user->password = Crypt::encrypt('Senha@321');
+        $user->password = Hash::make('Senha@321');
         $user->phone_number = '999999999';
         $user->phone_area_code = '41';
         $user->save();
@@ -85,7 +86,7 @@ class UsersSeeder extends Seeder
 
         $user->name = 'Ricardo Gusse';
         $user->email = $email;
-        $user->password = Crypt::encrypt('Senha@321');
+        $user->password = Hash::make('Senha@321');
         $user->phone_number = '999999999';
         $user->phone_area_code = '41';
         $user->save();
@@ -102,7 +103,7 @@ class UsersSeeder extends Seeder
 
         $user->name = 'Aroldo Almeida';
         $user->email = $email;
-        $user->password = Crypt::encrypt('Senha@321');
+        $user->password = Hash::make('Senha@321');
         $user->phone_number = '999999999';
         $user->phone_area_code = '41';
         $user->save();

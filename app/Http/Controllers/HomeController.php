@@ -23,6 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $estatisticas['empresas_ativas'] = auth()->user()->empresas->where('ativo', true)->count();
+
+        return view('pages.dashboard.painel', compact('estatisticas'));
     }
 }

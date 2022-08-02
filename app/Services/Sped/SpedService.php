@@ -31,7 +31,7 @@ class SpedService
 
 
     /**
-     * @return string
+     * @return ISpedDriver
      */
     public function driver(): ISpedDriver
     {

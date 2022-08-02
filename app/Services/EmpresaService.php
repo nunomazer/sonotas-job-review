@@ -4,12 +4,19 @@ namespace App\Services;
 
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
+use App\Models\CartaoCredito;
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
+use App\Models\EmpresaNFSConfig;
+use App\Models\Plan;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Services\Integra\IntegraService;
 use App\Services\Integra\Platform;
+use App\Services\MoneyFlow\MoneyFlowService;
 use App\Services\Sped\SpedService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class EmpresaService
@@ -55,7 +62,39 @@ class EmpresaService
     }
 
     /**
-     * Cadastra a empresa nos serviços Sped para cada tipo de documento e cidade
+     * Cria o registro de configuração padrão para a NFSe da Empresa
+     *
+     * @param Empresa $empresa
+     * @param array $nfseConfig
+     * @return Empresa
+     */
+    public function createConfigNFSe(Empresa $empresa, array $nfseConfig) : Empresa
+    {
+        $empresa->configuracao_nfse()->create($nfseConfig);
+
+        EmpresaAlteradaEvent::dispatch($empresa);
+
+        return $empresa;
+    }
+
+    /**
+     * Altera o registro de configuração padrão para a NFSe da Empresa
+     *
+     * @param Empresa $empresa
+     * @param array $nfseConfig
+     * @return Empresa
+     */
+    public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig) : Empresa
+    {
+        $empresa->configuracao_nfse->update($nfseConfig->toArray());
+
+        EmpresaAlteradaEvent::dispatch($empresa);
+
+        return $empresa;
+    }
+
+    /**
+     * Cadastra a empresa nos serviços Sped (driver) para cada tipo de documento e cidade
      *
      * @param Empresa $empresa
      * @return void
@@ -95,5 +134,56 @@ class EmpresaService
         throw_if($empresaIntegracao== null, "Integração {$driver} não encontrada para a empresa {$empresa->nome}");
 
         return (new IntegraService())->driver($driver, $empresaIntegracao->fields);
+    }
+
+    /**
+     * Retorna a lista de empresas que o usuário é proprietário na plataforma
+     *
+     * @param User $user
+     * @return Collection
+     */
+    public function getEmpresasOwner(User $user) : Collection
+    {
+        return Empresa::where('owner_user_id', $user->id)->get();
+    }
+
+    /**
+     * Marca uma assinatura como desativada, pode ser por motivos de escolha do cliente ou por estar criando uma
+     * nova assinatura
+     *
+     * @param Empresa $empresa
+     * @param EmpresaAssinatura $assinatura
+     * @return Empresa
+     */
+    public function cancelAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura) : Empresa
+    {
+        //$assinatura-> = false;
+        $assinatura->save();
+
+
+    }
+
+    public function createAssinatura(Empresa $empresa, Plan $plan, CartaoCredito $cc) : Empresa
+    {
+        $moneyFlowService = new MoneyFlowService();
+
+        $assinaturaAnterior = $empresa->assinatura;
+
+        if ($assinaturaAnterior) {
+            $this->cancelAssinatura($empresa, $assinaturaAnterior);
+        }
+
+        $cartaoDriver = $moneyFlowService->cartaoCreditoDriver();
+        $token = $cartaoDriver->tokenize($cc->holder, $cc->number, $cc->validate, $cc->security_code);
+
+        $assinatura = EmpresaAssinatura::create([
+            'empresa_id' => $empresa->id,
+            'plan_id' => $plan->id,
+        ]);
+
+        $assinaturaDriver = $moneyFlowService->assinaturaDriver();
+        $result = $assinaturaDriver->create($empresa, $assinatura, ['cartao_credito'=>$token]);
+
+        return $empresa;
     }
 }

@@ -28,6 +28,8 @@ class CreateEmpresaIntegrasTable extends Migration
             $table->string('transmissao_periodo');
             $table->boolean('transmissao_apenas_dias_uteis')->default(false);
 
+            $table->unique(['empresa_id', 'driver']);
+
             $table->timestamps();
             $table->softDeletes();
         });

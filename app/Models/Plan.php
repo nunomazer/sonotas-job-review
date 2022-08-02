@@ -15,6 +15,8 @@ class Plan extends Model
 
     protected $casts = [
         'features' => 'json',
+        'driver_id' => 'json',
+        'active' => 'boolean',
     ];
 
 }

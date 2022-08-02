@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\TipoLogradouro;
-use App\Services\Sped\RegimesTributarios;
-use App\Services\Sped\RegimesTributariosEspeciais;
+use App\Services\Sped\SpedRegimesTributarios;
+use App\Services\Sped\SpedRegimesTributariosEspeciais;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,7 +17,7 @@ class EmpresaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return auth()->user()->can('update', $this->empresa);
     }
 
     protected function prepareForValidation()
@@ -47,9 +47,20 @@ class EmpresaRequest extends FormRequest
             'telefone_num'      => ['required'],
             'telefone_ddd'      => ['required', 'ddd'],
             'email'             => ['required', 'email'],
-            'regime_tributario' => ['required', Rule::in(RegimesTributarios::toArrayValores())],
+            'regime_tributario' => ['required', Rule::in(SpedRegimesTributarios::toArrayValores())],
             'regime_tributario_especial'
-                                => ['required', Rule::in(RegimesTributariosEspeciais::toArrayValores())],
+                                => ['required', Rule::in(SpedRegimesTributariosEspeciais::toArrayValores())],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                if ($this->owner_user_id != $this->empresa->owner_user_id) {
+                    $validator->errors()->add('Proprietário da Empresa', 'O proprietário da empresa não pode ser alterado desta maneira!');
+                }
+            });
+        }
     }
 }

@@ -9,6 +9,9 @@
                 <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
             </a>
         </div>
+
+        @include('layouts.partials.messages')
+
         <form action="{{ route('login') }}" class="card card-md" method="POST" autocomplete="off">
             @csrf
             <div class="card-body">
@@ -31,7 +34,7 @@
                         </span>
                     </label>
                     <div class="input-group input-group-flat">
-                        <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                        <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                             placeholder="Digite sua senha" autocomplete="off">
                         <span class="input-group-text">
                             <a href="#" class="link-secondary" data-bs-toggle="tooltip">

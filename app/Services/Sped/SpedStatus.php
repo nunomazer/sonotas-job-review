@@ -5,7 +5,7 @@ namespace App\Services\Sped;
 /**
  * FLuxo de status dos documentos fiscais
  */
-class Status
+class SpedStatus
 {
     /**
      * Pendente em nossa plataforma, foi salvo o registro em banco de dados mas ainda não foi enviado para api
