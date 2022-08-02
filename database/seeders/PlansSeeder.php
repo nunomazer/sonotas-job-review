@@ -28,10 +28,28 @@ class PlansSeeder extends Seeder
         $feature->frequency = 1;
         $features[] = $feature;
 
+        $this->setTeste($features);
+        /*
         $this->setBasicoMensal($features);
         $this->setBasicoTrimestral($features);
         $this->setBasicoSemestral($features);
         $this->setBasicoAnual($features);
+        */
+    }
+
+    private function setTeste(array $features)
+    {
+        $planoService = new PlanoService();
+
+        $planoTeste = Plan::firstOrNew([
+            'name' => 'Teste Básico Mensal',
+        ]);
+        $planoTeste->description = 'Teste de Plano Básico com pagamento mensal';
+        $planoTeste->price = 1;
+        $planoTeste->frequence = 'month';
+        $planoTeste->features = $features;
+
+        $planoService->updateOrCreate($planoTeste);
     }
 
     private function setBasicoMensal(array $features)
@@ -73,7 +91,7 @@ class PlansSeeder extends Seeder
         ]);
         $planoBasicoSemestral->description = 'Plano Básico com pagamento semestral';
         $planoBasicoSemestral->price = 517;
-        $planoBasicoSemestral->frequence = 'quarter';
+        $planoBasicoSemestral->frequence = 'semester';
         $planoBasicoSemestral->features = $features;
 
         $planoService->updateOrCreate($planoBasicoSemestral);
@@ -88,7 +106,7 @@ class PlansSeeder extends Seeder
         ]);
         $planoBasicoAnual->description = 'Plano Básico com pagamento anual';
         $planoBasicoAnual->price = 970;
-        $planoBasicoAnual->frequence = 'quarter';
+        $planoBasicoAnual->frequence = 'year';
         $planoBasicoAnual->features = $features;
 
         $planoService->updateOrCreate($planoBasicoAnual);

@@ -16,8 +16,8 @@
             </div>
         </div>
         <div class="card-body">
-            @if (isset($nfseConfig))
-            <form method="POST" action="{{ route('empresas.nfse.update', [$empresa, $assinatura]) }}">
+            @if (isset($assinatura))
+            <form method="POST" action="{{ route('empresas.assinatura.update', [$empresa, $assinatura]) }}">
                 @method('PUT')
             @else
                 <form method="POST" action="{{ route('empresas.assinatura.store', [$empresa]) }}">

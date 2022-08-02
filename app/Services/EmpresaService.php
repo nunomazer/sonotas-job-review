@@ -147,9 +147,33 @@ class EmpresaService
         return Empresa::where('owner_user_id', $user->id)->get();
     }
 
+    /**
+     * Marca uma assinatura como desativada, pode ser por motivos de escolha do cliente ou por estar criando uma
+     * nova assinatura
+     *
+     * @param Empresa $empresa
+     * @param EmpresaAssinatura $assinatura
+     * @return Empresa
+     */
+    public function cancelAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura) : Empresa
+    {
+        $assinatura->ativo = false;
+        $assinatura->save();
+
+
+    }
+
     public function createAssinatura(Empresa $empresa, Plan $plan, CartaoCredito $cc) : Empresa
     {
         $moneyFlowService = new MoneyFlowService();
+
+        $assinaturaAnterior = EmpresaAssinatura::where('ativo', true)
+            ->where('empresa_id', $empresa->id)
+            ->first();
+
+        if ($assinaturaAnterior) {
+            $this->cancelAssinatura($empresa, $assinaturaAnterior);
+        }
 
         $cartaoDriver = $moneyFlowService->cartaoCreditoDriver();
         $token = $cartaoDriver->tokenize($cc->holder, $cc->number, $cc->validate, $cc->security_code);

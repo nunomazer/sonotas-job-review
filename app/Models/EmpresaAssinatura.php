@@ -19,6 +19,7 @@ class EmpresaAssinatura extends Model
 
     public function plano()
     {
-        return $this->belongsTo(Plan::class);
+        return $this->belongsTo(Plan::class, 'plan_id');
     }
+
 }

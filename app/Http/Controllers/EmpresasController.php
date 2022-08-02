@@ -84,6 +84,12 @@ class EmpresasController extends Controller
         return view('pages.empresas.edit-assinatura', compact('empresa', 'plans'));
     }
 
+    public function editAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura)
+    {
+        $plans = Plan::where('active', true)->get();
+        return view('pages.empresas.edit-assinatura', compact('empresa', 'plans', 'assinatura'));
+    }
+
     public function storeAssinatura(EmpresaAssinaturaRequest $request, Empresa $empresa)
     {
         $cc = new CartaoCredito();
@@ -95,6 +101,29 @@ class EmpresasController extends Controller
         $plan = Plan::find($request->plan_id);
 
         $empresa = $this->empresaService->createAssinatura($empresa, $plan, $cc);
+
+        return redirect()->route('empresas.list', )
+            ->with(['success' => 'Escolha de plano feita com sucesso para empresa '.$empresa->nome]);
+    }
+
+    public function updateAssinatura(EmpresaAssinaturaRequest $request, Empresa $empresa, EmpresaAssinatura $assinatura)
+    {
+        // não foi paga a assinatura quando escolheu o plano, é como se estivese criando do zero
+        // porém pode estar alterando o plano anteriormente escolhido que não foi pago, precisa fazer corretamente
+        // o set de plan_id
+        if ($assinatura->status == null) {
+            $cc = new CartaoCredito();
+            $cc->number = $request->cartao_credito;
+            $cc->holder = $request->nome;
+            $cc->validate = $request->validade;
+            $cc->security_code = $request->codigo;
+
+            $plan = Plan::find($request->plan_id);
+
+            $assinatura->plan_id = $request->plan_id;
+
+            $empresa = $this->empresaService->createAssinatura($empresa, $plan, $cc);
+        }
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Escolha de plano feita com sucesso para empresa '.$empresa->nome]);

@@ -24,7 +24,6 @@
                         <th>Configuração NFSe</th>
                         <th>Integrações</th>
                         <th></th>
-                        <th>Serviços</th>
                     </tr>
                     </thead>
                     <tbody class="table-tbody">
@@ -40,12 +39,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    @if($empresa->plano)
-                                    @else
-                                        <a href="{{route('empresas.assinatura.create', $empresa)}}" class="btn btn-sm btn-warning">
-                                            Assinar plano
-                                        </a>
-                                    @endif
+                                    @include('pages.empresas.partials.assinatura-status')
                                 </td>
                                 <td>
                                     @if($empresa->configuracao_nfse)
@@ -82,20 +76,6 @@
                                 <td>
                                     <a href="{{route('empresas.edit', $empresa)}}" class="btn btn-sm">
                                         Nova integração
-                                    </a>
-                                </td>
-                                <td>
-                                    @if($empresa->servicos()->count())
-                                        <span class="mx-1 status-green">
-                                            <span class="status-dot"></span>
-                                        </span>
-                                    @else
-                                        <span class="mx-1 status-warning">
-                                            <span class="status-dot"></span>
-                                        </span>
-                                    @endif
-                                    <a href="#">
-                                        Gerenciar
                                     </a>
                                 </td>
                             </tr>

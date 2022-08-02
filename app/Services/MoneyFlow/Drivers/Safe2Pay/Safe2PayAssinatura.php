@@ -59,6 +59,7 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
 
             $historico = $assinatura->statu_historico;
 
+            // TODO tá errado, deveria retornar para o service gravar os dados no banco de dados
             if ($result['success'] ?? false) {
                 $assinatura->driver = (new Safe2PayDriver())->nome();
                 $assinatura->driver_id = $result['data']['idSubscription'];
@@ -74,7 +75,7 @@ class Safe2PayAssinatura implements IMoneyFlowAssinatura
             }
 
             $assinatura->status_historico = $historico;
-            $assinatura->update();
+            $assinatura->save();
             return $assinatura;
         } catch (Exception $exception) {
             Log::error($exception);
