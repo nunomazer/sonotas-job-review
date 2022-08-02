@@ -46,8 +46,7 @@
                                 </td>
                                 <td>
                                     @foreach($servico->integracoes as $integracao)
-                                        {{ $integracao->driver }} -
-                                        {{ $integracao->driver_id }}
+                                        {{ $integracao->driver }}
                                     @endforeach
                                 </td>
                                 <td>
