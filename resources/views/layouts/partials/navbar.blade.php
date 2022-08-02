@@ -211,13 +211,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-desktop-analytics" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                               <rect x="3" y="4" width="18" height="12" rx="1"></rect>
+                               <path d="M7 20h10"></path>
+                               <path d="M9 16v4"></path>
+                               <path d="M15 16v4"></path>
+                               <path d="M9 12v-4"></path>
+                               <path d="M12 12v-1"></path>
+                               <path d="M15 12v-2"></path>
+                               <path d="M12 12v-1"></path>
                             </svg>
                         </span>
                         <span class="nav-link-title">
@@ -228,13 +231,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('empresas.list') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <line x1="3" y1="21" x2="21" y2="21" />
+                              <line x1="9" y1="8" x2="10" y2="8" />
+                              <line x1="9" y1="12" x2="10" y2="12" />
+                              <line x1="9" y1="16" x2="10" y2="16" />
+                              <line x1="14" y1="8" x2="15" y2="8" />
+                              <line x1="14" y1="12" x2="15" y2="12" />
+                              <line x1="14" y1="16" x2="15" y2="16" />
+                              <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" />
                             </svg>
                         </span>
                         <span class="nav-link-title">
