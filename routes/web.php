@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegracoesController;
+use App\Http\Controllers\NFSeController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -42,5 +43,7 @@ Route::put('/empresas/{empresa}/assinatura/{assinatura}', [EmpresasController::c
 Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
 Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
 Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
+
+Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
 
 Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
