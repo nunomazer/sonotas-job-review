@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegracoesController;
+use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -42,3 +43,4 @@ Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.li
 Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
 Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
 
+Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
