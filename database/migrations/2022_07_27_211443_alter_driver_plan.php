@@ -18,9 +18,6 @@ class AlterDriverPlan extends Migration
             $table->renameColumn('moneyflow_cod', 'driver_id');
         });
 
-        Schema::table('plans', function (Blueprint $table) {
-            $table->json('driver_id')->nullable()->change();
-        });
     }
 
     /**
