@@ -3,7 +3,7 @@
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegracoesController;
-use App\Http\Controllers\NFSeController;
+use App\Http\Controllers\VendasController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +44,8 @@ Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.li
 Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
 Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
 
-Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
+Route::get('/vendas', [VendasController::class, 'index'])->name('vendas.list');
+
+Route::get('/notas-servico', [VendasController::class, 'index'])->name('notas-servico.list');
 
 Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
