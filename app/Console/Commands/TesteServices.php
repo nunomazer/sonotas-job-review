@@ -206,7 +206,7 @@ class TesteServices extends Command
         $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
         $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
 
-        dd($nfseService->syncFromPlatform($empresa, 'eduzz', '2022-07-01'));
+        dd($nfseService->syncFromPlatform($empresa, 'Eduzz', '2022-07-01'));
     }
 
     public function moneyServicePlanUpdateOrCreate()
