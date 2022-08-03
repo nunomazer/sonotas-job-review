@@ -48,7 +48,7 @@
                                     {{ number_format($venda->valor, 2, ',', '.') }}
                                 </td>
                                 <td>
-                                    {{ $venda->integracao->driver ?? '' }}
+                                    {{ $venda->integracao->nome ?? '' }}
                                 </td>
                                 <td>
                                 </td>

@@ -22,7 +22,6 @@
                         <th>Data Serviço</th>
                         <th>Serviços</th>
                         <th>Valor</th>
-                        <th>Integração</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -46,9 +45,6 @@
                                 </td>
                                 <td>
                                     {{ number_format($nfse->valor, 2, ',', '.') }}
-                                </td>
-                                <td>
-                                    {{ $nfse->integracao->driver ?? '' }}
                                 </td>
                                 <td>
                                 </td>
