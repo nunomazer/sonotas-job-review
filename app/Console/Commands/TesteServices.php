@@ -196,7 +196,7 @@ class TesteServices extends Command
         $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
         $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
 
-        dd($servicoService->syncFromPlatform($empresa, 'eduzz'));
+        dd($servicoService->syncFromPlatform($empresa, 'Eduzz'));
     }
 
     public function nfseServiceSyncPlatformEmpresaMktDigital()
