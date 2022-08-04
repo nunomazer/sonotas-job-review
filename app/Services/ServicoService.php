@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Empresa;
+use App\Models\EmpresaNFSConfig;
 use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Services\Integra\IntegraService;
@@ -19,7 +20,18 @@ class ServicoService
      */
     public function create(array $servico) : Servico
     {
-        $servico = Servico::create($servico);
+        // cria com os campos padrão do cabeçalho de configuração da NFSe da empresa
+        // o merge considera os novos, então sobrepõe com o que está vindo, se estiver vindo um campo pelo parâmetro
+        // que já exista no template
+
+        $config = EmpresaNFSConfig::where('empresa_id', $servico['empresa_id'])
+                            ->exclude(['id', 'created_at', 'updated_at', 'deleted_at'])
+                            ->first();
+
+        $servico = Servico::create(array_merge(
+            $config->toArray() ?? [],
+            $servico
+        ));
 
         return $servico;
     }
