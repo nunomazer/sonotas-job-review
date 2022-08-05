@@ -18,6 +18,7 @@ class CreateVendasTable extends Migration
 
             $table->string('driver')->nullable()->comment('Origem da venda se veio por integração');
             $table->string('driver_id')->nullable()->comment('Identificação ou protocolo de retorno do driver');
+            $table->jsonb('driver_dados')->nullable()->comment('Todos os dados de retorno da integração');
             $table->string('status')->index()->comment('Status do fluxo pendente/enviado/processamento/erro/gerado');
             $table->jsonb('status_historico')->nullable()->comment('Alguns status definem uma descrição, mensagem, dados extras, podem ser o erro ou retorno satisfatório com meta dados do retorno');
 
@@ -32,7 +33,7 @@ class CreateVendasTable extends Migration
             $table->decimal('valor', 20,2);
 
             $table->string('tipo_documento')->comment('Se NFSe, NFe ou outro que deverá ser emitido para a transação comercial');
-            $table->dateTime('data_emissao_planejada')->comment('Data que está planejada a emissão do doc fiscal');
+            $table->dateTime('data_emissao_planejada')->nullable()->comment('Data que está planejada a emissão do doc fiscal');
             $table->unsignedBigInteger('documento_id')->nullable()->comment('Id do documento fiscal emitido, relacionar de acordo com o tipo');
 
             $table->index(['driver_id', 'empresa_id']);

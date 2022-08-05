@@ -7,6 +7,7 @@ use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Events\NFSeCriadaEvent;
+use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
 use App\Listeners\EmiteNFSeDriverSped;
@@ -28,11 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ClienteCriadoEvent::class => [
-
         ],
 
         ClienteAlteradoEvent::class => [
-
         ],
 
         EmpresaCriadaEvent::class => [
@@ -41,6 +40,9 @@ class EventServiceProvider extends ServiceProvider
 
         EmpresaAlteradaEvent::class => [
             AlteraEmpresaDriverSped::class,
+        ],
+
+        VendaCriadaEvent::class => [
         ],
 
         NFSeCriadaEvent::class => [
