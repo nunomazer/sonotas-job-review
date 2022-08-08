@@ -14,6 +14,7 @@ use App\Services\NFSeService;
 use App\Services\ServicoService;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
+use App\Services\VendasService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +58,7 @@ class TesteServices extends Command
             'moneyServicePlanUpdateOrCreate' => 'Money Flow Plano Update or Create',
             'moneyServiceTokenize' => 'Money Flow Tokenizar um Cartão do .env',
             'nfseServiceCriar' => 'NFSe Service: Criar NFSe',
-            'nfseServiceSyncPlatformEmpresaMktDigital' => 'NFSe Service: Sincronizar da plataforma Eduzz emrpesa Mkt Digital',
+            'vendasServiceSyncPlatformEmpresaMktDigital' => 'Vendas Service: Sincronizar da plataforma Eduzz emrpesa Mkt Digital',
             'integraPlatformsList' => 'Integra: Lista Plataformas',
             'integraEduzzAuth' => 'Integra: Eduzz Auth (gera token)',
             'integraEduzzGetServicos' => 'Integra: Eduzz Get Serviços',
@@ -199,14 +200,14 @@ class TesteServices extends Command
         dd($servicoService->syncFromPlatform($empresa, 'Eduzz'));
     }
 
-    public function nfseServiceSyncPlatformEmpresaMktDigital()
+    public function vendasServiceSyncPlatformEmpresaMktDigital()
     {
-        $nfseService = new NFSeService();
+        $vendasService = new VendasService();
 
         $empresa = Empresa::where('nome', 'like', '%Mkt%')->first();
         $empresaIntegracao = Integracao::where('empresa_id', $empresa->id)->first();
 
-        dd($nfseService->syncFromPlatform($empresa, 'Eduzz', '2022-07-01'));
+        dd($vendasService->syncFromPlatform($empresa, 'Eduzz', '2022-07-01'));
     }
 
     public function moneyServicePlanUpdateOrCreate()
