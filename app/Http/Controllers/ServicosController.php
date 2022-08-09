@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\ServicoRequest;
+use App\Models\Empresa;
+use App\Models\Integracao;
 use App\Models\Servico;
 use App\Services\EmpresaService;
 use App\Services\ServicoService;
+use Illuminate\Http\Request;
 
 class ServicosController extends Controller
 {
@@ -19,8 +22,9 @@ class ServicosController extends Controller
 
     public function index()
     {
-        $servicos = Servico::whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray())->get();
-        return view('pages.servicos.list', compact('servicos'));
+        $servicos = Servico::whereIn('empresa_id', auth()->user()->empresasIdsArray())->get();
+        $integracoes = Integracao::whereIn('empresa_id', auth()->user()->empresasIdsArray())->get();
+        return view('pages.servicos.list', compact('servicos','integracoes'));
     }
 
     public function store(ServicoRequest $request)
@@ -30,4 +34,5 @@ class ServicosController extends Controller
         // TODO implementar visões
         return dump($servico);
     }
+
 }

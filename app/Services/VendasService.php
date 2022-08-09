@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
 use App\Events\VendaCriadaEvent;
+use App\Exceptions\ServicoNaoSincronizadoException;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\Integracao;
@@ -32,9 +33,6 @@ class VendasService
     {
         try {
             DB::beginTransaction();
-
-                $venda['status'] = SpedStatus::PENDENTE;
-                $venda['status_historico'] = $this->addStatusDados(null, SpedStatus::PENDENTE, ['message' => 'Registro criado no banco de dados']);
 
                 $venda = Venda::create($venda);
 
@@ -90,7 +88,7 @@ class VendasService
      *
      * @param Empresa $empresa Empresa para a qual o sync de serviços deve ser realizado
      * @param string $driver Nome do driver de plataforma para sincronizar
-     * @return array NFSe importadas e sincronizados da api de integração, já salvos no banco de dados
+     * @return array Vendas importadas e sincronizados da api de integração, já salvos no banco de dados
      */
     public function syncFromPlatform(Empresa $empresa, string $driverName, $from) : array
     {
@@ -165,10 +163,10 @@ class VendasService
     {
         $itens = [];
         foreach ($vendaApi['servicos'] as $servico) {
-            if ($vendaApi->tipo_documento == SpedService::DOCTYPE_NFSE) {
+            if ($vendaApi['venda']['tipo_documento'] == SpedService::DOCTYPE_NFSE) {
                 $servicoIntegracao = ServicoIntegracao::where('driver_id', $servico['driver_id'])->first();
 
-                throw_if($servicoIntegracao == null, 'Servico com id ' . $servico['driver_id'] . ' na ' . $driverName . ' não encontrado em nossa base, é necessário importar');
+                throw_if($servicoIntegracao == null, new ServicoNaoSincronizadoException('Servico com id ' . $servico['driver_id'] . ' na ' . $driverName . ' não encontrado em nossa base, é necessário importar'));
 
                 $item = new VendaItem();
                 $item->item_id = $servicoIntegracao->servico->id;

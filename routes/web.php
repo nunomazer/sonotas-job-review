@@ -29,6 +29,7 @@ Route::get('/profile/{user}', [UserController::class, 'showProfile'])->name('pro
 
 Route::get('/empresas/{empresa}/integracoes/{integracao}/edit', [IntegracoesController::class, 'edit'])->name('empresas.integracoes.edit');
 Route::post('/empresas/{empresa}/integracoes', [IntegracoesController::class, 'store'])->name('empresas.integracoes.store');
+Route::post('/empresas/{empresa}/integracoes/{integracao}/servicos/importar', [IntegracoesController::class, 'importFromPlatform'])->name('empresas.integracoes.servicos.importar');
 Route::put('/empresas/{empresa}/integracoes/{integracao}', [IntegracoesController::class, 'update'])->name('empresas.integracoes.upate');
 
 Route::get('/empresas/{empresa}/configuracao-nfse/edit', [EmpresasController::class, 'createConfigNFSe'])->name('empresas.nfse.create');
@@ -50,3 +51,4 @@ Route::get('/vendas', [VendasController::class, 'index'])->name('vendas.list');
 Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
 
 Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
+
