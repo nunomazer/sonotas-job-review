@@ -6,6 +6,7 @@ use App\Models\Servico;
 use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
+use App\Services\Sped\SpedService;
 use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -202,7 +203,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                     'venda' => [
                         'nome' => $vendaApi['document_name'],
                         'status' => $vendaApi['document_status'],
-                        'tipo' => $vendaApi['document_type'],
+                        'tipo_documento' => SpedService::DOCTYPE_NFSE, // TODO refatorar quando trabalhar com NFe
                         'valor' => $vendaApi['document_basevalue'],
                         'data_emissao' => $vendaApi['document_emissiondate'],
                         'data_referencia' => $vendaApi['document_referencedate'],
