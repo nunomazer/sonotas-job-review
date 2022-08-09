@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Empresa::class, UserEmpresa::class, 'user_id', 'id', 'id', 'id');
     }
+
+    public function empresasIdsArray() : array
+    {
+        return $this->empresas->pluck('id')->toArray();
+    }
 }
