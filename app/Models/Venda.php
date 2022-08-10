@@ -42,7 +42,7 @@ class Venda extends Model
     public function documento_fiscal()
     {
         if ($this->tipo_documento == SpedService::DOCTYPE_NFSE) {
-            return $this->belongsTo(NFSe::class, 'documento_id');
+            return $this->hasOne(NFSe::class, 'documento_id');
         }
     }
 
