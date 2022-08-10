@@ -14,6 +14,8 @@ class NFSeItemServico extends Model
 
     protected $table = 'nfse_servico';
 
+    protected $guarded = ['id'];
+
     public function servico()
     {
         return $this->belongsTo(Servico::class);
