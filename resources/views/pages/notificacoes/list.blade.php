@@ -44,7 +44,7 @@
                                 <td class="small">
                                     @foreach($notification->data as $key => $value)
                                         @if( ! in_array($key, ['mensagem', 'status', 'empresa_id']) )
-                                            {{ $value }} <br/>
+                                            <span class="fw-lighter">{{$key}}:</span> {{ is_array($value) ? '' : $value }} <br/>
                                         @endif
                                     @endforeach
                                 </td>
