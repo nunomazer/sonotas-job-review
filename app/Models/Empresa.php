@@ -71,4 +71,9 @@ class Empresa extends Model
     {
         return $this->hasMany(EmpresaAssinatura::class);
     }
+
+    public function vendas()
+    {
+        return $this->hasMany(Venda::class);
+    }
 }
