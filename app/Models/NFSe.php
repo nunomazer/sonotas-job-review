@@ -35,11 +35,6 @@ class NFSe extends Model
         return $this->belongsTo(Empresa::class);
     }
 
-    public function cliente()
-    {
-        return $this->belongsTo(Cliente::class);
-    }
-
     public function venda() {
         return $this->belongsTo(Venda::class);
     }
