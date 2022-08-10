@@ -29,4 +29,9 @@ class Integracao extends Model
     {
         return $this->belongsTo(Empresa::class);
     }
+
+    public function scopeIsAtivo($query)
+    {
+        return $query->where('ativo', true);
+    }
 }
