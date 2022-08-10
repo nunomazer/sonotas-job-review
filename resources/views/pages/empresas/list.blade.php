@@ -88,6 +88,7 @@
                                             <tr>
                                                 <th class="table-sort" data-sort="sort-name">Integração</th>
                                                 <th>Vendas</th>
+                                                <th>Última importação vendas</th>
                                                 <th>Serviços</th>
                                                 <th></th>
                                             </tr>
@@ -106,6 +107,10 @@
 
                                                     <td>
                                                         X Vendas
+                                                    </td>
+
+                                                    <td>
+                                                        {{ $integracao->vendas_importadas_em->format('d/m/Y H:i') }}
                                                     </td>
 
                                                     <td>
