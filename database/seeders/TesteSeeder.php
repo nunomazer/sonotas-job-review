@@ -184,7 +184,7 @@ class TesteSeeder extends Seeder
         $integracao->fields = $fields;
         $integracao->driver = $eduzzDriver->name();
         $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
-        $integracao->data_inicio = now();
+        $integracao->data_inicio = '2022-07-01';
         $integracao->transmissao_automatica = false;
         $integracao->transmissao_periodo = 'day';
         $integracao->transmissao_apenas_dias_uteis = false;
@@ -336,7 +336,7 @@ class TesteSeeder extends Seeder
         $integracao->fields = $fields;
         $integracao->driver = $eduzzDriver->name();
         $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
-        $integracao->data_inicio = now();
+        $integracao->data_inicio = '2022-07-01';
         $integracao->transmissao_automatica = false;
         $integracao->transmissao_periodo = 'hour';
         $integracao->transmissao_apenas_dias_uteis = false;
