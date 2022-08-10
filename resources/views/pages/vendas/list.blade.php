@@ -19,8 +19,10 @@
                         <th class="table-sort" data-sort="sort-name">
                             Cliente
                         </th>
-                        <th>Data</th>
-                        <th>Descrição</th>
+                        <th>Data Transação</th>
+                        <th>Emissão Planejada NF</th>
+                        <th></th>
+                        <th>Serviço/Produto</th>
                         <th>Valor</th>
                         <th>Integração</th>
                         <th></th>
@@ -36,10 +38,16 @@
                                     {{ $venda->cliente->nome }}
                                 </td>
                                 <td>
-                                    {{ $venda->emitido_em->format('d/m/Y H:i:s') }}
+                                    {{ $venda->data_transacao->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    @foreach($venda->itens_servico as $item)
+                                    {{ $venda->data_emissao_planejada->format('d/m/Y H:i') }}
+                                </td>
+                                <td>
+                                    {{ $venda->documento_fiscal ? 'Emitida' : 'Pendente' }}
+                                </td>
+                                <td>
+                                    @foreach($venda->itens as $item)
                                         {{ $item->servico->nome }}
                                         <br/>
                                     @endforeach
