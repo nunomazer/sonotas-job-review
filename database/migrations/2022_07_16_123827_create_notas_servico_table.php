@@ -25,6 +25,7 @@ class CreateNotasServicoTable extends Migration
             $table->jsonb('status_historico')->nullable()->comment('Alguns status definem uma descrição, mensagem, dados extras, podem ser o erro ou retorno satisfatório com meta dados do retorno');
 
             $table->dateTime('emitido_em');
+            $table->decimal('valor', 20,2);
 
             $table->timestamps();
             $table->softDeletes();
