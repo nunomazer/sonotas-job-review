@@ -36,10 +36,10 @@
                                     {{ $nfse->venda->empresa->nome }}
                                 </td>
                                 <td>
-                                    {{ $nfse->cliente->nome }}
+                                    {{ $nfse->venda->cliente->nome }}
                                 </td>
                                 <td>
-                                    {{ $nfse->emitido_em->format('d/m/Y H:i:s') }}
+                                    {{ $nfse->emitido_em->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
                                     @foreach($nfse->itens_servico as $item)

@@ -17,7 +17,9 @@ class NFSeController extends Controller
 
     public function index()
     {
-        $nfses = NFSe::whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray())->get();
+        $nfses = NFSe::with('venda')->whereHas('venda', function($q) {
+            $q->whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray());
+        })->get();
         return view('pages.nfse.list', compact('nfses'));
     }
 
