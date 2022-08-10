@@ -13,7 +13,10 @@
             </div>
             <!-- Page title actions -->
             <div class="col-12 col-md-auto ms-auto d-print-none">
-                @include('layouts.partials.dropdown-user')
+                <div class="btn-list">
+                    @include('layouts.partials.notifications')
+                    @include('layouts.partials.dropdown-user')
+                </div>
             </div>
         </div>
     </div>
