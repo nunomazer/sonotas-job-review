@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Sped\SpedService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,6 +37,13 @@ class Venda extends Model
     public function tipo_servico()
     {
         return $this->belongsTo(TipoServico::class);
+    }
+
+    public function documento_fiscal()
+    {
+        if ($this->tipo_documento == SpedService::DOCTYPE_NFSE) {
+            return $this->belongsTo(NFSe::class, 'documento_id');
+        }
     }
 
 }
