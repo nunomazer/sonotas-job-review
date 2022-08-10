@@ -15,6 +15,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th class="table-sort" data-sort="sort-name">Empresa</th>
                         <th class="table-sort" data-sort="sort-name">
                             Cliente
@@ -31,6 +32,9 @@
                     <tbody class="table-tbody">
                         @foreach($vendas as $venda)
                             <tr>
+                                <td>
+                                    {{ $venda->id }}
+                                </td>
                                 <td>
                                     {{ $venda->empresa->nome }}
                                 </td>
