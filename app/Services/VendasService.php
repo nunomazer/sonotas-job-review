@@ -14,6 +14,7 @@ use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Models\Venda;
 use App\Models\VendaItem;
+use App\Notifications\ErroAoImportarVenda;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ class VendasService
      * @param array<array|VendaItem> $itens
      * @return NFSe|null
      */
-    public function create(array $venda, array $itens) : ? NFSe
+    public function create(array $venda, array $itens) : ? Venda
     {
         try {
             DB::beginTransaction();
@@ -69,7 +70,7 @@ class VendasService
         $integracao = Integracao::where('empresa_id', $venda->empresa_id)
             ->where('driver', $venda->driver)
             ->where('tipo_documento', $venda->tipo_documento)
-            ->get();
+            ->first();
 
         if ($integracao->transmissao_automatica) return $venda->data_transacao;
 
@@ -88,32 +89,55 @@ class VendasService
      *
      * @param Empresa $empresa Empresa para a qual o sync de serviços deve ser realizado
      * @param string $driver Nome do driver de plataforma para sincronizar
+     * @param string $fromDate A partir de qual data deve sincronizar as vendas, no formato YYYY-MM-DD
      * @return array Vendas importadas e sincronizados da api de integração, já salvos no banco de dados
+     * @throws \Throwable
      */
-    public function syncFromPlatform(Empresa $empresa, string $driverName, $from) : array
+    public function syncFromPlatform(Empresa $empresa, string $driverName, string $fromDate) : array
     {
         $driver = (new EmpresaService())->driverIntegracao($empresa, $driverName);
 
-        $vendasApi = $driver->getVendas($from);
+        $vendasApi = $driver->getVendas($fromDate);
 
         $vendas = [];
-        DB::transaction(function () use ($driverName, $empresa, $vendasApi, &$vendas) {
-            foreach ($vendasApi as $vendaApi) {
-                $venda = Venda
-                    ::where('driver', $driverName)
-                    ->where('driver_id', $vendaApi['driver_id'])
-                    ->first();
 
-                /**
-                 * Somente inserção de novas vendas vindas da Api que ainda não foram criadas do nosso lado
-                 */
-                if ($venda == null) {
-                    $venda = $this->hydrateVendaFromApi($empresa, $driverName, $vendaApi);
+        $success = true;
+        foreach ($vendasApi as $vendaApi) {
+            $venda = Venda
+                ::where('driver', $driverName)
+                ->where('driver_id', $vendaApi['driver_id'])
+                ->first();
+
+            /**
+             * Somente inserção de novas vendas vindas da Api que ainda não foram criadas do nosso lado
+             */
+            if ($venda == null) {
+                $venda = $this->hydrateVendaFromApi($empresa, $driverName, $vendaApi);
+
+                if ($venda) {
                     $itensServico = $this->hydrateItensServicoFromApi($empresa, $driverName, $vendaApi);
-                    $vendas[] = $this->create($venda->toArray(), $itensServico);
+                    $vendaCriada = $this->create($venda->toArray(), $itensServico);
+                    if ($vendaCriada) {
+                        $vendas[] = $vendaCriada;
+                    } else {
+                        $success = false;
+                    }
                 }
             }
-        });
+        }
+
+        /**
+         * Atualiza data da importação de vendas na integração somente se importou todas, senão permanece buscando
+         * desde esta data antiga para garantir que a empresa corrigiu o erro na plataforma para não perder vendas importadas
+         * TODO rever esta lógica, talvez adicionar um importar a partir de como função de tela
+         */
+        if ($success) {
+            Integracao::where('empresa_id', $empresa->id)
+                ->where('driver', $driverName)
+                ->update([
+                    'vendas_importadas_em' => now(),
+                ]);
+        }
 
         return $vendas;
     }
@@ -126,11 +150,18 @@ class VendasService
      * @param array $vendaApi
      * @return Venda
      */
-    protected function hydrateVendaFromApi(Empresa $empresa, string $driverName, array $vendaApi) : Venda
+    protected function hydrateVendaFromApi(Empresa $empresa, string $driverName, array $vendaApi) : ?Venda
     {
+        if ($vendaApi['cliente']['documento'] == null) {
+            $mensagem = 'Não é possível importar vendas para clientes que não tenham o documento (CPF / CNPJ) preenchidos na plataforma de integração.';
+            $empresa->owner->notify(new ErroAoImportarVenda($empresa, $driverName, $vendaApi, $mensagem));
+            return null;
+        }
+
         $venda = new Venda();
 
         $venda->empresa_id = $empresa->id;
+        $venda->tipo_documento = $vendaApi['venda']['tipo_documento'];
         $venda->data_transacao = $vendaApi['venda']['data_emissao'];
         $venda->valor = $vendaApi['venda']['valor'];
 
@@ -172,6 +203,7 @@ class VendasService
                 $item->item_id = $servicoIntegracao->servico->id;
             }
 
+            $item->tipo_documento = $vendaApi['venda']['tipo_documento'];
             $item->qtde = $servico['qtde'];
             $item->valor = $servico['valor'];
 
@@ -179,5 +211,18 @@ class VendasService
         }
 
         return $itens;
+    }
+
+    public function syncAllCompaniesFromPlatforms()
+    {
+        $empresas = Empresa::isAtivo()->get();
+
+        $empresas->each(function($empresa) {
+            $empresa->integracoes()->isAtivo()->each(function ($integracao) use ($empresa) {
+                $fromDate = ($integracao->vendas_importadas_em) ? $integracao->vendas_importadas_em->format('Y-m-d')
+                                                                : $integracao->data_inicio->format('Y-m-d');
+                $this->syncFromPlatform($empresa, $integracao->driver, $fromDate);
+            });
+        });
     }
 }
