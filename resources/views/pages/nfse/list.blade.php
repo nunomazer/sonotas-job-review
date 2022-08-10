@@ -15,6 +15,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th class="table-sort" data-sort="sort-name">Prestador</th>
                         <th class="table-sort" data-sort="sort-name">
                             Tomador
@@ -29,7 +30,10 @@
                         @foreach($nfses as $nfse)
                             <tr>
                                 <td>
-                                    {{ $nfse->empresa->nome }}
+                                    {{ $nfse->id }}
+                                </td>
+                                <td>
+                                    {{ $nfse->venda->empresa->nome }}
                                 </td>
                                 <td>
                                     {{ $nfse->cliente->nome }}
