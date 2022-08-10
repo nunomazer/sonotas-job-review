@@ -70,7 +70,11 @@ class ErroAoImportarVenda extends Notification implements ShouldQueue
             'empresa_id' => $this->empresa->id,
             'empresa_nome' => $this->empresa->nome,
             'driver' => $this->driverName,
-            'venda' => $this->vendaApi,
+            $this->driverName.'_venda_id' => $this->vendaApi['driver_id'],
+            $this->driverName.'_venda_id' => $this->vendaApi['driver_id'],
+            $this->driverName.'_venda_valor' => $this->vendaApi['venda']['valor'],
+            $this->driverName.'_cliente_nome' => $this->vendaApi['cliente']['nome'] ?? '',
+            $this->driverName.'_cliente_documento' => $this->vendaApi['cliente']['documento'] ?? '',
             'status' => 'error',
         ];
     }
