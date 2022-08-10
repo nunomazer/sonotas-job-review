@@ -110,7 +110,7 @@
                                                     </td>
 
                                                     <td>
-                                                        {{ $integracao->vendas_importadas_em->format('d/m/Y H:i') }}
+                                                        {{ $integracao->vendas_importadas_em ? $integracao->vendas_importadas_em->format('d/m/Y H:i') : 'Nenhuma importação' }}
                                                     </td>
 
                                                     <td>
