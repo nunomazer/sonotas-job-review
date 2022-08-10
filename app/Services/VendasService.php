@@ -43,7 +43,7 @@ class VendasService
                      * para este cálculo
                      */
                     if ($venda->driver) {
-                        $venda->data_emissao_planejada = $this->calculoDataPlanejadaEmissao($venda);
+                        $venda->data_emissao_planejada = $this->calculoDataPlanejadaEmissaoNF($venda);
                         $venda->save();
                     }
                 }
@@ -65,7 +65,7 @@ class VendasService
         }
     }
 
-    public function calculoDataPlanejadaEmissao(Venda $venda) : Carbon
+    public function calculoDataPlanejadaEmissaoNF(Venda $venda) : Carbon
     {
         $integracao = Integracao::where('empresa_id', $venda->empresa_id)
             ->where('driver', $venda->driver)
