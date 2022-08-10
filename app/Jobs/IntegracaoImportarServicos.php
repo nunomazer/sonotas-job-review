@@ -43,11 +43,11 @@ class IntegracaoImportarServicos implements ShouldQueue
         try {
             $result = $servicoService->syncFromPlatform($this->empresa, $this->integracao->driver);
 
-            $this->empresa->owner->notify(new ServicosImportados($this->empresa, $this->integracao, 'success'));
+            $this->empresa->owner->notify(new ServicosImportados($this->empresa, $this->integracao, 'success', count($result)));
         } catch (\Exception $exception) {
             Log::error($exception);
 
-            $this->empresa->owner->notify(new ServicosImportados($this->empresa, $this->integracao, 'error'));
+            $this->empresa->owner->notify(new ServicosImportados($this->empresa, $this->integracao, 'error', 0));
         }
     }
 }
