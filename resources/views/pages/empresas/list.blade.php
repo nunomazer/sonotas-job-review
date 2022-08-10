@@ -113,7 +113,10 @@
                                                     </td>
 
                                                     <td>
-                                                        <form method="POST" action="{{route('servicos.importar', $integracao)}}"
+                                                        <form method="POST" action="{{route('empresas.integracoes.servicos.importar', [$empresa, $integracao])}}">
+                                                            @csrf
+                                                            <input type="submit" class="btn btn-sm" value="Importar serviços">
+                                                        </form>
                                                     </td>
 
                                                 </tr>

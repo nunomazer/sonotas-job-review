@@ -32,10 +32,10 @@ class IntegracoesController extends Controller
     }
 
 
-    public function importarFromPlatform(Request $request, Empresa $empresa, Integracao $integracao)
+    public function importFromPlatform(Request $request, Empresa $empresa, Integracao $integracao)
     {
         $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
 
-        return redirect()->back()->with('success', 'Importação de serviços em execução, ao finalizar o resultado é informado na área de notificações');
+        return redirect()->back()->with('success', 'Importação de serviços para empresa "'.$empresa->nome.'", da integração "'.$integracao->driver.'" está em execução, ao finalizar o resultado é informado na área de notificações');
     }
 }
