@@ -14,6 +14,7 @@ use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Models\Venda;
 use App\Models\VendaItem;
+use App\Notifications\ErroAoGerarEmitirNF;
 use App\Notifications\ErroAoImportarVenda;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
@@ -213,6 +214,13 @@ class VendasService
         return $itens;
     }
 
+    /**
+     * Executa a importação das vendas de cada empresa ativa e cada integração ativa, a partir da última data de importação
+     * executada para a integração ou pela data de início configurada
+     *
+     * @return void
+     * @throws \Throwable
+     */
     public function syncAllCompaniesFromPlatforms()
     {
         $empresas = Empresa::isAtivo()->get();
@@ -223,6 +231,74 @@ class VendasService
                                                                 : $integracao->data_inicio->format('Y-m-d');
                 $this->syncFromPlatform($empresa, $integracao->driver, $fromDate);
             });
+        });
+    }
+
+    /**
+     * Chama a criação da NFSe e solicita sua emissão para o service correto
+     *
+     * @param Venda $venda
+     * @return Venda
+     */
+    public function gerarEmitirNFSe(Venda $venda) : Venda
+    {
+        $nfseService = new NFSeService();
+
+        $nfseItens = $venda->itens->map(function($item) {
+            return new NFSeItemServico([
+                'servico_id'        => $item->item_id,
+                'qtde'              => $item->qtde,
+                'valor'             => $item->valor,
+            ]);
+        });
+
+        $nfse = $nfseService->create([
+            'venda_id'      => $venda->id,
+            'emitido_em'    => now(),
+            'valor'         => $venda->valor,
+        ], $nfseItens->all());
+
+        if ($nfse == null) {
+            $venda->empresa->owner->notify(new ErroAoGerarEmitirNF($venda->empresa, $venda, 'Um erro ocorreu ao emitir a NFSe para venda ' . $venda->id));
+            return $venda;
+        }
+
+        $nfse = $nfseService->emitirSped($nfse);
+
+        return $venda;
+    }
+
+    /**
+     * Verifica as vendas da empresa, emitindo as NF de acordo com o tipo de documento e a data planejada para emissão
+     *
+     * @param Empresa $empresa
+     * @return void
+     */
+    public function gerarEmitirNF(Empresa $empresa)
+    {
+        $vendas = $empresa->vendas()
+            ->where('data_emissao_planejada', '<=', now())
+            ->whereNull('documento_id')
+            ->get();
+
+        $vendas->each(function ($venda) {
+            if ($venda->tipo_documento == SpedService::DOCTYPE_NFSE) {
+                $this->gerarEmitirNFSe($venda);
+            }
+        });
+    }
+
+    /**
+     * Percorre cada empresa ativa, as vendas que não foram emitidas NF, gera e emite de acordo com a data planejada
+     *
+     * @return void
+     */
+    public function gerarEmitirAllCompaniesNFs()
+    {
+        $empresas = Empresa::isAtivo()->get();
+
+        $empresas->each(function($empresa) {
+            $this->gerarEmitirNF($empresa);
         });
     }
 }
