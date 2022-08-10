@@ -12,6 +12,7 @@ class NFSe extends Model
     protected $table = 'notas_servico';
 
     protected $fillable = [
+        'venda_id',
         'driver',
         'driver_id',
         'status',
@@ -37,6 +38,10 @@ class NFSe extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function venda() {
+        return $this->belongsTo(Venda::class);
     }
 
     public function itens_servico()
