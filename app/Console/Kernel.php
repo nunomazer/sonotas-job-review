@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('sync:vendas-plataformas')->hourly();
+
         $schedule->command('ibge:import-states-cities')->monthly();
     }
 
