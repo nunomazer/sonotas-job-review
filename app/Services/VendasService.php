@@ -116,13 +116,21 @@ class VendasService
                 $venda = $this->hydrateVendaFromApi($empresa, $driverName, $vendaApi);
 
                 if ($venda) {
-                    $itensServico = $this->hydrateItensServicoFromApi($empresa, $driverName, $vendaApi);
-                    $vendaCriada = $this->create($venda->toArray(), $itensServico);
-                    if ($vendaCriada) {
-                        $vendas[] = $vendaCriada;
-                    } else {
+                    try {
+                        $itensServico = $this->hydrateItensServicoFromApi($empresa, $driverName, $vendaApi);
+                        $vendaCriada = $this->create($venda->toArray(), $itensServico);
+                        if ($vendaCriada) {
+                            $vendas[] = $vendaCriada;
+                        } else {
+                            $success = false;
+                        }
+                    } catch (ServicoNaoSincronizadoException $e) {
+                        Log::error($e);
+                        $empresa->owner->notify(new ErroAoImportarVenda($empresa, $driverName, $vendaApi, $e->getMessage()));
                         $success = false;
                     }
+                } else {
+                    $success = false;
                 }
             }
         }
@@ -198,7 +206,8 @@ class VendasService
             if ($vendaApi['venda']['tipo_documento'] == SpedService::DOCTYPE_NFSE) {
                 $servicoIntegracao = ServicoIntegracao::where('driver_id', $servico['driver_id'])->first();
 
-                throw_if($servicoIntegracao == null, new ServicoNaoSincronizadoException('Servico com id ' . $servico['driver_id'] . ' na ' . $driverName . ' não encontrado em nossa base, é necessário importar'));
+                throw_if($servicoIntegracao == null, new ServicoNaoSincronizadoException(
+                    'Servico com id ' . $servico['driver_id'] . ' na ' . $driverName . ' não encontrado em nossa base, é necessário importar'));
 
                 $item = new VendaItem();
                 $item->item_id = $servicoIntegracao->servico->id;
