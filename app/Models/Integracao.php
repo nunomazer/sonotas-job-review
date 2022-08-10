@@ -21,6 +21,7 @@ class Integracao extends Model
     protected $casts = [
         'fields' => 'json',
         'data_inicio' => 'date',
+        'vendas_importadas_em' => 'datetime',
         'transmissao_automatica' => 'boolean',
         'transmissao_apenas_dias_uteis' => 'boolean',
     ];
