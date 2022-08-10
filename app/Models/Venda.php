@@ -30,7 +30,7 @@ class Venda extends Model
 
     public function itens()
     {
-        return $this->hasMany(NFSeItemServico::class, 'nota_servico_id');
+        return $this->hasMany(VendaItem::class, 'venda_id');
     }
 
     public function tipo_servico()
