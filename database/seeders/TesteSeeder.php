@@ -186,7 +186,7 @@ class TesteSeeder extends Seeder
         $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
         $integracao->data_inicio = now();
         $integracao->transmissao_automatica = false;
-        $integracao->transmissao_periodo = '1H';
+        $integracao->transmissao_periodo = 'day';
         $integracao->transmissao_apenas_dias_uteis = false;
         $integracao->save();
     }
@@ -338,7 +338,7 @@ class TesteSeeder extends Seeder
         $integracao->tipo_documento = SpedService::DOCTYPE_NFSE;
         $integracao->data_inicio = now();
         $integracao->transmissao_automatica = false;
-        $integracao->transmissao_periodo = '1D';
+        $integracao->transmissao_periodo = 'hour';
         $integracao->transmissao_apenas_dias_uteis = false;
         $integracao->save();
     }
