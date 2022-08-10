@@ -17,6 +17,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('sync:vendas-plataformas')->hourly();
 
+        $schedule->command('vendas:emitir-nf-planejadas')->hourlyAt(10);
+
         $schedule->command('ibge:import-states-cities')->monthly();
     }
 
