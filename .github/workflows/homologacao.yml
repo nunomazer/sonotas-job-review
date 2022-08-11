@@ -17,5 +17,5 @@ jobs:
           username: ${{ secrets.HOMOLOG_USERNAME }}
           key: ${{ secrets.HOMOLOG_SSH_KEY }}
           script: |
-            whoami
+            cd homologacao.sonotas.com.br
             ls -al
