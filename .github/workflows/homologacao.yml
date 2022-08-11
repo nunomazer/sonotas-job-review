@@ -1,0 +1,20 @@
+name: Homologação
+
+on:
+  push:
+    branches: [ "homolog" ]
+  
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+          host: ${{ secrets.HOMOLOG_HOST }}
+          username: ${{ secrets.HOMOLOG_USERNAME }}
+          key: ${{ secrets.HOMOLOG_SSH_KEY }}
+          script: |
+            ls -al
