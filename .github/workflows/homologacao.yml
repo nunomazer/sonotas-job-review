@@ -3,7 +3,7 @@ name: Homologação
 on:
   push:
     branches: [ "homolog" ]
-  
+
 jobs:
   deploy:
 
@@ -19,7 +19,10 @@ jobs:
           script_stop: true
           script: |
             cd homologacao.sonotas.com.br
+            php artisan down
             git pull origin homolog
             composer install
             php artisan migrate --force
             php artisan db:seed
+            cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            php artisan up
