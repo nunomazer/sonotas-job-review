@@ -18,4 +18,7 @@ jobs:
           key: ${{ secrets.HOMOLOG_SSH_KEY }}
           script: |
             cd homologacao.sonotas.com.br
-            ls -al
+            git fetch origin homolog
+            git merge homolog
+            composer install -y
+            php artisan migrate -y
