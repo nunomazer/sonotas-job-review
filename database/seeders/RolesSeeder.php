@@ -14,8 +14,8 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-        $roleSystemAdmin = Role::create(['name' => Role::SYSADMIN]);
-        $roleOwner = Role::create(['name' => Role::OWNER]);
-        $roleManager = Role::create(['name' => Role::MANAGER]);
+        $roleSystemAdmin = Role::updateOrCreate(['name' => Role::SYSADMIN]);
+        $roleOwner = Role::updateOrCreate(['name' => Role::OWNER]);
+        $roleManager = Role::updateOrCreate(['name' => Role::MANAGER]);
     }
 }
