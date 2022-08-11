@@ -20,5 +20,5 @@ jobs:
             cd homologacao.sonotas.com.br
             git fetch origin homolog
             git merge homolog
-            composer install -y
+            composer install
             php artisan migrate -y
