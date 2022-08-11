@@ -261,6 +261,9 @@ class VendasService
             ]);
         });
 
+        /**
+         * Ao criar a NFSe pelo service um evento é disparado e o listener cria um job para emitir no drive sped correto
+         */
         $nfse = $nfseService->create([
             'venda_id'      => $venda->id,
             'emitido_em'    => now(),
@@ -272,7 +275,8 @@ class VendasService
             return $venda;
         }
 
-        $nfse = $nfseService->emitirSped($nfse);
+        $venda->documento_id = $nfse->id;
+        $venda->save();
 
         return $venda;
     }
