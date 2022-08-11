@@ -8,17 +8,17 @@ Sistema emissor de NFe
 
 Trabalhar em _feature branches_:
 
-1. Pull da branch main no ambiente local
-2. Com a branch main atualizada, criar a branch para nova feature
+1. Pull da branch `homolog` no ambiente local
+2. Com a branch `homolog` atualizada, criar a branch para nova feature
     1. trabalhar na feature
     2. commits
     3. push para branch
 3. Antes de realizar um PR
-    1. Pull da main novamente
-    2. Merge da main na branch de trabalho
+    1. Pull da `homolog` novamente
+    2. Merge da `homolog` na branch de trabalho
     3. Resolução de conflitos se necessário
-4. Fazer a PR da feature branch para main
-5. Depois de realizado o merge no repositório da main
+4. Fazer a PR da feature branch para `homolog`
+5. Depois de realizado o merge no repositório da `homolog`
     1. voltar ao passo 1
 
 ## Download Dependencies
