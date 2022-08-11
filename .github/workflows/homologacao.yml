@@ -24,5 +24,8 @@ jobs:
             composer install
             php artisan migrate --force
             php artisan db:seed
-            cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl restart sonotas-homologacao-worker:*
             php artisan up
