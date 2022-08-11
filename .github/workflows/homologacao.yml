@@ -14,10 +14,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.5
       with:
           host: ${{ secrets.HOMOLOG_HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          username: ${{ secrets.HOMOLOG_USERNAME }}
+          key: ${{ secrets.HOMOLOG_SSH_KEY }}
           script: |
-            cd public_html
-            git fetch
-            git pull 
+            ls -al
