@@ -16,6 +16,7 @@ jobs:
           host: ${{ secrets.HOMOLOG_HOST }}
           username: ${{ secrets.HOMOLOG_USERNAME }}
           key: ${{ secrets.HOMOLOG_SSH_KEY }}
+          script_stop: true
           script: |
             cd homologacao.sonotas.com.br
             git pull origin homolog
