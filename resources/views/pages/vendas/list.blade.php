@@ -48,7 +48,13 @@
                                     {{ $venda->data_emissao_planejada->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    {{ $venda->documento_fiscal ? 'Emitida' : 'Pendente' }}
+                                    <span class="badge badge-outline badge-sm text-{{ $venda->documento_fiscal ? 'blue' : 'warning' }}">
+                                        @if($venda->documento_fiscal)
+                                            <a href="{{route('notas-servico.show', $venda->documento_fiscal->id) }}">
+                                                Detalhes NFSe
+                                            </a>
+                                        @endif
+                                    </span>
                                 </td>
                                 <td>
                                     @foreach($venda->itens as $item)

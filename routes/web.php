@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendas', [VendasController::class, 'index'])->name('vendas.list');
 
     Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
+    Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
 
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
 

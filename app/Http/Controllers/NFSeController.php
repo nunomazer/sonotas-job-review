@@ -30,4 +30,9 @@ class NFSeController extends Controller
         // TODO implementar visões
         return dump($nfse);
     }
+
+    public function show(NFSe $nfse)
+    {
+        return view('pages.nfse.show', compact('nfse'));
+    }
 }
