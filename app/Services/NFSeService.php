@@ -55,7 +55,7 @@ class NFSeService
     public function emitirSped(NFSe $nfse) : NFSe
     {
         try {
-            $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->empresa->cidade->name);
+            $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
             $driverNFSe = $sped->nfseDriver($nfse);
             $result = $driverNFSe->emitir();
 

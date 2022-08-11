@@ -30,11 +30,6 @@ class NFSe extends Model
         'driver_dados' => 'json',
     ];
 
-    public function empresa()
-    {
-        return $this->belongsTo(Empresa::class);
-    }
-
     public function venda() {
         return $this->belongsTo(Venda::class);
     }
