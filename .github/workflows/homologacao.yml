@@ -23,7 +23,6 @@ jobs:
             git pull origin homolog
             composer install
             php artisan migrate --force
-            php artisan db:seed
             sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
             sudo supervisorctl reread
             sudo supervisorctl update
