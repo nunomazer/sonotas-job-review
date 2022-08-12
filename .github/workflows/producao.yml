@@ -1,0 +1,38 @@
+name: Produção
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script_stop: false
+          script: |
+            cd app.sonotas.com.br
+            php artisan down
+            git pull origin main
+            composer install
+            #npm install
+            #npm run prod
+            sudo supervisorctl stop sonotas-producao-worker:*
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan config:cache
+            php artisan route:clear
+            php artisan route:cache
+            php artisan optimize --force
+            sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl start sonotas-producao-worker:*
+            php artisan up

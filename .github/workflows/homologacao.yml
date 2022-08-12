@@ -3,7 +3,7 @@ name: Homologação
 on:
   push:
     branches: [ "homolog" ]
-  
+
 jobs:
   deploy:
 
@@ -16,5 +16,18 @@ jobs:
           host: ${{ secrets.HOMOLOG_HOST }}
           username: ${{ secrets.HOMOLOG_USERNAME }}
           key: ${{ secrets.HOMOLOG_SSH_KEY }}
+          script_stop: false
           script: |
-            ls -al
+            cd homologacao.sonotas.com.br
+            php artisan down
+            git pull origin homolog
+            composer install
+            sudo supervisorctl stop sonotas-homologacao-worker:*
+            #npm install
+            #npm run dev
+            php artisan migrate --force
+            sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl start sonotas-homologacao-worker:*
+            php artisan up
