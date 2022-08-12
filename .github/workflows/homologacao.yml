@@ -23,8 +23,9 @@ jobs:
             git pull origin homolog
             composer install
             php artisan migrate --force
-            sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
-            sudo supervisorctl reread
-            sudo supervisorctl update
-            sudo supervisorctl restart sonotas-homologacao-worker:*
+            #sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            #sudo supervisorctl reread
+            #sudo supervisorctl update
+            #sudo supervisorctl restart sonotas-homologacao-worker:*
+            php artisan queue:restart
             php artisan up
