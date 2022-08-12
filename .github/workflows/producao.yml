@@ -16,14 +16,14 @@ jobs:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          script_stop: true
+          script_stop: false
           script: |
             cd app.sonotas.com.br
             php artisan down
             git pull origin main
             composer install
-            npm install
-            npm run prod
+            #npm install
+            #npm run prod
             sudo supervisorctl stop sonotas-producao-worker:*
             php artisan migrate --force
             php artisan config:clear

@@ -16,15 +16,15 @@ jobs:
           host: ${{ secrets.HOMOLOG_HOST }}
           username: ${{ secrets.HOMOLOG_USERNAME }}
           key: ${{ secrets.HOMOLOG_SSH_KEY }}
-          script_stop: true
+          script_stop: false
           script: |
             cd homologacao.sonotas.com.br
             php artisan down
             git pull origin homolog
             composer install
             sudo supervisorctl stop sonotas-homologacao-worker:*
-            npm install
-            npm run dev
+            #npm install
+            #npm run dev
             php artisan migrate --force
             sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
             sudo supervisorctl reread
