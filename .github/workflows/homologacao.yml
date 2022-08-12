@@ -23,6 +23,8 @@ jobs:
             git pull origin homolog
             composer install
             sudo supervisorctl stop sonotas-homologacao-worker:*
+            npm install
+            npm run dev
             php artisan migrate --force
             sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
             sudo supervisorctl reread
