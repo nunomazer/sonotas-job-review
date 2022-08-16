@@ -1024,8 +1024,6 @@
         <div class="col-12">
             <div class="row row-cards">
 
-                @include('pages.dashboard.partials.qtde-empresas')
-
                 <div class="col-sm-6 col-lg-3">
                     <div class="card card-sm">
                         <div class="card-body">
@@ -1117,6 +1115,9 @@
                         </div>
                     </div>
                 </div>
+
+                @include('pages.dashboard.partials.qtde-empresas')
+
             </div>
         </div>
         <div class="col-lg-6">

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Cache;
 class EstatisticasService
 {
     const EMPRESAS_ATIVAS = 'empresas_ativas';
+    const EMPRESAS_TOTAL = 'empresas_total';
 
     private array $estatisticas = [
         self::EMPRESAS_ATIVAS => null,
+        self::EMPRESAS_TOTAL => null,
     ];
 
     private User $user;
@@ -42,6 +44,7 @@ class EstatisticasService
         $this->estatisticas = Cache::remember($this->getCacheKey(), 60*120, function () {
             return [
                 self::EMPRESAS_ATIVAS => $this->calcularEmpresasAtivas(),
+                self::EMPRESAS_TOTAL => $this->calcularEmpresasTotal(),
             ];
         });
 
@@ -51,6 +54,11 @@ class EstatisticasService
     private function calcularEmpresasAtivas()
     {
         return $this->user->empresas->where('ativo', true)->count();
+    }
+
+    private function calcularEmpresasTotal()
+    {
+        return $this->user->empresas->count();
     }
 
     public function getEmpresasAtivas(User $user) : int
