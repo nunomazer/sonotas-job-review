@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\EstatisticasService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,8 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $estatisticasService = new EstatisticasService();
-        $estatisticas['empresas_ativas'] =$estatisticasService->getEmpresasAtivas(auth()->user());
+        $data_inicial = now()->startOfMonth()->startOfDay();
+        $data_final = now()->endOfMonth()->endOfDay();
+        $estatisticasService = new EstatisticasService(auth()->user(), $data_inicial, $data_final);
+        $estatisticas = $estatisticasService->calcularEstatisticas(true);
 
         return view('pages.dashboard.painel', compact('estatisticas'));
     }
