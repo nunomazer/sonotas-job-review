@@ -2,18 +2,23 @@
 
 namespace App\Services;
 
+use App\Models\Servico;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class EstatisticasService
 {
-    const EMPRESAS_ATIVAS = 'empresas_ativas';
     const EMPRESAS_TOTAL = 'empresas_total';
+    const EMPRESAS_ATIVAS = 'empresas_ativas';
+    const SERVICOS_TOTAL = 'servicos_total';
+    const SERVICOS_ATIVOS = 'servicos_ativos';
 
     private array $estatisticas = [
         self::EMPRESAS_ATIVAS => null,
         self::EMPRESAS_TOTAL => null,
+        self::SERVICOS_TOTAL => null,
+        self::SERVICOS_ATIVOS => null,
     ];
 
     private User $user;
@@ -45,6 +50,8 @@ class EstatisticasService
             return [
                 self::EMPRESAS_ATIVAS => $this->calcularEmpresasAtivas(),
                 self::EMPRESAS_TOTAL => $this->calcularEmpresasTotal(),
+                self::SERVICOS_ATIVOS => $this->calcularServicosAtivos(),
+                self::SERVICOS_TOTAL => $this->calcularServicosTotal(),
             ];
         });
 
@@ -59,6 +66,18 @@ class EstatisticasService
     private function calcularEmpresasTotal()
     {
         return $this->user->empresas->count();
+    }
+
+    private function calcularServicosAtivos()
+    {
+        return Servico::isAtivo()
+                        ->whereIn('empresa_id', $this->user->empresasIdsArray())
+                        ->count();
+    }
+
+    private function calcularServicosTotal()
+    {
+        return Servico::whereIn('empresa_id', $this->user->empresasIdsArray())->count();
     }
 
     public function getEmpresasAtivas(User $user) : int
