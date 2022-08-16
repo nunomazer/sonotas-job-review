@@ -178,7 +178,7 @@ class TesteSeeder extends Seeder
             'email' => env('MAZER_EDUZZ_EMAIL'),
         ];
 
-        $integracao = new Integracao();
+        $integracao = Integracao::where('empresa_id', $empresa->id)->first() ?? new Integracao();
         $integracao->empresa_id = $empresa->id;
         $integracao->name = 'Integração com Eduzz';
         $integracao->fields = $fields;
@@ -330,7 +330,7 @@ class TesteSeeder extends Seeder
             'email' => env('DIGIBR_EDUZZ_EMAIL'),
         ];
 
-        $integracao = new Integracao();
+        $integracao = Integracao::where('empresa_id', $empresa->id)->first() ?? new Integracao();
         $integracao->empresa_id = $empresa->id;
         $integracao->name = 'Integração com Eduzz';
         $integracao->fields = $fields;
