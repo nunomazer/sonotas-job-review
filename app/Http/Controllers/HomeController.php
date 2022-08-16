@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\EstatisticasService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $estatisticas['empresas_ativas'] = auth()->user()->empresas->where('ativo', true)->count();
+        $estatisticasService = new EstatisticasService();
+        $estatisticas['empresas_ativas'] =$estatisticasService->getEmpresasAtivas(auth()->user());
 
         return view('pages.dashboard.painel', compact('estatisticas'));
     }
