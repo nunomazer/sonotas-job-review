@@ -29,10 +29,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $periodo = \request()->get('periodo', now()->format('Y-m-d'));
+        $periodo = \request()->get('periodo', now()->format('Y-m'));
 
-        $data_inicial = Carbon::createFromFormat('Y-m-d', $periodo)->startOfMonth()->startOfDay();
-        $data_final = Carbon::createFromFormat('Y-m-d', $periodo)->endOfMonth()->endOfDay();
+        $data_inicial = Carbon::createFromFormat('Y-m', $periodo)->startOfMonth()->startOfDay();
+        $data_final = Carbon::createFromFormat('Y-m', $periodo)->endOfMonth()->endOfDay();
         $estatisticasService = new EstatisticasService(auth()->user(), $data_inicial, $data_final);
         $estatisticas = $estatisticasService->calcularEstatisticas(true);
 

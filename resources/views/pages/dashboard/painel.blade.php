@@ -12,8 +12,8 @@
                             </div>
                             <div class="col-9">
                                 <select class="form-select" name="periodo">
-                                    <option value="{{ now()->format('Y-m-d') }}" {{ $periodo ==  now()->format('Y-m-d') ? 'selected' : '' }}>Mês atual</option>
-                                    <option value="{{ now()->subMonths(1)->format('Y-m-d') }}"  {{ $periodo ==  now()->subMonths(1)->format('Y-m-d') ? 'selected' : '' }}>Mês anterior</option>
+                                    <option value="{{ now()->format('Y-m') }}" {{ $periodo ==  now()->format('Y-m') ? 'selected' : '' }}>Mês atual</option>
+                                    <option value="{{ now()->subMonths(1)->format('Y-m') }}"  {{ $periodo ==  now()->subMonths(1)->format('Y-m') ? 'selected' : '' }}>Mês anterior</option>
                                 </select>
                             </div>
                             <div class="col">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-lg-3">
+<!--        <div class="col-sm-6 col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -67,8 +67,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
+        </div>-->
+<!--        <div class="col-sm-6 col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -91,7 +91,7 @@
                         <div class="me-auto">
                             <span class="text-green d-inline-flex align-items-center lh-1">
                                 8%
-                                <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/trending-up &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
                                      stroke="currentColor" fill="none" stroke-linecap="round"
@@ -256,8 +256,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
+        </div>-->
+<!--        <div class="col-sm-6 col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -280,7 +280,7 @@
                         <div class="me-auto">
                             <span class="text-yellow d-inline-flex align-items-center lh-1">
                                 0%
-                                <!-- Download SVG icon from http://tabler-icons.io/i/minus -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/minus &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
                                      stroke="currentColor" fill="none" stroke-linecap="round"
@@ -480,8 +480,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
+        </div>-->
+<!--        <div class="col-sm-6 col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -504,7 +504,7 @@
                         <div class="me-auto">
                             <span class="text-green d-inline-flex align-items-center lh-1">
                                 4%
-                                <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/trending-up &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
                                      stroke="currentColor" fill="none" stroke-linecap="round"
@@ -1043,7 +1043,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
+
         <div class="col-12">
             <div class="row row-cards">
 
@@ -2963,7 +2964,7 @@
 
         @include('pages.dashboard.partials.servicos-mais-vendidos')
 
-        <div class="col-12">
+<!--        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Invoices</h3>
@@ -2994,7 +2995,7 @@
                             <th class="w-1"><input class="form-check-input m-0 align-middle"
                                                    type="checkbox" aria-label="Select all invoices"></th>
                             <th class="w-1">No.
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/chevron-up &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      class="icon icon-sm text-dark icon-thick" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -3311,7 +3312,7 @@
                     <ul class="pagination m-0 ms-auto">
                         <li class="page-item disabled">
                             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/chevron-left &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
                                      stroke="currentColor" fill="none" stroke-linecap="round"
@@ -3330,7 +3331,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#">
                                 next
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                &lt;!&ndash; Download SVG icon from http://tabler-icons.io/i/chevron-right &ndash;&gt;
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2"
                                      stroke="currentColor" fill="none" stroke-linecap="round"
@@ -3343,6 +3344,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 @endsection
