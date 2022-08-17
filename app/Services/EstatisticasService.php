@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Servico;
 use App\Models\User;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class EstatisticasService

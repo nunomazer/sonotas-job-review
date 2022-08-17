@@ -2,6 +2,29 @@
 
 @section('content')
     <div class="row row-deck row-cards">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('home') }}">
+                        <div class="form-group row">
+                            <div class="col-form-label col-1">
+                                Período
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" name="periodo">
+                                    <option value="{{ now()->format('Y-m-d') }}" {{ $periodo ==  now()->format('Y-m-d') ? 'selected' : '' }}>Mês atual</option>
+                                    <option value="{{ now()->subMonths(1)->format('Y-m-d') }}"  {{ $periodo ==  now()->subMonths(1)->format('Y-m-d') ? 'selected' : '' }}>Mês anterior</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <input type="submit" class="btn btn-primary" value="Alterar período"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="col-sm-6 col-lg-3">
             <div class="card">
                 <div class="card-body">

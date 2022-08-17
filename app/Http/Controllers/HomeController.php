@@ -6,6 +6,7 @@ use App\Models\Servico;
 use App\Services\EstatisticasService;
 use App\Services\Sped\SpedService;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,8 +29,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data_inicial = now()->startOfMonth()->startOfDay();
-        $data_final = now()->endOfMonth()->endOfDay();
+        $periodo = \request()->get('periodo', now()->format('Y-m-d'));
+
+        $data_inicial = Carbon::createFromFormat('Y-m-d', $periodo)->startOfMonth()->startOfDay();
+        $data_final = Carbon::createFromFormat('Y-m-d', $periodo)->endOfMonth()->endOfDay();
         $estatisticasService = new EstatisticasService(auth()->user(), $data_inicial, $data_final);
         $estatisticas = $estatisticasService->calcularEstatisticas(true);
 
@@ -41,8 +44,10 @@ class HomeController extends Controller
             ->where('venda_item.tipo_documento', SpedService::DOCTYPE_NFSE)
             ->whereBetween('vendas.data_transacao', [$data_inicial, $data_final])
             ->groupBy('servicos.nome', 'servicos.id')
+            ->limit(10)
             ->get();
 
-        return view('pages.dashboard.painel', compact('estatisticas', 'servicosMaisVendidos'));
+        return view('pages.dashboard.painel', compact('estatisticas', 'servicosMaisVendidos'))
+            ->with('periodo', $periodo);
     }
 }

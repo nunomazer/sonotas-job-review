@@ -22,7 +22,7 @@
                             {{ $s->qtde }}
                         </td>
                         <td class="text-muted">
-                            {{ number_format($s->valor, 2, ',', '.') }}
+                            R$ {{ number_format($s->valor, 2, ',', '.') }}
                         </td>
                     </tr>
                 @endforeach
