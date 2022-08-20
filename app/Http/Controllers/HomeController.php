@@ -37,13 +37,21 @@ class HomeController extends Controller
         $estatisticas = $estatisticasService->calcularEstatisticas(true);
 
         // TODO refatorar isso aqui
-        $servicosMaisVendidos = Servico::select('servicos.id', 'servicos.nome',
-                    DB::raw('SUM(venda_item.qtde) as qtde'), DB::raw('SUM(venda_item.qtde * venda_item.valor) as valor'))
+        $servicosMaisVendidos = DB::table('servicos')
+            ->select('servicos.id', 'servicos.nome', DB::raw("to_char(v.data_transacao, 'YYYY-MM') as data_transacao"),
+                    DB::raw('SUM(venda_item.qtde) as qtde'), DB::raw('SUM(venda_item.qtde * venda_item.valor) as valor'),
+                    DB::raw("array(
+                                    select sum(vis.valor) as v
+                                    from venda_item vis inner join vendas vs on vis.venda_id = vs.id
+                                    where vis.item_id = servicos.id
+                                    group by date_part('day', vs.data_transacao)
+                                ) as serie")
+                    )
             ->join('venda_item', 'venda_item.item_id', '=', 'servicos.id')
-            ->join('vendas', 'vendas.id', '=', 'venda_item.venda_id')
+            ->join(DB::raw('vendas v'), 'v.id', '=', 'venda_item.venda_id')
             ->where('venda_item.tipo_documento', SpedService::DOCTYPE_NFSE)
-            ->whereBetween('vendas.data_transacao', [$data_inicial, $data_final])
-            ->groupBy('servicos.nome', 'servicos.id')
+            ->whereBetween('v.data_transacao', [$data_inicial, $data_final])
+            ->groupBy('servicos.nome', 'servicos.id', DB::raw("to_char(v.data_transacao, 'YYYY-MM')"))
             ->limit(10)
             ->get();
 

@@ -3347,3 +3347,7 @@
         </div>-->
     </div>
 @endsection
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+@endpush
