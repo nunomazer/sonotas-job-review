@@ -21,10 +21,10 @@
                 <div class="col">
                     <a href="{{route('empresas.list')}}">
                         <div class="font-weight-medium">
-                            {{ $estatisticas['empresas_ativas'] }} empresa(s) ativa(s)
+                            {{ $estatisticas[\App\Services\EstatisticasService::EMPRESAS_ATIVAS_QTDE] }} empresa(s) ativa(s)
                         </div>
                         <div class="text-muted">
-                            {{ $estatisticas['empresas_total'] }} no total
+                            {{ $estatisticas[\App\Services\EstatisticasService::EMPRESAS_TOTAL_QTDE] }} no total
                         </div>
                     </a>
                 </div>

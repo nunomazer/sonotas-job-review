@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Servico;
 use App\Models\User;
+use App\Models\Venda;
 use App\Services\Sped\SpedService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -11,19 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class EstatisticasService
 {
-    const EMPRESAS_TOTAL = 'empresas_total';
-    const EMPRESAS_ATIVAS = 'empresas_ativas';
-    const SERVICOS_TOTAL = 'servicos_total';
-    const SERVICOS_ATIVOS = 'servicos_ativos';
+    const EMPRESAS_TOTAL_QTDE = 'empresas_total_qtde';
+    const EMPRESAS_ATIVAS_QTDE = 'empresas_ativas_qtde';
+    const SERVICOS_TOTAL_QTDE = 'servicos_total_qtde';
+    const SERVICOS_ATIVOS_QTDE = 'servicos_ativos_qtde';
     const SERVICOS_MAIS_VENDIDOS_SERIE = 'servicos_mais_vendidos_serie';
     const VENDAS_MES_QTDE = 'vendas_mes_qtde';
     const VENDAS_MES_VALOR = 'vendas_mes_valor';
 
     private array $estatisticas = [
-        self::EMPRESAS_ATIVAS => null,
-        self::EMPRESAS_TOTAL => null,
-        self::SERVICOS_TOTAL => null,
-        self::SERVICOS_ATIVOS => null,
+        self::EMPRESAS_ATIVAS_QTDE => null,
+        self::EMPRESAS_TOTAL_QTDE => null,
+        self::SERVICOS_TOTAL_QTDE => null,
+        self::SERVICOS_ATIVOS_QTDE => null,
         self::SERVICOS_MAIS_VENDIDOS_SERIE => null,
         self::VENDAS_MES_QTDE => null,
         self::VENDAS_MES_VALOR => null,
@@ -56,10 +57,10 @@ class EstatisticasService
 
         $this->estatisticas = Cache::remember($this->getCacheKey(), 60*120, function () {
             return [
-                self::EMPRESAS_ATIVAS => $this->calcularEmpresasAtivas(),
-                self::EMPRESAS_TOTAL => $this->calcularEmpresasTotal(),
-                self::SERVICOS_ATIVOS => $this->calcularServicosAtivos(),
-                self::SERVICOS_TOTAL => $this->calcularServicosTotal(),
+                self::EMPRESAS_ATIVAS_QTDE => $this->calcularEmpresasAtivas(),
+                self::EMPRESAS_TOTAL_QTDE => $this->calcularEmpresasTotal(),
+                self::SERVICOS_ATIVOS_QTDE => $this->calcularServicosAtivos(),
+                self::SERVICOS_TOTAL_QTDE => $this->calcularServicosTotal(),
                 self::SERVICOS_MAIS_VENDIDOS_SERIE => $this->calcularServicosMaisVendidosSerie()
             ];
         });
@@ -87,6 +88,13 @@ class EstatisticasService
     private function calcularServicosTotal()
     {
         return Servico::whereIn('empresa_id', $this->user->empresasIdsArray())->count();
+    }
+
+    private function calcularVendasMesQtde()
+    {
+        return Venda::whereIn('empresa_id', $this->user->empresasIdsArray())
+            ->whereBetween('data_transacao',[$this->data_inicial, $this->data_final])
+            ->count();
     }
 
     private function calcularServicosMaisVendidosSerie()
@@ -119,7 +127,7 @@ class EstatisticasService
 
     public function getEmpresasAtivas(User $user) : int
     {
-        return $this->estatisticas[self::EMPRESAS_ATIVAS];
+        return $this->estatisticas[self::EMPRESAS_ATIVAS_QTDE];
     }
 
     public function toArray()
