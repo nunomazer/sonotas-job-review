@@ -99,7 +99,7 @@ class EstatisticasService
                                     from
                                         (
                                             SELECT dt
-                                            FROM generate_series(1, 31) dt
+                                            FROM generate_series(".$this->data_inicial->format('d').", ".$this->data_final->format('d').") dt
                                         ) d
                                         left join vendas vs on date_part('day', vs.data_transacao) = d.dt
                                         left join venda_item vis on vis.venda_id = vs.id
