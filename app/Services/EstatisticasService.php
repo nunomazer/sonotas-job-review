@@ -20,6 +20,7 @@ class EstatisticasService
     const SERVICOS_MAIS_VENDIDOS_SERIE = 'servicos_mais_vendidos_serie';
     const VENDAS_MES_QTDE = 'vendas_mes_qtde';
     const VENDAS_MES_VALOR = 'vendas_mes_valor';
+    const VENDAS_SERIE = 'vendas_serie';
     const NF_EMITIDAS_QTDE = 'nf_emitidas_qtde';
     const NF_PENDENTES_QTDE = 'nf_pendentes_qtde';
 
@@ -33,6 +34,7 @@ class EstatisticasService
         self::VENDAS_MES_VALOR => null,
         self::NF_EMITIDAS_QTDE => null,
         self::NF_PENDENTES_QTDE => null,
+        self::VENDAS_SERIE => null,
     ];
 
     private User $user;
@@ -69,6 +71,7 @@ class EstatisticasService
                 self::SERVICOS_MAIS_VENDIDOS_SERIE => $this->calcularServicosMaisVendidosSerie(),
                 self::VENDAS_MES_QTDE => $this->calcularVendasMesQtde(),
                 self::VENDAS_MES_VALOR => $this->calcularVendasMesValor(),
+                self::VENDAS_SERIE => $this->calcularVendasSerie(),
                 self::NF_EMITIDAS_QTDE => $this->calcularNFEmitidasQtde(),
             ];
         });
@@ -161,6 +164,26 @@ class EstatisticasService
             ->whereBetween('v.data_transacao', [$this->data_inicial, $this->data_final])
             ->groupBy('servicos.nome', 'servicos.id', DB::raw("to_char(v.data_transacao, 'YYYY-MM')"))
             ->limit(10)
+            ->get();
+    }
+
+    private function calcularVendasSerie()
+    {
+        //->select(DB::raw("to_char(v.data_transacao, 'DD') as data_transacao"),
+        return DB::table('vendas')
+            ->select(
+                DB::raw('COALESCE(SUM(vendas.valor), 0) as valor'),
+                DB::raw('d.dia')
+            )
+            ->rightJoin(DB::raw("(SELECT dia, 0 as valor
+                                    FROM generate_series(".$this->data_inicial->format('d').", ".
+                                    $this->data_final->format('d').") dia) d"
+                        ), function($join) {
+                            $join->on(DB::raw("date_part('day', vendas.data_transacao)"), '=', "d.dia")
+                                ->whereBetween('vendas.data_transacao', [$this->data_inicial, $this->data_final]);
+                        })
+            ->groupBy('d.dia')
+            ->orderBy('d.dia')
             ->get();
     }
 
