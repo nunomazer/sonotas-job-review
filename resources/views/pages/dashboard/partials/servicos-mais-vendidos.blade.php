@@ -14,7 +14,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($servicosMaisVendidos->unique('id') as $s)
+                @foreach($estatisticas[\App\Services\EstatisticasService::SERVICOS_MAIS_VENDIDOS_SERIE] as $s)
                     <tr>
                         <td>
                             {{ $s->nome }}
@@ -39,14 +39,15 @@
 @push('js')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            @foreach($servicosMaisVendidos as $s)
+            @foreach($estatisticas[\App\Services\EstatisticasService::SERVICOS_MAIS_VENDIDOS_SERIE] as $s)
+                let serie = {!! $s->serie !!};
                 var opt_chart_{{$s->id}} = {
                     series: [{
-                        data: {!! json_encode($s->serie) !!}
+                        data: serie
                     }],
                     chart: {
                         type: 'line',
-                        width: 150,
+                        width: '100%',
                         height: 30,
                         sparkline: {
                             enabled: true
