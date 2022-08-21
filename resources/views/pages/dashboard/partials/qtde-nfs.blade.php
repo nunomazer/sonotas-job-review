@@ -14,12 +14,14 @@
                     </span>
                 </div>
                 <div class="col">
-                    <div class="font-weight-medium">
-                        {{ $estatisticas[\App\Services\EstatisticasService::NF_EMITIDAS_QTDE] }} NFs emitidas
-                    </div>
-                    <div class="text-muted">
-                        16 today
-                    </div>
+                    <a href="{{route('notas-servico.list')}}">
+                        <div class="font-weight-medium">
+                            {{ $estatisticas[\App\Services\EstatisticasService::NF_EMITIDAS_QTDE] }} NFs emitidas
+                        </div>
+                        <div class="text-muted">
+                            16 today
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
