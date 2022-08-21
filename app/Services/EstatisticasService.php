@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\NFSe;
 use App\Models\Servico;
 use App\Models\User;
 use App\Models\Venda;
@@ -19,6 +20,8 @@ class EstatisticasService
     const SERVICOS_MAIS_VENDIDOS_SERIE = 'servicos_mais_vendidos_serie';
     const VENDAS_MES_QTDE = 'vendas_mes_qtde';
     const VENDAS_MES_VALOR = 'vendas_mes_valor';
+    const NF_EMITIDAS_QTDE = 'nf_emitidas_qtde';
+    const NF_PENDENTES_QTDE = 'nf_pendentes_qtde';
 
     private array $estatisticas = [
         self::EMPRESAS_ATIVAS_QTDE => null,
@@ -28,6 +31,8 @@ class EstatisticasService
         self::SERVICOS_MAIS_VENDIDOS_SERIE => null,
         self::VENDAS_MES_QTDE => null,
         self::VENDAS_MES_VALOR => null,
+        self::NF_EMITIDAS_QTDE => null,
+        self::NF_PENDENTES_QTDE => null,
     ];
 
     private User $user;
@@ -64,6 +69,7 @@ class EstatisticasService
                 self::SERVICOS_MAIS_VENDIDOS_SERIE => $this->calcularServicosMaisVendidosSerie(),
                 self::VENDAS_MES_QTDE => $this->calcularVendasMesQtde(),
                 self::VENDAS_MES_VALOR => $this->calcularVendasMesValor(),
+                self::NF_EMITIDAS_QTDE => $this->calcularNFEmitidasQtde(),
             ];
         });
 
@@ -104,6 +110,30 @@ class EstatisticasService
         return Venda::whereIn('empresa_id', $this->user->empresasIdsArray())
             ->whereBetween('data_transacao',[$this->data_inicial, $this->data_final])
             ->sum('valor');
+    }
+
+    private function calcularNFEmitidasQtde()
+    {
+        $nfse = NFSe::join('vendas', 'vendas.id', '=', 'notas_servico.venda_id')
+            ->whereIn('vendas.empresa_id', $this->user->empresasIdsArray())
+            ->whereBetween('emitido_em',[$this->data_inicial, $this->data_final])
+            ->count();
+
+        $nf = 0;
+
+        return $nfse + $nf;
+    }
+
+    private function calcularNFPendentesQtde()
+    { // TODO refatorar com refatoração de nfse pendentes
+        $nfse = NFSe::join('vendas', 'vendas.id', '=', 'notas_servico.venda_id')
+            ->whereIn('vendas.empresa_id', $this->user->empresasIdsArray())
+            ->whereBetween('emitido_em',[$this->data_inicial, $this->data_final])
+            ->count();
+
+        $nf = 0;
+
+        return $nfse + $nf;
     }
 
     private function calcularServicosMaisVendidosSerie()

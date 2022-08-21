@@ -14,12 +14,14 @@
                     </span>
                 </div>
                 <div class="col">
-                    <div class="font-weight-medium">
-                        {{ number_format($estatisticas[\App\Services\EstatisticasService::VENDAS_MES_VALOR], 2, ',', '.') }} vendas
-                    </div>
-                    <div class="text-muted">
-                        {{ $estatisticas[\App\Services\EstatisticasService::VENDAS_MES_QTDE] }} vendas
-                    </div>
+                    <a href="{{route('vendas.list')}}">
+                        <div class="font-weight-medium">
+                            {{ number_format($estatisticas[\App\Services\EstatisticasService::VENDAS_MES_VALOR], 2, ',', '.') }} vendas
+                        </div>
+                        <div class="text-muted">
+                            {{ $estatisticas[\App\Services\EstatisticasService::VENDAS_MES_QTDE] }} vendas
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
