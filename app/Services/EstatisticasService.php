@@ -61,7 +61,9 @@ class EstatisticasService
                 self::EMPRESAS_TOTAL_QTDE => $this->calcularEmpresasTotal(),
                 self::SERVICOS_ATIVOS_QTDE => $this->calcularServicosAtivos(),
                 self::SERVICOS_TOTAL_QTDE => $this->calcularServicosTotal(),
-                self::SERVICOS_MAIS_VENDIDOS_SERIE => $this->calcularServicosMaisVendidosSerie()
+                self::SERVICOS_MAIS_VENDIDOS_SERIE => $this->calcularServicosMaisVendidosSerie(),
+                self::VENDAS_MES_QTDE => $this->calcularVendasMesQtde(),
+                self::VENDAS_MES_VALOR => $this->calcularVendasMesValor(),
             ];
         });
 
@@ -95,6 +97,13 @@ class EstatisticasService
         return Venda::whereIn('empresa_id', $this->user->empresasIdsArray())
             ->whereBetween('data_transacao',[$this->data_inicial, $this->data_final])
             ->count();
+    }
+
+    private function calcularVendasMesValor()
+    {
+        return Venda::whereIn('empresa_id', $this->user->empresasIdsArray())
+            ->whereBetween('data_transacao',[$this->data_inicial, $this->data_final])
+            ->sum('valor');
     }
 
     private function calcularServicosMaisVendidosSerie()
