@@ -73,6 +73,7 @@ class EstatisticasService
                 self::VENDAS_MES_VALOR => $this->calcularVendasMesValor(),
                 self::VENDAS_SERIE => $this->calcularVendasSerie(),
                 self::NF_EMITIDAS_QTDE => $this->calcularNFEmitidasQtde(),
+                self::NF_PENDENTES_QTDE => $this->calcularNFPendentesQtde(),
             ];
         });
 
@@ -128,10 +129,9 @@ class EstatisticasService
     }
 
     private function calcularNFPendentesQtde()
-    { // TODO refatorar com refatoração de nfse pendentes
-        $nfse = NFSe::join('vendas', 'vendas.id', '=', 'notas_servico.venda_id')
-            ->whereIn('vendas.empresa_id', $this->user->empresasIdsArray())
-            ->whereBetween('emitido_em',[$this->data_inicial, $this->data_final])
+    {
+        $nfse = Venda::whereIn('vendas.empresa_id', $this->user->empresasIdsArray())
+            ->whereBetween('data_emissao_planejada',[$this->data_inicial, $this->data_final])
             ->count();
 
         $nf = 0;

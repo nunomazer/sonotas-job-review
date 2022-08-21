@@ -19,7 +19,7 @@
                             {{ $estatisticas[\App\Services\EstatisticasService::NF_EMITIDAS_QTDE] }} NFs emitidas
                         </div>
                         <div class="text-muted">
-                            16 today
+                            {{ $estatisticas[\App\Services\EstatisticasService::NF_PENDENTES_QTDE] }} planejadas
                         </div>
                     </a>
                 </div>
