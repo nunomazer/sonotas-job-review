@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegracoesController;
@@ -54,6 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
 
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
+
+    Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.list');
 
     Route::get('/notificacoes', [NotificacoesController::class, 'index'])->name('notificacoes.list');
     Route::get('/notificacoes/{notification}/mark-as-read', [NotificacoesController::class, 'markAsRead'])->name('notificacoes.marcar-como-lida');
