@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Empresa;
 use App\Models\TipoLogradouro;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedRegimesTributariosEspeciais;
@@ -17,13 +18,17 @@ class ClienteRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $empresa = Empresa::find($this->empresa_id ?? 0);
+
+        if ($empresa == null) return false;
+
+        return auth()->user()->can('update', $empresa);
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            //'ativo' => filter_var($this->request->get('ativo'), FILTER_VALIDATE_BOOLEAN),
+            'orgao_publico' => filter_var($this->request->get('orgao_publico'), FILTER_VALIDATE_BOOLEAN),
         ]);
     }
 
