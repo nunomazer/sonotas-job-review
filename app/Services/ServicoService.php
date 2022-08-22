@@ -25,8 +25,9 @@ class ServicoService
         // que já exista no template
 
         $config = EmpresaNFSConfig::where('empresa_id', $servico['empresa_id'])
-                            ->exclude(['id', 'created_at', 'updated_at', 'deleted_at'])
                             ->first();
+
+        $config = $config->makeHidden(['id', 'created_at', 'updated_at', 'deleted_at']) ?? [];
 
         $servico = Servico::create(array_merge(
             $config->toArray() ?? [],

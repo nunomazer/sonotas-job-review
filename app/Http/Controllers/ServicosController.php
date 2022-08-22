@@ -27,12 +27,18 @@ class ServicosController extends Controller
         return view('pages.servicos.list', compact('servicos','integracoes'));
     }
 
+    public function create()
+    {
+        $empresas = auth()->user()->empresas;
+        return view('pages.servicos.edit', compact('empresas'));
+    }
+
     public function store(ServicoRequest $request)
     {
         $servico = $this->servicoService->create($request->toArray());
 
-        // TODO implementar visões
-        return dump($servico);
+        return redirect()->route('servicos.list', )
+            ->with(['success' => 'Serviço criado com successo !']);
     }
 
 }

@@ -57,6 +57,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
 
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
+    Route::get('/servicos/create', [ServicosController::class, 'create'])->name('servicos.create');
+    Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
+    Route::get('/servicos/{servico}/edit', [ServicosController::class, 'edit'])->name('servicos.edit');
+    Route::put('/servicos/{servico}', [ServicosController::class, 'update'])->name('servicos.update');
 
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.list');
     Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
