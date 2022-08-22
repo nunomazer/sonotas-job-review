@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/empresas/{empresa}/assinatura/{assinatura}', [EmpresasController::class, 'updateAssinatura'])->name('empresas.assinatura.update');
 
     Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
+    Route::get('/empresas/create', [EmpresasController::class, 'create'])->name('empresas.create');
+    Route::post('/empresas', [EmpresasController::class, 'store'])->name('empresas.store');
     Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
     Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
 

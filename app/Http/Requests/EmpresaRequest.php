@@ -17,6 +17,8 @@ class EmpresaRequest extends FormRequest
      */
     public function authorize()
     {
+        if ($this->routeIs('empresas.store')) return true;
+
         return auth()->user()->can('update', $this->empresa);
     }
 
@@ -55,6 +57,8 @@ class EmpresaRequest extends FormRequest
 
     public function withValidator($validator)
     {
+        if ($this->routeIs('empresas.store')) return;
+
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
                 if ($this->owner_user_id != $this->empresa->owner_user_id) {
