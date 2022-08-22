@@ -134,7 +134,7 @@
                             <select class="form-select" required name="regime_tributario">
                                 @foreach(\App\Services\Sped\SpedRegimesTributarios::toArray() as $regime)
                                     <option value="{{$regime['valor']}}"
-                                        {{ old('regime_tributario', $model->regime_tributario ?? '') == $regime['valor'] ? 'selected' : '' }}>
+                                        {{ old('regime_tributario', $cliente->regime_tributario ?? '') == $regime['valor'] ? 'selected' : '' }}>
                                         {{$regime['nome']}}
                                     </option>
                                 @endforeach
@@ -146,7 +146,7 @@
                             <select class="form-select" required name="regime_tributario_especial">
                                 @foreach(\App\Services\Sped\SpedRegimesTributariosEspeciais::toArray() as $regime)
                                     <option value="{{$regime['valor']}}"
-                                        {{ old('regime_tributario_especial', $model->regime_tributario_especial ?? '') == $regime['valor'] ? 'selected' : '' }}>
+                                        {{ old('regime_tributario_especial', $cliente->regime_tributario_especial ?? '') == $regime['valor'] ? 'selected' : '' }}>
                                         {{$regime['nome']}}
                                     </option>
                                 @endforeach
