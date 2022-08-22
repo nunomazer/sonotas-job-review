@@ -71,7 +71,7 @@
                                         <span class="status-dot"></span>
                                     </span>
 
-                                    <a href="{{route('empresas.edit', $servico)}}">
+                                    <a href="{{route('servicos.edit', $servico)}}">
                                         {{ $servico->nome }}
                                     </a>
                                 </td>

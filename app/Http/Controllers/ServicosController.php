@@ -41,4 +41,19 @@ class ServicosController extends Controller
             ->with(['success' => 'Serviço criado com successo !']);
     }
 
+    public function edit(Servico $servico)
+    {
+        return view('pages.servicos.edit', compact('servico'));
+    }
+
+
+    public function update(ServicoRequest $request, Servico $servico)
+    {
+        $servico->fill($request->toArray());
+        $servico = $this->servicoService->update($servico);
+
+        return redirect()->route('servicos.list', )
+            ->with(['success' => 'Servico "'.$servico->nome.'" atualizado com successo !']);
+    }
+
 }
