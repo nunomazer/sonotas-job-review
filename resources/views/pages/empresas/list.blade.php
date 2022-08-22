@@ -88,8 +88,8 @@
                                             <tr>
                                                 <th class="table-sort" data-sort="sort-name">Integração</th>
                                                 <th>Vendas</th>
-                                                <th>Última importação vendas</th>
                                                 <th>Serviços</th>
+                                                <th>Última importação vendas</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -110,11 +110,11 @@
                                                     </td>
 
                                                     <td>
-                                                        {{ $integracao->vendas_importadas_em ? $integracao->vendas_importadas_em->format('d/m/Y H:i') : 'Nenhuma importação' }}
+                                                        X Serviços
                                                     </td>
 
                                                     <td>
-                                                        X Serviços
+                                                        {{ $integracao->vendas_importadas_em ? $integracao->vendas_importadas_em->format('d/m/Y H:i') : 'Nenhuma importação' }}
                                                     </td>
 
                                                     <td>
