@@ -37,7 +37,7 @@
                             <select class="form-select" required name="empresa_id">
                                 @foreach($empresas as $empresa)
                                     <option value="{{$empresa->id}}"
-                                        {{ old('empresa_id', $model->empresa_id ?? '') == $empresa->id ? 'selected' : '' }}>
+                                        {{ old('empresa_id', $cliente->empresa_id ?? '') == $empresa->id ? 'selected' : '' }}>
                                         {{$empresa->nome}}
                                     </option>
                                 @endforeach
