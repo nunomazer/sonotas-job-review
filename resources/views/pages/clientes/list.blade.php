@@ -40,7 +40,7 @@
                                     {{ $cliente->empresa->nome }}
                                 </td>
                                 <td>
-                                    <a href="{{route('empresas.edit', $cliente)}}">
+                                    <a href="{{route('clientes.edit', $cliente)}}">
                                         {{ $cliente->nome }}
                                     </a>
                                 </td>
@@ -56,6 +56,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="card-footer">
+                    {{ $clientes->links() }}
+                </div>
             </div>
         </div>
     </div>

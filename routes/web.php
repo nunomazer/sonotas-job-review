@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.list');
     Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/{cliente}/edit', [ClientesController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{cliente}', [ClientesController::class, 'update'])->name('clientes.update');
 
     Route::get('/notificacoes', [NotificacoesController::class, 'index'])->name('notificacoes.list');
     Route::get('/notificacoes/{notification}/mark-as-read', [NotificacoesController::class, 'markAsRead'])->name('notificacoes.marcar-como-lida');

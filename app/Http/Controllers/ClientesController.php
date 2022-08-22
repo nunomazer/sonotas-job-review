@@ -17,7 +17,8 @@ class ClientesController extends Controller
 
     public function index()
     {
-        $clientes = Cliente::whereIn('empresa_id', auth()->user()->empresasIdsArray())->get();
+        $clientes = Cliente::whereIn('empresa_id', auth()->user()->empresasIdsArray())
+            ->simplePaginate(25);
         return view('pages.clientes.list', compact('clientes'));
     }
 
@@ -36,4 +37,24 @@ class ClientesController extends Controller
         return redirect()->route('clientes.list', )
             ->with(['success' => 'Cliente criado com successo !']);
     }
+
+    public function edit(Cliente $cliente)
+    {
+        $empresas = auth()->user()->empresas;
+        return view('pages.clientes.edit', compact('cliente', 'empresas'));
+    }
+
+    public function update(ClienteRequest $request, Cliente $cliente)
+    {
+        $cliente->fill($request->all());
+
+        $clienteService = new ClienteService();
+
+        $cliente = $clienteService->update($cliente);
+
+        return redirect()->route('clientes.list', )
+            ->with(['success' => 'Cliente atualizado com successo !']);
+    }
+
+
 }

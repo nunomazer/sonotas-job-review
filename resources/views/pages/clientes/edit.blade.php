@@ -25,23 +25,26 @@
 
             @csrf
 
-            @if (isset($cliente))
-                <input type="hidden" name="empresa_id" value="{{$empresa->id}}">
-            @else
-                <div class="row">
-                    <div class="mb-3 col-12">
-                        <label class="form-label required">Empresa</label>
-                        <select class="form-select" required name="empresa_id">
-                            @foreach($empresas as $empresa)
-                                <option value="{{$empresa->id}}"
-                                    {{ old('empresa_id', $model->empresa_id ?? '') == $empresa->id ? 'selected' : '' }}>
-                                    {{$empresa->nome}}
-                                </option>
-                            @endforeach
-                        </select>
+            <div class="row">
+                <div class="mb-3 col-12">
+                    <label class="form-label required">Empresa</label>
+                        @if (isset($cliente))
+                            <input type="hidden" name="empresa_id" value="{{$cliente->empresa->id}}">
+                            <div class="form-control">
+                                {{ $cliente->empresa->nome }}
+                            </div>
+                        @else
+                            <select class="form-select" required name="empresa_id">
+                                @foreach($empresas as $empresa)
+                                    <option value="{{$empresa->id}}"
+                                        {{ old('empresa_id', $model->empresa_id ?? '') == $empresa->id ? 'selected' : '' }}>
+                                        {{$empresa->nome}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endif
                     </div>
-                </div>
-            @endif
+            </div>
 
                 <div class="row">
 
