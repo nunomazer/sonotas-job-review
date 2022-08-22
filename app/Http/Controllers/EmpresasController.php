@@ -28,12 +28,17 @@ class EmpresasController extends Controller
         return view('pages.empresas.list', compact('empresas'));
     }
 
+    public function create()
+    {
+        return view('pages.empresas.edit');
+    }
+
     public function store(EmpresaRequest $request)
     {
         $empresa = $this->empresaService->create($request->toArray());
 
-        // TODO implementar visões
-        return dump($empresa);
+        return redirect()->route('empresas.list', )
+            ->with(['success' => 'Empresa '.$empresa->nome.' criada com successo !']);
     }
 
     public function edit(Empresa $empresa)

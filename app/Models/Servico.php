@@ -14,6 +14,11 @@ class Servico extends Model
 
     protected $guarded = ['id'];
 
+    public function scopeIsAtivo($query)
+    {
+        return $query->where('ativo', true);
+    }
+
     /**
      * Retorna relacionamento com Tipo de serviço, LC116
      * @return void

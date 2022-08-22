@@ -25,4 +25,9 @@ class Cliente extends Model
     {
         return Cliente::where('documento', $documento)->first();
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }

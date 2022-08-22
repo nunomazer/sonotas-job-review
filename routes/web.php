@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegracoesController;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/empresas/{empresa}/assinatura/{assinatura}', [EmpresasController::class, 'updateAssinatura'])->name('empresas.assinatura.update');
 
     Route::get('/empresas', [EmpresasController::class, 'index'])->name('empresas.list');
+    Route::get('/empresas/create', [EmpresasController::class, 'create'])->name('empresas.create');
+    Route::post('/empresas', [EmpresasController::class, 'store'])->name('empresas.store');
     Route::get('/empresas/{empresa}/edit', [EmpresasController::class, 'edit'])->name('empresas.edit');
     Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
 
@@ -54,6 +57,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
 
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.list');
+    Route::get('/servicos/create', [ServicosController::class, 'create'])->name('servicos.create');
+    Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
+    Route::get('/servicos/{servico}/edit', [ServicosController::class, 'edit'])->name('servicos.edit');
+    Route::put('/servicos/{servico}', [ServicosController::class, 'update'])->name('servicos.update');
+
+    Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.list');
+    Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
+    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/{cliente}/edit', [ClientesController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{cliente}', [ClientesController::class, 'update'])->name('clientes.update');
 
     Route::get('/notificacoes', [NotificacoesController::class, 'index'])->name('notificacoes.list');
     Route::get('/notificacoes/{notification}/mark-as-read', [NotificacoesController::class, 'markAsRead'])->name('notificacoes.marcar-como-lida');

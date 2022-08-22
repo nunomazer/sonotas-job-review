@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Servico;
+use App\Services\EstatisticasService;
+use App\Services\Sped\SpedService;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,8 +29,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $estatisticas['empresas_ativas'] = auth()->user()->empresas->where('ativo', true)->count();
+        $periodo = \request()->get('periodo', now()->format('Y-m'));
 
-        return view('pages.dashboard.painel', compact('estatisticas'));
+        $data_inicial = Carbon::createFromFormat('Y-m', $periodo)->startOfMonth()->startOfDay();
+        $data_final = Carbon::createFromFormat('Y-m', $periodo)->endOfMonth()->endOfDay();
+        $estatisticasService = new EstatisticasService(auth()->user(), $data_inicial, $data_final);
+        $estatisticas = $estatisticasService->calcularEstatisticas(true);
+
+        return view('pages.dashboard.painel', compact('estatisticas'))
+            ->with('periodo', $periodo);
     }
 }
