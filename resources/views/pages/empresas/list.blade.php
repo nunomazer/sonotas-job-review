@@ -34,7 +34,7 @@
                         </div>
                         <div class="col">
                             <div class="card-body row">
-                                <h3 class="card-title col-8">
+                                <h3 class="card-title col-12">
                                     <span class="mx-1 {{ $empresa->ativo ? 'status-green' : '' }}">
                                         <span class="status-dot"></span>
                                     </span>
@@ -43,7 +43,7 @@
                                         {{ $empresa->nome }}
                                     </a>
                                 </h3>
-                                <div class="col-2">
+                                <div class="col">
                                     @if($empresa->configuracao_nfse)
                                         <span class="mx-1 status-green">
                                             <span class="status-dot"></span>
@@ -63,11 +63,11 @@
                                     @endif
                                 </div>
 
-                                <div class="col-2">
+                                <div class="col">
                                     @include('pages.empresas.partials.assinatura-status')
                                 </div>
 
-                                <div class="col-3 mt-3">
+                                <div class="col">
                                     <div class="ms-3">
                                         <a href="{{route('empresas.edit', $empresa)}}" class="btn btn-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -120,7 +120,14 @@
                                                     <td>
                                                         <form method="POST" action="{{route('empresas.integracoes.servicos.importar', [$empresa, $integracao])}}">
                                                             @csrf
-                                                            <input type="submit" class="btn btn-sm" value="Importar serviços">
+                                                            <button type="submit" class="btn btn-sm">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-forward-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M15 13l4 -4l-4 -4m4 4h-11a4 4 0 0 0 0 8h1"></path>
+                                                                </svg>
+
+                                                                Importar serviços
+                                                            </button>
                                                         </form>
                                                     </td>
 
