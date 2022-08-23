@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/empresas/{empresa}', [EmpresasController::class, 'update'])->name('empresas.update');
 
     Route::get('/vendas', [VendasController::class, 'index'])->name('vendas.list');
+    Route::get('/vendas/create', [VendasController::class, 'create'])->name('vendas.create');
+    Route::post('/vendas', [VendasController::class, 'store'])->name('vendas.store');
 
     Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');

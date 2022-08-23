@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ClientesController;
+use App\Http\Controllers\Api\ServicosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

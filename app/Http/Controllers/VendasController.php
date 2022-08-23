@@ -20,4 +20,10 @@ class VendasController extends Controller
         return view('pages.vendas.list', compact('vendas'));
     }
 
+    public function create()
+    {
+        $empresas = auth()->user()->empresas;
+        return view('pages.vendas.edit', compact('empresas'));
+    }
+
 }
