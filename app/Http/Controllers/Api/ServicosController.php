@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cliente;
+use App\Models\Servico;
 use App\Models\Venda;
 use Illuminate\Http\Request;
 
-class ClientesController extends Controller
+class ServicosController extends Controller
 {
     public function search(Request $request)
     {
         $term = $request->get('term', '');
         // TODO refatorar para Full Text Search
-        $clientes = Cliente::where('nome', 'ilike', '%'.$term.'%')
-                            ->orWhere('alias', 'ilike', '%'.$term.'%')
+        $servicos = Servico::where('nome', 'like', '%'.$term.'%')
+                            ->orWhere('descricao', 'ilike', '%'.$term.'%')
                             ->orWhere('documento', 'ilike', '%'.$term.'%')
                             ->paginate(15);
 
-        return $clientes->toJson();
+        return $servicos->toJson();
     }
 }
