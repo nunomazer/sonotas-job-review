@@ -13,9 +13,8 @@ class ServicosController extends Controller
     {
         $term = $request->get('term', '');
         // TODO refatorar para Full Text Search
-        $servicos = Servico::where('nome', 'like', '%'.$term.'%')
+        $servicos = Servico::where('nome', 'ilike', '%'.$term.'%')
                             ->orWhere('descricao', 'ilike', '%'.$term.'%')
-                            ->orWhere('documento', 'ilike', '%'.$term.'%')
                             ->paginate(15);
 
         return $servicos->toJson();

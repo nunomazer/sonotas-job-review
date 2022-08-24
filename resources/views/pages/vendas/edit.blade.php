@@ -101,19 +101,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <div id="inputFormRow">
-                            <div class="input-group mb-3">
-                                <select class="form-select servico_select2" required name="servico[].id"></select>
 
-                                <input type="number" step="0.01" class="form-control ms-1" name="servico[].qtde" placeholder="Quantidade" required>
-
-                                <input type="number" step="0.01" class="form-control ms-1" name="servico[].valor" placeholder="Valor" required>
-
-                                <div class="input-group-append ms-1">
-                                    <button id="removeRow" type="button" class="btn btn-danger">Remover</button>
-                                </div>
-                            </div>
-                        </div>
 
                         <div id="newRow"></div>
                     </div>
@@ -172,48 +160,55 @@
                 // templateSelection: formatClienteSelection,
             });
 
-            console.log($('.servico_select2'));
-
-            $('.servico_select2').select2({
-                language: "pt",
-                placeholder: 'Clique ou pressione ENTER para pesquisar o item',
-                // width: '350px',
-                allowClear: true,
-                ajax: {
-                    url: '{{route('api.servicos.search')}}',
-                    dataType: 'json',
-                    delay: 500,
-                    data: function (params) {
-                        return {
-                            term: params.term || '',
-                            page: params.page || 1
+            function initSelect2Servico() {
+                $('.servico_select2').select2({
+                    language: "pt",
+                    placeholder: 'Clique ou pressione ENTER para pesquisar o item',
+                    // width: '350px',
+                    allowClear: true,
+                    ajax: {
+                        url: '{{route('api.servicos.search')}}',
+                        dataType: 'json',
+                        delay: 500,
+                        data: function (params) {
+                            return {
+                                term: params.term || '',
+                                page: params.page || 1
+                            }
+                        },
+                        cache: true,
+                        processResults: function (data) {
+                            return {
+                                results: data.data.map(item => ({...{'text': item.nome}, ...item}))
+                            };
                         }
+                        // processResults: function (data, params) {
+                        //     // parse the results into the format expected by Select2
+                        //     // since we are using custom formatting functions we do not need to
+                        //     // alter the remote JSON data, except to indicate that infinite
+                        //     // scrolling can be used
+                        //     params.page = params.page || 1;
+                        //
+                        //     return {
+                        //         results: data.data,
+                        //         pagination: {
+                        //             more: (data.current_page * data.per_page) < data.total
+                        //         }
+                        //     };
+                        // }
                     },
-                    cache: true,
-                    processResults: function (data) {
-                        return {
-                            results: data.data.map(item => ({...{'text': item.nome}, ...item}))
-                        };
-                    }
-                    // processResults: function (data, params) {
-                    //     // parse the results into the format expected by Select2
-                    //     // since we are using custom formatting functions we do not need to
-                    //     // alter the remote JSON data, except to indicate that infinite
-                    //     // scrolling can be used
-                    //     params.page = params.page || 1;
-                    //
-                    //     return {
-                    //         results: data.data,
-                    //         pagination: {
-                    //             more: (data.current_page * data.per_page) < data.total
-                    //         }
-                    //     };
-                    // }
-                },
-                minimumInputLength: 2,
-                templateResult: formatServico,
-                // templateSelection: formatClienteSelection,
-            });
+                    minimumInputLength: 2,
+                    templateResult: formatServico,
+                    // templateSelection: formatClienteSelection,
+                }).on('select2:select', function (e) {
+                    var data = e.params.data;
+
+                    $('#servico_valor_' + $(this).data("idx")).val(data.valor);
+                    $('#servico_qtde_' + $(this).data("idx")).val(1);
+                });
+            }
+
+            initSelect2Servico();
 
             $(document).on('select2:open', () => {
                 document.querySelector('.select2-search__field').focus();
@@ -246,8 +241,7 @@
                     "<div class='select2-result-item clearfix'>" +
                         "<div class='select2-result-item__meta'>" +
                             "<strong>"+ item.nome + "</strong>" +
-                            "<span class='ms-2 text-muted'>"+ item.valor +"</span>" +
-                            " - <span class='ms-2 text-muted'>"+ item.obs +"</span>" +
+                            "<span class='ms-2 text-muted'>R$ "+ item.valor +"</span>" +
                         "</div>" +
                     "</div>"
                 );
@@ -269,7 +263,26 @@
                             '</div>';
                 html += '</div>';
 
+                var html = '' +
+                '<div id="inputFormRow">' +
+                    '<div class="input-group mb-3">' +
+                        '<select class="form-select servico_select2" required name="servico[].id"' +
+                                'data-idx="'+$('.servico_select2').length+'"></select>' +
+                        '<input type="number" step="0.01" class="form-control ms-1"' +
+                               'name="servico[].qtde" id="servico_qtde_'+$('.servico_select2').length+'"' +
+                                'placeholder="Quantidade" required>' +
+                            '<input type="number" step="0.01" class="form-control ms-1"' +
+                                   'name="servico[].valor" id="servico_valor_'+$('.servico_select2').length+'"' +
+                                    'placeholder="Valor" required>' +
+                                '<div class="input-group-append ms-1">' +
+                                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
+                                '</div>' +
+                    '</div>' +
+                '</div>';
+
                 $('#newRow').append(html);
+
+                initSelect2Servico();
             });
 
             // remove row
