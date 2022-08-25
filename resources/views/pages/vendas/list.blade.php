@@ -54,7 +54,7 @@
                                     {{ $venda->data_transacao->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    {{ $venda->data_emissao_planejada->format('d/m/Y H:i') }}
+                                    {{ isset($venda->data_emissao_planejada) ? $venda->data_emissao_planejada->format('d/m/Y H:i') : '' }}
                                 </td>
                                 <td>
                                     <span class="badge badge-outline badge-sm text-{{ $venda->documento_fiscal ? 'blue' : 'warning' }}">

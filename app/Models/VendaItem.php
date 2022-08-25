@@ -14,6 +14,8 @@ class VendaItem extends Model
 
     protected $table = 'venda_item';
 
+    protected $guarded = ['id'];
+
     public function servico()
     {
         return $this->belongsTo(Servico::class, 'item_id');

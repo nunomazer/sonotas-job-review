@@ -77,7 +77,7 @@
                     <div class="mb-3 col-2">
                         <label for="name" class="form-label required">Valor</label>
                         <input type="number" step="0.01" class="form-control" name="valor" id="valor"
-                               disabled required value="{{ old('valor', $valor->valor ?? '') }}"
+                               required value="{{ old('valor', $valor->valor ?? '') }}"
                         >
                         <div class="form-text">Valor total da venda</div>
                     </div>
@@ -119,6 +119,10 @@
 @push('js')
     <script>
         $(function() {
+            // para controlar o indice da linha de serviço no form
+            // somente pode aumentar para cada nova linha
+            let servicoIdx = 0;
+
             $('#cliente_id').select2({
                 language: "pt",
                 placeholder: 'Clique ou pressione ENTER para pesquisar o cliente',
@@ -262,30 +266,19 @@
             });
 
             function addServicoRow() {
-                var html = '';
-                html += '<div class="row">';
-                html += '<div id="inputFormRow">'+
-                    '<div class="input-group mb-3">' +
-                    '<select class="form-select servico_select2" required name="servico[].id"></select>' +
-                    '<input type="number" step="0.01" class="form-control ms-1" name="servico[].qtde" placeholder="Quantidade" required>' +
-                    '<input type="number" step="0.01" class="form-control ms-1" name="servico[].valor" placeholder="Valor" required>' +
-                    '<div class="input-group-append ms-1">' +
-                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
-                    '</div>' +
-                    '</div>';
-                html += '</div>';
+                servicoIdx++;
 
                 var html = '' +
                     '<div id="inputFormRow">' +
                     '<div class="input-group mb-3">' +
-                    '<select class="form-select servico_select2" required name="servico[].id"' +
-                    'data-idx="'+$('.servico_select2').length+'"></select>' +
+                    '<select class="form-select servico_select2" required name="servico['+servicoIdx+'][id]"' +
+                    'data-idx="'+servicoIdx+'"></select>' +
                     '<input type="number" step="0.01" class="form-control ms-1 servico-qtde"' +
-                    'name="servico[].qtde" id="servico_qtde_'+$('.servico_select2').length+'"' +
-                    'data-idx="'+$('.servico_select2').length+'" placeholder="Quantidade" required>' +
+                    'name="servico['+servicoIdx+'][qtde]" id="servico_qtde_'+servicoIdx+'"' +
+                    'data-idx="'+servicoIdx+'" placeholder="Quantidade" required>' +
                     '<input type="number" step="0.01" class="form-control ms-1 servico-valor"' +
-                    'name="servico[].valor" id="servico_valor_'+$('.servico_select2').length+'"' +
-                    'data-idx="'+$('.servico_select2').length+'" placeholder="Valor" required>' +
+                    'name="servico['+servicoIdx+'][valor]" id="servico_valor_'+servicoIdx+'"' +
+                    'data-idx="'+servicoIdx+'" placeholder="Valor" required>' +
                     '<div class="input-group-append ms-1">' +
                     '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
                     '</div>' +
