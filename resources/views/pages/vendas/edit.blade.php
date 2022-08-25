@@ -76,8 +76,8 @@
 
                     <div class="mb-3 col-2">
                         <label for="name" class="form-label required">Valor</label>
-                        <input type="number" step="0.01" class="form-control" name="valor"
-                               required value="{{ old('valor', $valor->valor ?? '') }}"
+                        <input type="number" step="0.01" class="form-control" name="valor" id="valor"
+                               disabled required value="{{ old('valor', $valor->valor ?? '') }}"
                         >
                         <div class="form-text">Valor total da venda</div>
                     </div>
@@ -205,6 +205,8 @@
 
                     $('#servico_valor_' + $(this).data("idx")).val(data.valor);
                     $('#servico_qtde_' + $(this).data("idx")).val(1);
+
+                    calculaValorTotal()
                 });
             }
 
@@ -256,6 +258,7 @@
             // remove row
             $(document).on('click', '#removeRow', function () {
                 $(this).closest('#inputFormRow').remove();
+                calculaValorTotal();
             });
 
             function addServicoRow() {
@@ -277,12 +280,12 @@
                     '<div class="input-group mb-3">' +
                     '<select class="form-select servico_select2" required name="servico[].id"' +
                     'data-idx="'+$('.servico_select2').length+'"></select>' +
-                    '<input type="number" step="0.01" class="form-control ms-1"' +
+                    '<input type="number" step="0.01" class="form-control ms-1 servico-qtde"' +
                     'name="servico[].qtde" id="servico_qtde_'+$('.servico_select2').length+'"' +
-                    'placeholder="Quantidade" required>' +
-                    '<input type="number" step="0.01" class="form-control ms-1"' +
+                    'data-idx="'+$('.servico_select2').length+'" placeholder="Quantidade" required>' +
+                    '<input type="number" step="0.01" class="form-control ms-1 servico-valor"' +
                     'name="servico[].valor" id="servico_valor_'+$('.servico_select2').length+'"' +
-                    'placeholder="Valor" required>' +
+                    'data-idx="'+$('.servico_select2').length+'" placeholder="Valor" required>' +
                     '<div class="input-group-append ms-1">' +
                     '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
                     '</div>' +
@@ -292,9 +295,25 @@
                 $('#newRow').append(html);
 
                 initSelect2Servico();
+                initEventValor();
             }
 
+            function calculaValorTotal() {
+                var valorTotal = 0;
+                $('.servico-valor').each( function() {
+                    valorTotal += parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val()) * parseFloat($(this).val());
+                });
+                $('#valor').val(valorTotal);
+            }
+
+            function initEventValor() {
+                $('.servico-qtde').on('change', calculaValorTotal);
+                $('.servico-valor').on('change', calculaValorTotal);
+            }
+
+            // carrega a primeira linha do form de serviços
             addServicoRow();
+            initEventValor();
 
         });
     </script>
