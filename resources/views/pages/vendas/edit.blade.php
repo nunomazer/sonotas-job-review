@@ -250,45 +250,52 @@
             }
 
             $("#addRow").click(function () {
-                var html = '';
-                html += '<div class="row">';
-                html += '<div id="inputFormRow">'+
-                            '<div class="input-group mb-3">' +
-                                '<select class="form-select servico_select2" required name="servico[].id"></select>' +
-                                '<input type="number" step="0.01" class="form-control ms-1" name="servico[].qtde" placeholder="Quantidade" required>' +
-                                '<input type="number" step="0.01" class="form-control ms-1" name="servico[].valor" placeholder="Valor" required>' +
-                                '<div class="input-group-append ms-1">' +
-                                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
-                                '</div>' +
-                            '</div>';
-                html += '</div>';
-
-                var html = '' +
-                '<div id="inputFormRow">' +
-                    '<div class="input-group mb-3">' +
-                        '<select class="form-select servico_select2" required name="servico[].id"' +
-                                'data-idx="'+$('.servico_select2').length+'"></select>' +
-                        '<input type="number" step="0.01" class="form-control ms-1"' +
-                               'name="servico[].qtde" id="servico_qtde_'+$('.servico_select2').length+'"' +
-                                'placeholder="Quantidade" required>' +
-                            '<input type="number" step="0.01" class="form-control ms-1"' +
-                                   'name="servico[].valor" id="servico_valor_'+$('.servico_select2').length+'"' +
-                                    'placeholder="Valor" required>' +
-                                '<div class="input-group-append ms-1">' +
-                                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
-                                '</div>' +
-                    '</div>' +
-                '</div>';
-
-                $('#newRow').append(html);
-
-                initSelect2Servico();
+                addServicoRow();
             });
 
             // remove row
             $(document).on('click', '#removeRow', function () {
                 $(this).closest('#inputFormRow').remove();
             });
+
+            function addServicoRow() {
+                var html = '';
+                html += '<div class="row">';
+                html += '<div id="inputFormRow">'+
+                    '<div class="input-group mb-3">' +
+                    '<select class="form-select servico_select2" required name="servico[].id"></select>' +
+                    '<input type="number" step="0.01" class="form-control ms-1" name="servico[].qtde" placeholder="Quantidade" required>' +
+                    '<input type="number" step="0.01" class="form-control ms-1" name="servico[].valor" placeholder="Valor" required>' +
+                    '<div class="input-group-append ms-1">' +
+                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
+                    '</div>' +
+                    '</div>';
+                html += '</div>';
+
+                var html = '' +
+                    '<div id="inputFormRow">' +
+                    '<div class="input-group mb-3">' +
+                    '<select class="form-select servico_select2" required name="servico[].id"' +
+                    'data-idx="'+$('.servico_select2').length+'"></select>' +
+                    '<input type="number" step="0.01" class="form-control ms-1"' +
+                    'name="servico[].qtde" id="servico_qtde_'+$('.servico_select2').length+'"' +
+                    'placeholder="Quantidade" required>' +
+                    '<input type="number" step="0.01" class="form-control ms-1"' +
+                    'name="servico[].valor" id="servico_valor_'+$('.servico_select2').length+'"' +
+                    'placeholder="Valor" required>' +
+                    '<div class="input-group-append ms-1">' +
+                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#newRow').append(html);
+
+                initSelect2Servico();
+            }
+
+            addServicoRow();
+
         });
     </script>
 @endpush
