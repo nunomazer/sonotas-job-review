@@ -66,24 +66,7 @@
                 </div>
 
                 <div class="row">
-
-                    <div class="mb-3 col-2">
-                        <label for="name" class="form-label required">Data da venda</label>
-                        <input type="date" class="form-control" name="data_transacao"
-                               required value="{{ old('data_transacao', $venda->data_transacao ?? '') }}"
-                        >
-                    </div>
-
-                    <div class="mb-3 col-2">
-                        <label for="name" class="form-label required">Valor</label>
-                        <input type="number" step="0.01" class="form-control" name="valor" id="valor"
-                               required value="{{ old('valor', $valor->valor ?? '') }}"
-                        >
-                        <div class="form-text">Valor total da venda</div>
-                    </div>
-
-
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-3">
                         <label for="name" class="form-label required">Tipo NF</label>
                         <select class="form-select" required name="tipo_documento">
                             <option value="nfse" selected>
@@ -91,6 +74,32 @@
                             </option>
                         </select>
                         <div class="form-text">As vendas devem especificar apenas um tipo de NF (Serviços ou Produtos)</div>
+                    </div>
+
+                    <div class="mb-3 col-3">
+                        <label class="form-label required">Data da venda</label>
+                        <input type="date" class="form-control" name="data_transacao"
+                               required value="{{ old('data_transacao', $venda->data_transacao ?? now()->format('Y-m-d')) }}"
+                        >
+                    </div>
+
+                    <div class="mb-3 col-3">
+                        <label class="form-label">Data planejada NF</label>
+                        <input type="date" class="form-control" name="data_emissao_planejada"
+                               required value="{{ old('data_transacao', $venda->data_transacao ?? '') }}"
+                        >
+                        <div class="form-text">
+                            Data planejada para emitir a NF (Serviços ou Produtos), deixe em branco para emissão após
+                            salvar a venda ou de acordo com as configurações padrões da empresa.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-3">
+                        <label for="name" class="form-label required">Valor</label>
+                        <input type="number" step="0.01" class="form-control" name="valor" id="valor"
+                               readonly="readonly" required value="{{ old('valor', $valor->valor ?? '') }}"
+                        >
+                        <div class="form-text">Valor total da venda</div>
                     </div>
                 </div>
 
@@ -100,12 +109,10 @@
                 </h3>
 
                 <div class="row">
-                    <div class="col-lg-12">
-
-
-                        <div id="newRow"></div>
-                    </div>
+                    <div id="newRow"></div>
                 </div>
+
+                <hr/>
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="{{ route('servicos.list') }}" class="btn btn-secondary">
@@ -270,19 +277,22 @@
 
                 var html = '' +
                     '<div id="inputFormRow">' +
-                    '<div class="input-group mb-3">' +
-                    '<select class="form-select servico_select2" required name="servico['+servicoIdx+'][id]"' +
-                    'data-idx="'+servicoIdx+'"></select>' +
-                    '<input type="number" step="0.01" class="form-control ms-1 servico-qtde"' +
-                    'name="servico['+servicoIdx+'][qtde]" id="servico_qtde_'+servicoIdx+'"' +
-                    'data-idx="'+servicoIdx+'" placeholder="Quantidade" required>' +
-                    '<input type="number" step="0.01" class="form-control ms-1 servico-valor"' +
-                    'name="servico['+servicoIdx+'][valor]" id="servico_valor_'+servicoIdx+'"' +
-                    'data-idx="'+servicoIdx+'" placeholder="Valor" required>' +
-                    '<div class="input-group-append ms-1">' +
-                    '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
-                    '</div>' +
-                    '</div>' +
+                        '<div class="input-group mb-3">' +
+                            '<select class="form-select servico_select2" required name="servico['+servicoIdx+'][id]"' +
+                                'data-idx="'+servicoIdx+'"></select>' +
+                            '<input type="number" step="0.01" class="form-control ms-1 servico-qtde"' +
+                                'name="servico['+servicoIdx+'][qtde]" id="servico_qtde_'+servicoIdx+'"' +
+                                'data-idx="'+servicoIdx+'" placeholder="Quantidade" required>' +
+                            '<input type="number" step="0.01" class="form-control ms-1 servico-valor"' +
+                                'name="servico['+servicoIdx+'][valor]" id="servico_valor_'+servicoIdx+'"' +
+                                'data-idx="'+servicoIdx+'" placeholder="Valor" required>' +
+                            '<input type="number" step="0.01" class="form-control ms-1 servico-valor-total"' +
+                                'id="servico_valor_total_'+servicoIdx+'"' +
+                                'data-idx="'+servicoIdx+'" placeholder="Total" readonly="readonly" required>' +
+                            '<div class="input-group-append ms-1">' +
+                                '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
+                            '</div>' +
+                        '</div>' +
                     '</div>';
 
                 $('#newRow').append(html);
@@ -294,9 +304,11 @@
             function calculaValorTotal() {
                 var valorTotal = 0;
                 $('.servico-valor').each( function() {
-                    valorTotal += parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val()) * parseFloat($(this).val());
+                    valorLinha = parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val()) * parseFloat($(this).val());
+                    valorTotal += valorLinha;
+                    $(`#servico_valor_total_${$(this).data('idx')}`).val(valorLinha.toFixed(2));
                 });
-                $('#valor').val(valorTotal);
+                $('#valor').val(valorTotal.toFixed(2));
             }
 
             function initEventValor() {
