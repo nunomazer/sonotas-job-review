@@ -36,6 +36,12 @@ class VendasService
         try {
             DB::beginTransaction();
 
+                $valorTotal = 0;
+                foreach ($itens as $item) {
+                    $valorTotal += $item->valor * $item->qtde;
+                }
+                $venda['valor'] = $valorTotal;
+
                 $venda = Venda::create($venda);
 
                 if ($venda->data_emissao_planejada == null) {
