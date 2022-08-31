@@ -26,9 +26,24 @@ class SpedStatus
     const PROCESSAMENTO = 'processamento';
 
     /**
-     * Documento fiscal emitido (gerado) pela api
+     * Documento fiscal emitido e finalizado (gerado) pela api
      */
-    const GERADO = 'gerado';
+    const CONCLUIDO = 'concluido';
+
+    /**
+     * Documento fiscal emitido e rejeitado pela api
+     */
+    const REJEITADO = 'rejeitado';
+
+    /**
+     * Documento fiscal emitido e denegado pela api
+     */
+    const DENEGADO = 'denegado';
+
+    /**
+     * Documento fiscal emitido e solicitação de cancelada finalizada na api
+     */
+    const CANCELADO = 'cancelado';
 
     /**
      * Erro no processo de envio e geração
