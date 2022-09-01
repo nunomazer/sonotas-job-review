@@ -121,7 +121,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             try {
                 $result = $this->httpClient()->request('GET', 'nfse/'.$doc->driver_id);
 
-                dd(json_decode($result->getBody()->getContents(), true));
+                $docDriver = json_decode($result->getBody()->getContents(), true);
 
                 return $this->toApiReturn($result);
 

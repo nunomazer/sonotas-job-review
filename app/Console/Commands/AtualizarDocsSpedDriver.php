@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Empresa;
+use App\Services\EmpresaService;
 use App\Services\Sped\SpedService;
 use App\Services\VendasService;
 use Illuminate\Console\Command;
@@ -40,13 +41,11 @@ class AtualizarDocsSpedDriver extends Command
      */
     public function handle()
     {
-        Empresa::all()->each(function ($d) {
-            $es = new SpedService(SpedService::DOCTYPE_NFSE, $d->cidade->name);
-            $eee = $es->empresaDriver($d);
-            $eee->atualizarStatusDocsProcessamento();
-        });
-        $vendasService = new VendasService();
+        $empresaService = new EmpresaService();
 
-        $vendasService->gerarEmitirAllCompaniesNFs();
+        Empresa::isAtivo()->get()->each(
+            function ($empresa) use ($empresaService) {
+                $empresaService->atualizarStatusDocsProcessamento($empresa);
+        });
     }
 }

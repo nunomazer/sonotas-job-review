@@ -8,6 +8,7 @@ use App\Models\CartaoCredito;
 use App\Models\Empresa;
 use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
+use App\Models\NFSe;
 use App\Models\Plan;
 use App\Models\Role;
 use App\Models\User;
@@ -16,8 +17,10 @@ use App\Services\Integra\IntegraService;
 use App\Services\Integra\Platform;
 use App\Services\MoneyFlow\MoneyFlowService;
 use App\Services\Sped\SpedService;
+use App\Services\Sped\SpedStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EmpresaService
 {
@@ -185,5 +188,41 @@ class EmpresaService
         $result = $assinaturaDriver->create($empresa, $assinatura, ['cartao_credito'=>$token]);
 
         return $empresa;
+    }
+
+    /**
+     * Atualiza os status de todas as notas que estejam em uma das situações intermediárias
+     * (não finais como processado, finalizado, etc .. de acordo com o driver). Orquestra esta atualização
+     * chamando corretamente os drivers de cada documento fiscal emitido, e realiza as alterações nos registros de banco
+     * de dados.
+     *
+     * Este método deve ser executado por processamento em batch de linha de comando
+     * ou filas
+     *
+     * @param Empresa $empresa
+     * @return void
+     */
+    public function atualizarStatusDocsProcessamento(Empresa $empresa)
+    {
+        // TODO refatorar para os demais tipos fiscais quando implementados
+
+        $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
+            ->get();
+
+        $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
+
+        $nfses->each(function ($doc) use ($empresa, $spedService){
+            try {
+                $nfseDriver = $spedService->nfseDriver($doc);
+
+                $docDriver = $nfseDriver->consultar();
+
+
+            } catch (\Exception $exception) {
+                Log::error('Erro ao consultar NFSe Driver');
+                Log::error($exception);
+            }
+        });
+
     }
 }
