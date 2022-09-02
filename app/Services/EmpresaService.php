@@ -208,6 +208,46 @@ class EmpresaService
         // TODO refatorar para os demais tipos fiscais quando implementados
 
         $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
+            ->SO DA EMPRESA X
+            ->get();
+
+        $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
+
+        $nfses->each(function ($doc) use ($empresa, $spedService){
+            try {
+                $nfseDriver = $spedService->nfseDriver($doc);
+
+                $docDriver = $nfseDriver->consultar();
+
+                // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
+                // TODO mover esta lógica para o NFSeService
+                $doc->status = Str::lower($docDriver['status']);
+                $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
+                $doc->save();
+            } catch (\Exception $exception) {
+                Log::error('Erro ao consultar NFSe Driver');
+                Log::error($exception);
+            }
+        });
+
+
+    }
+    /**
+     * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída.
+     * Orquestra esta atualização chamando corretamente os drivers de cada documento fiscal emitido,
+     * e realiza as alterações nos registros de banco de dados.
+     *
+     * Este método deve ser executado por processamento em batch de linha de comando ou filas
+     *
+     * @param Empresa $empresa
+     * @return void
+     */
+    public function downloadXmlPdfDocsConcluidos(Empresa $empresa)
+    {
+        // TODO refatorar para os demais tipos fiscais quando implementados
+
+        $nfses = NFSe::where('status', SpedStatus::CONCLUIDO)
+            ->where
             ->get();
 
         $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
