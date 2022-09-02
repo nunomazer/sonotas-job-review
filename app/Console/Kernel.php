@@ -19,6 +19,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('vendas:emitir-nf-planejadas')->hourlyAt(10);
 
+        $schedule->command('sped:atualizar-status-docs')->dailyAt('01:00');
+
         $schedule->command('ibge:import-states-cities')->monthly();
     }
 
