@@ -21,6 +21,7 @@ use App\Services\Sped\SpedStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class EmpresaService
 {
@@ -217,7 +218,11 @@ class EmpresaService
 
                 $docDriver = $nfseDriver->consultar();
 
-
+                // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
+                // TODO mover esta lógica para o NFSeService
+                $doc->status = Str::lower($docDriver['status']);
+                $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
+                $doc->save();
             } catch (\Exception $exception) {
                 Log::error('Erro ao consultar NFSe Driver');
                 Log::error($exception);

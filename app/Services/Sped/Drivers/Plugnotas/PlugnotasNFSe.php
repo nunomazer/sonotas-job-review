@@ -94,8 +94,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         $docDriver = json_decode($result->getBody()->getContents(), true);
 
-        dd($docDriver);
-
-        return $this->toApiReturn($result);
+        // TODO definir um padrão para os drivers na consulta sempre retornarem igual para o service
+        return $docDriver;
     }
 }
