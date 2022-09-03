@@ -21,10 +21,13 @@ use App\Services\Sped\SpedStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EmpresaService
 {
+    protected $disk_docs_fiscais = 'local_docs_fiscais';
+
     /**
      * Cria um novo registro de empresa no banco de dados
      *
@@ -222,6 +225,8 @@ class EmpresaService
                 // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
                 // TODO mover esta lógica para o NFSeService
                 $doc->status = Str::lower($docDriver['status']);
+                $doc->arquivo_xml = $docDriver['xml']['filename'];
+                $doc->arquivo_pdf = $docDriver['pdf']['filename'];
                 $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
                 $doc->save();
             } catch (\Exception $exception) {
@@ -233,7 +238,7 @@ class EmpresaService
 
     }
     /**
-     * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída.
+     * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída, porém não foi baixado pdf ou xml.
      * Orquestra esta atualização chamando corretamente os drivers de cada documento fiscal emitido,
      * e realiza as alterações nos registros de banco de dados.
      *
@@ -247,7 +252,11 @@ class EmpresaService
         // TODO refatorar para os demais tipos fiscais quando implementados
 
         $nfses = NFSe::where('status', SpedStatus::CONCLUIDO)
-            ->where
+            ->whereRelation('venda', 'empresa_id', $empresa->id)
+            ->where(function($q) {
+                $q->where('arquivo_xml_downloaded', false)
+                    ->orWhere('arquivo_pdf_downloaded', false);
+            })
             ->get();
 
         $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
@@ -256,15 +265,24 @@ class EmpresaService
             try {
                 $nfseDriver = $spedService->nfseDriver($doc);
 
-                $docDriver = $nfseDriver->consultar();
-
                 // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
                 // TODO mover esta lógica para o NFSeService
-                $doc->status = Str::lower($docDriver['status']);
-                $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
+
+                if ($doc->arquivo_xml_downloaded == false) {
+                    $fileString = $nfseDriver->downloadXml();
+                    Storage::disk($this->disk_docs_fiscais)->put('$doc->arquivo_xml', $fileString);
+                    $doc->arquivo_xml_downloaded = true;
+                }
+
+                if ($doc->arquivo_pdf_downloaded == false) {
+                    $fileString = $nfseDriver->downloadPdf();
+                    Storage::disk($this->disk_docs_fiscais)->put('$doc->arquivo_pdf', $fileString);
+                    $doc->arquivo_pdf_downloaded = true;
+                }
+
                 $doc->save();
             } catch (\Exception $exception) {
-                Log::error('Erro ao consultar NFSe Driver');
+                Log::error('Erro ao fazer o download dos arquivos XML e PDF da NFSe Driver');
                 Log::error($exception);
             }
         });

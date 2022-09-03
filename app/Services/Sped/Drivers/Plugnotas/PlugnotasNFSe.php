@@ -97,4 +97,22 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
         // TODO definir um padrão para os drivers na consulta sempre retornarem igual para o service
         return $docDriver;
     }
+
+    public function downloadPdf() // TODO definir o tipo de retorno
+    {
+        $result = $this->httpClient()->request('GET', 'nfse/pdf/'.$this->nfse->driver_id);
+
+        $docDriver = (string)$result->getBody();
+
+        return $docDriver;
+    }
+
+    public function downloadXml()
+    {
+        $result = $this->httpClient()->request('GET', 'nfse/xml/'.$this->nfse->driver_id);
+
+        $docDriver = (string)$result->getBody();
+dd($docDriver);
+        return $docDriver;
+    }
 }
