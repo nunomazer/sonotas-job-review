@@ -225,8 +225,9 @@ class EmpresaService
                 // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
                 // TODO mover esta lógica para o NFSeService
                 $doc->status = Str::lower($docDriver['status']);
-                $doc->arquivo_xml = $docDriver['xml']['filename'];
-                $doc->arquivo_pdf = $docDriver['pdf']['filename'];
+                $doc->arquivo_xml = $doc->id . '_' . $docDriver['xml']['filename'];
+                $doc->arquivo_pdf = $doc->id . '_' . $docDriver['pdf']['filename'];
+                $doc->disk = $this->disk_docs_fiscais;
                 $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
                 $doc->save();
             } catch (\Exception $exception) {
