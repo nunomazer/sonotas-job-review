@@ -208,7 +208,7 @@ class EmpresaService
         // TODO refatorar para os demais tipos fiscais quando implementados
 
         $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
-            ->SO DA EMPRESA X
+            ->whereRelation('venda', 'empresa_id', $empresa->id)
             ->get();
 
         $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
