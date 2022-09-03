@@ -112,7 +112,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
         $result = $this->httpClient()->request('GET', 'nfse/xml/'.$this->nfse->driver_id);
 
         $docDriver = (string)$result->getBody();
-dd($docDriver);
+
         return $docDriver;
     }
 }
