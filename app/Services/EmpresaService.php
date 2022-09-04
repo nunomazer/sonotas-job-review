@@ -271,13 +271,13 @@ class EmpresaService
 
                 if ($doc->arquivo_xml_downloaded == false) {
                     $fileString = $nfseDriver->downloadXml();
-                    Storage::disk($this->disk_docs_fiscais)->put('$doc->arquivo_xml', $fileString);
+                    Storage::disk($doc->disk)->put($doc->arquivo_xml, $fileString);
                     $doc->arquivo_xml_downloaded = true;
                 }
 
                 if ($doc->arquivo_pdf_downloaded == false) {
                     $fileString = $nfseDriver->downloadPdf();
-                    Storage::disk($this->disk_docs_fiscais)->put('$doc->arquivo_pdf', $fileString);
+                    Storage::disk($doc->disk)->put($doc->arquivo_pdf, $fileString);
                     $doc->arquivo_pdf_downloaded = true;
                 }
 
