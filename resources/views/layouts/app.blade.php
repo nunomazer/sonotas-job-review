@@ -42,8 +42,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="{{ $class ?? '' }} theme-light">
-    <div class="page page-center" id="app">
+<body  class="  {{ $class ?? '' }} theme-light ">
+    <div  class="page page-center "  id="app">
         @auth()
             @include('layouts.page_templates.auth')
         @endauth()
