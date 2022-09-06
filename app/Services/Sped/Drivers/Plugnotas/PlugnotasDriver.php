@@ -31,4 +31,8 @@ class PlugnotasDriver implements ISpedDriver
         return new PlugnotasNFSe($nfse);
     }
 
+    public function cadastrarWebhook()
+    {
+        return (new PlugnotasWebhook())->cadastrar();
+    }
 }
