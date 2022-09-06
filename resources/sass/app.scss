@@ -1,11 +1,15 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
 //@import '~bootstrap/scss/bootstrap';
 
 // Tabler
 @import "~@tabler/core/src/scss/tabler";
+
+.bg-light-gray {
+    background-color: #e6e6e6;
+}

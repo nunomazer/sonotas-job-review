@@ -68,8 +68,9 @@
                 </div>
             </div>
             
-            <div class="text-center  fs-4 mt-2 mb-3">
-                Ainda não tem conta? <a class="e fw-bold" href="{{ route('register') }}">Registre-se</a>
+            <div class="text-center bg-light-gray text-dark 
+              fs-3 pt-3 mt-2 pb-3 rounded-bottom " >
+                Ainda não tem conta? <a class=" fw-bold fs-3" href="{{ route('register') }}">Registre-se</a>
             </div>
         </form>
     </div>
