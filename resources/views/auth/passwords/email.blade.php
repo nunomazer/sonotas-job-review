@@ -6,7 +6,7 @@
     <div class="container-tight py-4">
         <div class="text-center mb-4">
             <a href="#" class="navbar-brand navbar-brand-autodark">
-                <img src="{{ mix('images/sonotas_logo_horizontal_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
+                <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
             </a>
         </div>
         <form class="card card-md" action="{{ route('password.email') }}" method="POST" autocomplete="off">
