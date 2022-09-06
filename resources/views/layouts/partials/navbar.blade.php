@@ -8,7 +8,7 @@
                 <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" width="110" height="32" alt="{{ config('app.name', 'Só Notas') }}" class="navbar-brand-image">
             </a>
         </h1>
-        <div class="navbar-nav flex-row d-lg-none">
+        <div class="navbar-nav flex-row d-lg-none p- align-items-center">
             <div class="nav-item d-none d-lg-flex me-3">
                 <div class="btn-list">
                     <a href="{{ route('home') }}" class="btn" target="_blank" rel="noreferrer">
@@ -188,6 +188,7 @@
                 </div>
             </div>
 
+            @include('layouts.partials.notifications')
             @include('layouts.partials.dropdown-user')
 
         </div>
@@ -195,7 +196,7 @@
             <ul class="navbar-nav pt-lg-3">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <span class="nav-link-icon d-md-none  d-lg-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-desktop-analytics" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                <rect x="3" y="4" width="18" height="12" rx="1"></rect>
