@@ -56,7 +56,7 @@
 
                     <div class="mb-3 col-12">
                         <label class="form-label required">CNAE</label>
-                        <select class="form-select" required name="cnae_codigo">
+                        <select class="form-select" required name="cnae_codigo" id="cnae_codigo">
                             <option value="">Selectione</option>
                             @foreach(\App\Models\Cnae::orderBy('codigo')->get() as $cnae)
                                 <option value="{{$cnae->codigo}}"
@@ -69,7 +69,7 @@
 
                     <div class="mb-3 col-12">
                         <label class="form-label required">Tipo Serviço (LC 116)</label>
-                        <select class="form-select" required name="tipo_servico_codigo">
+                        <select class="form-select" required name="tipo_servico_codigo" id="tipo_servico_codigo">
                             <option value="">Selectione</option>
                             @foreach(\App\Models\TipoServico::orderBy('codigo')->get() as $tipo)
                                 <option value="{{$tipo->codigo}}"
@@ -181,3 +181,20 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+<script type="text/javascript">    
+    $(function() {
+        $('#tipo_servico_codigo, #cnae_codigo').select2({
+            language: "pt-BR",
+            placeholder: 'Infome uma descrição',
+            // width: '350px',
+            allowClear: true,
+        });
+    });
+    
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+</script>
+@endpush
