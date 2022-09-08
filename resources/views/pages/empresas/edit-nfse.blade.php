@@ -17,10 +17,10 @@
         </div>
         <div class="card-body">
             @if (isset($nfseConfig))
-                <form method="POST" action="{{ route('empresas.nfse.update', [$empresa, $nfseConfig]) }}">
+                <form method="POST" action="{{ route('empresas.nfse.update', [$empresa, $nfseConfig]) }}" enctype="multipart/form-data">
                     @method('PUT')
             @else
-                <form method="POST" action="{{ route('empresas.nfse.store', [$empresa]) }}">
+                <form method="POST" action="{{ route('empresas.nfse.store', [$empresa]) }}" enctype="multipart/form-data">
             @endif
 
                 @csrf
@@ -52,6 +52,29 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    @if($nfseConfig->certificado != null)
+                    <div class="mb-3 col-2" >
+                        <label class="form-label">Validade do certificado</label>
+                        {{$nfseConfig->certificado->dataValidade}} 
+                    </div>
+                    <div class="mb-3 col-2" >
+                        <label class="form-label">Status do certificado</label>
+                        <span class="badge {{$nfseConfig->certificado->isCertificadoValido ? 'bg-success' : 'bg-warning'}}">
+                            {{$nfseConfig->certificado->isCertificadoValido ? 'Válido' : 'Vencido'}}
+                        </span>
+                    </div>
+                    @endif
+                    <div class="mb-3 col-5">
+                        <label class="form-label">Upload certificado</label>
+                        <input type="file" name="certificadoDigital" />
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label class="form-label">Senha certificado</label>
+                        <input class="form-control" type="password" name="certificadoDigitalSenha" />
+                    </div>
+                </div>
+                <hr />
                 <div class="row">
 
                     <div class="mb-3 col-12">

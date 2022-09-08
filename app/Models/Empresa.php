@@ -28,11 +28,6 @@ class Empresa extends Model
         return $this->belongsTo(User::class, 'owner_user_id', 'id');
     }
 
-    public function certificado()
-    {
-        return $this->belongsTo(Certificado::class);
-    }
-
     public function cidade()
     {
         return $this->belongsTo(Cidade::class, 'city_id', 'id', 'city');

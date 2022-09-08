@@ -9,7 +9,8 @@ use App\Models\Empresa;
 use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\NFSe;
-use App\Models\Plan;
+use App\Models\Plan; 
+use App\Models\Certificado; 
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
@@ -26,7 +27,7 @@ use Illuminate\Support\Str;
 
 class EmpresaService
 {
-    protected $disk_docs_fiscais = 'local_docs_fiscais';
+    protected $disk_docs_fiscais = 'local_docs_fiscais'; 
 
     /**
      * Cria um novo registro de empresa no banco de dados
@@ -72,11 +73,16 @@ class EmpresaService
      * Cria o registro de configuração padrão para a NFSe da Empresa
      *
      * @param Empresa $empresa
-     * @param array $nfseConfig
+     * @param array $nfseConfig 
+     * @param Certificado $certificado
      * @return Empresa
      */
-    public function createConfigNFSe(Empresa $empresa, array $nfseConfig) : Empresa
+    public function createConfigNFSe(Empresa $empresa, array $nfseConfig, Certificado $certificado = null) : Empresa
     {
+        if($certificado != null){            
+            $nfseConfig['certificado_id'] = $this->handleUploadCertificate($certificado, $empresa->id);
+        }
+
         $empresa->configuracao_nfse()->create($nfseConfig);
 
         EmpresaAlteradaEvent::dispatch($empresa);
@@ -85,14 +91,60 @@ class EmpresaService
     }
 
     /**
+     * Método responsável por realizar o upload e validar o certificado
+     *
+     * @param Certificado $certificado
+     * @param int $empresaID 
+     * @return int
+     */
+    public function handleUploadCertificate(Certificado $certificado, $empresaID){
+        $name = uniqid(date('HisYmd')); 
+        $extension = $certificado->file->extension();   
+        $nameFile = "{$empresaID}-{$name}.{$extension}";     
+        $uploaded = $certificado->file->storeAs("certificados", $nameFile);
+
+        $pfxContent = Storage::get($uploaded);
+
+        if (!openssl_pkcs12_read($pfxContent, $x509certdata, $certificado->password)) {
+            Storage::delete($uploaded);
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'certificadoDigital' => ['Senha incorreta ou arquivo de certificado inválido!']
+             ]); 
+        }
+
+        $CertPriv = openssl_x509_parse(openssl_x509_read($x509certdata['cert']));
+
+        if($CertPriv['validTo_time_t'] < time()){
+            Storage::delete($uploaded);
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'certificadoDigital' => ['O certificado está expirado!']
+             ]);
+        }
+        
+        $certificadoPersistido = Certificado::create([
+            'file'          => $uploaded,
+            'expires_at'    => gmdate("Y-m-d\TH:i:s\Z", $CertPriv['validTo_time_t']),
+            'sped_id'       => "PADRÃO-A-DEFINIR",
+            'password'      => $certificado->password
+        ]);
+
+        return $certificadoPersistido->id;
+    }
+
+    /**
      * Altera o registro de configuração padrão para a NFSe da Empresa
      *
      * @param Empresa $empresa
-     * @param array $nfseConfig
+     * @param EmpresaNFSConfig $nfseConfig
+     * @param Certificado $certificado
      * @return Empresa
      */
-    public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig) : Empresa
+    public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig, Certificado $certificado = null) : Empresa
     {
+        if($certificado != null){            
+            $nfseConfig->certificado_id = $this->handleUploadCertificate($certificado, $empresa->id);    
+        }
+
         $empresa->configuracao_nfse->update($nfseConfig->toArray());
 
         EmpresaAlteradaEvent::dispatch($empresa);
@@ -162,12 +214,10 @@ class EmpresaService
      * @param EmpresaAssinatura $assinatura
      * @return Empresa
      */
-    public function cancelAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura) : Empresa
+    public function cancelAssinatura(Empresa $empresa, EmpresaAssinatura $assinatura)
     {
         //$assinatura-> = false;
-        $assinatura->save();
-
-
+        $assinatura->save(); 
     }
 
     public function createAssinatura(Empresa $empresa, Plan $plan, CartaoCredito $cc) : Empresa
