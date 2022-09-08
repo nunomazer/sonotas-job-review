@@ -136,7 +136,7 @@
                 // width: '350px',
                 allowClear: true,
                 ajax: {
-                    url: '{{route('api.clientes.search')}}',
+                    url: '{{route("api.clientes.search")}}',
                     dataType: 'json',
                     delay: 500,
                     data: function (params) {
@@ -151,20 +151,6 @@
                             results: data.data.map(item => ({...{'text': item.nome}, ...item}))
                         };
                     }
-                    // processResults: function (data, params) {
-                    //     // parse the results into the format expected by Select2
-                    //     // since we are using custom formatting functions we do not need to
-                    //     // alter the remote JSON data, except to indicate that infinite
-                    //     // scrolling can be used
-                    //     params.page = params.page || 1;
-                    //
-                    //     return {
-                    //         results: data.data,
-                    //         pagination: {
-                    //             more: (data.current_page * data.per_page) < data.total
-                    //         }
-                    //     };
-                    // }
                 },
                 minimumInputLength: 2,
                 templateResult: formatCliente,
@@ -178,7 +164,7 @@
                     // width: '350px',
                     allowClear: true,
                     ajax: {
-                        url: '{{route('api.servicos.search')}}',
+                        url: "{{route('api.servicos.search')}}",
                         dataType: 'json',
                         delay: 500,
                         data: function (params) {
@@ -193,20 +179,6 @@
                                 results: data.data.map(item => ({...{'text': item.nome}, ...item}))
                             };
                         }
-                        // processResults: function (data, params) {
-                        //     // parse the results into the format expected by Select2
-                        //     // since we are using custom formatting functions we do not need to
-                        //     // alter the remote JSON data, except to indicate that infinite
-                        //     // scrolling can be used
-                        //     params.page = params.page || 1;
-                        //
-                        //     return {
-                        //         results: data.data,
-                        //         pagination: {
-                        //             more: (data.current_page * data.per_page) < data.total
-                        //         }
-                        //     };
-                        // }
                     },
                     minimumInputLength: 2,
                     templateResult: formatServico,

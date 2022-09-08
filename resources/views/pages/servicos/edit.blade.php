@@ -95,7 +95,7 @@
 
                     <div class="mb-3 col-12">
                         <label class="form-label required">Tipo Serviço (LC 116)</label>
-                        <select class="form-select" required name="tipo_servico_codigo">
+                        <select class="form-select" required name="tipo_servico_codigo" id="tipo_servico_codigo">
                             <option value="">Selectione</option>
                             @foreach(\App\Models\TipoServico::orderBy('codigo')->get() as $tipo)
                                 <option value="{{$tipo->codigo}}"
@@ -180,9 +180,7 @@
                 <div class="row">
                     <div class="mb-3 col-12">
                         <label for="name" class="form-label">Observações</label>
-                        <textarea class="form-control" name="obs">
-                            {{ old('nome', $servico->obs ?? '') }}
-                        </textarea>
+                        <textarea class="form-control" name="obs">{{ old('nome', $servico->obs ?? '') }}</textarea>
                     </div>
                 </div>
 
@@ -194,3 +192,20 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+<script type="text/javascript">    
+    $(function() {
+        $('#tipo_servico_codigo').select2({
+            language: "pt-BR",
+            placeholder: 'Infome uma descrição',
+            // width: '350px',
+            allowClear: true,
+        });
+    });
+    
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+</script>
+@endpush

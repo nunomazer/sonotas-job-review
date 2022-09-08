@@ -12,4 +12,9 @@ class EmpresaNFSConfig extends Model
     protected $guarded = ['id'];
 
     protected $table = 'empresa_nfs_configuracoes';
+    
+    public function certificado()
+    {
+        return $this->belongsTo(Certificado::class);
+    }
 }

@@ -6,10 +6,10 @@
     <div class="page page-center">
         <div class="container-tight py-4">
             <div class="empty">
-                <div class="empty-header">500</div>
-                <p class="empty-title">Oops… Você acabou de encontrar uma página de erro</p>
+                <div class="empty-header"></div>
+                <p class="empty-title">Não foi possível realizar a solicitação!</p>
                 <p class="empty-subtitle text-muted">
-                    Lamentamos, mas nosso servidor encontrou um erro interno
+                    Mas não se preocupe! Nossa equipe técnica já está analisando a situação! 
                 </p>
                 <div class="empty-action">
                     <a href="{{ route('home') }}" class="btn btn-primary">
@@ -21,7 +21,7 @@
                             <line x1="5" y1="12" x2="11" y2="18"></line>
                             <line x1="5" y1="12" x2="11" y2="6"></line>
                         </svg>
-                        Me leve para o início
+                        Voltar para a tela inicial
                     </a>
                 </div>
             </div>
