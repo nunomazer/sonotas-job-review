@@ -79,7 +79,7 @@
 
                     <div class="mb-3 col-8">
                         <label class="form-label required">E-mail</label>
-                        <input type="text" class="form-control" name="email"
+                        <input type="email" class="form-control" name="email"
                                required value="{{ old('email', $cliente->email ?? null) }}"
                         >
                         <div class="form-text">Endereço de e-mail</div>

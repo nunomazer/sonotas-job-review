@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ClientesController;
+use App\Http\Controllers\Api\CidadesController;
 use App\Http\Controllers\Api\ServicosController;
 use App\Http\Controllers\Api\WebhooksController;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
 Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
 
 Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name('api.webhook.sped');

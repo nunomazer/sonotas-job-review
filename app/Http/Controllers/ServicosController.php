@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\ServicoRequest;
-use App\Models\Empresa;
+use App\Models\EmpresaNFSConfig;
 use App\Models\Integracao;
 use App\Models\Servico;
+use App\Models\Empresa;
 use App\Services\EmpresaService;
 use App\Services\ServicoService;
 use Illuminate\Http\Request;
@@ -22,14 +23,24 @@ class ServicosController extends Controller
 
     public function index()
     {
-        $servicos = Servico::whereIn('empresa_id', auth()->user()->empresasIdsArray())->get();
-        $integracoes = Integracao::whereIn('empresa_id', auth()->user()->empresasIdsArray())->get();
+        $empresasID_array = auth()->user()->empresasIdsArray();
+        $servicos = Servico::whereIn('empresa_id', $empresasID_array)->get();
+        $integracoes = Integracao::whereIn('empresa_id', $empresasID_array)->get();
+        $config = EmpresaNFSConfig::whereIn('empresa_id', $empresasID_array)->count();
+
+        if($config === 0){
+            return view('pages.servicos.noconfig');            
+        }
+
         return view('pages.servicos.list', compact('servicos','integracoes'));
     }
 
     public function create()
     {
-        $empresas = auth()->user()->empresas;
+        $empresasID_array = auth()->user()->empresasIdsArray();
+        $empresasQuePossuemConfiguracao = EmpresaNFSConfig::whereIn('empresa_id', $empresasID_array)->pluck('empresa_id');
+
+        $empresas = Empresa::whereIn('id', $empresasQuePossuemConfiguracao)->get();
         return view('pages.servicos.edit', compact('empresas'));
     }
 
