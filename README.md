@@ -69,13 +69,6 @@ Adicione testes para serem chamados por linha de comando quando desejar:
 
 **ATENÇÃO**: este método/estratégia não substitui a implementação de testes unitários e de integração.
 
-## Arquitetura
-
-A aplicação está desenvolvida para que a camada de domínio resolva a lógica central dos fluxos do negócio.
-
-As classes de domínio estão localizadas na pasta `Services` e devem possuir o nome do domínio com prefixo _Service_,
-por exemplo: `EmpresaService`.
-
 ## Responsividade
 
 A responsividade foi feita utilizando o sistema de grid do Bootstrap, onde a tela é dividida em uma grade de 12 colunas e você pode definir a largura do elemento html em cada breakpoint.
@@ -107,8 +100,8 @@ col-lg = ≥992px
 col-xl = ≥1200px
 
 Ex:
-```
 
+```
 <div class="container">
   <div class="row">
     <div class="col-4 col-md-6 col-lg-8">
@@ -116,6 +109,13 @@ Ex:
     </div>
 </div>
 ```
+
+## Arquitetura
+
+A aplicação está desenvolvida para que a camada de domínio resolva a lógica central dos fluxos do negócio.
+
+As classes de domínio estão localizadas na pasta `Services` e devem possuir o nome do domínio com prefixo _Service_,
+por exemplo: `EmpresaService`.
 
 ### Single Source of Truth
 
