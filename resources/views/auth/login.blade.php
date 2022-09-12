@@ -14,7 +14,7 @@
 
         <form action="{{ route('login') }}" class="card shadow card-md" method="POST" autocomplete="off">
             @csrf
-            <div class="card-body">
+            <div class="card-body  ">
                 <h2 class="fs-2 card-title text-center mb-4">Login</h2>
                 <div class="mb-3">
                     <label for="email" class="  form-label ">E-mail</label>
@@ -63,7 +63,7 @@
                         <span class="form-check-label">Lembre-me</span>
                     </label>
                 </div>
-                <div class="form-footer">
+                <div class="form-footer ">
                     <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 </div>
             </div>
