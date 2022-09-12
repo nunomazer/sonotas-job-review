@@ -25,14 +25,14 @@
 
 <div class="row">
 
-    <div class="mb-3 col-2">
+    <div class="mb-3 col-3 col-md-2">
         <label class="form-label required">Número</label>
         <input type="text" class="form-control" name="numero"
                required value="{{ old('numero', $model->numero ?? null) }}"
         >
     </div>
 
-    <div class="mb-3 col-10">
+    <div class="mb-3 col-9 col-md-10">
         <label class="form-label">Complemento</label>
         <input type="text" class="form-control" name="complemento"
                value="{{ old('complemento', $model->complemento ?? null) }}"
@@ -43,7 +43,7 @@
 
 <div class="row">
 
-    <div class="mb-3 col-2">
+    <div class="mb-3 col-6 col-md-2">
         <label class="form-label required">Bairro</label>
         <input type="text" class="form-control" name="bairro"
                required
@@ -51,7 +51,7 @@
         >
     </div>
 
-    <div class="mb-3 col-2">
+    <div class="mb-3 col-6 col-md-2">
         <label class="form-label required">CEP</label>
         <input type="text" class="form-control" name="cep"
                required
@@ -59,7 +59,7 @@
         >
     </div>
 
-    <div class="mb-3 col-8">
+    <div class="mb-3 col-12 col-md-8">
         <label class="form-label required">Cidade</label>
         <select class="form-select" name="city_id" required>
             @foreach(\App\Models\Cidade::all() as $cidade)
