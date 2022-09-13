@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\ClientesController;
+use App\Http\Controllers\Api\CidadesController;
+use App\Http\Controllers\Api\ServicosController;
+use App\Http\Controllers\Api\WebhooksController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
+Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+
+Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name('api.webhook.sped');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

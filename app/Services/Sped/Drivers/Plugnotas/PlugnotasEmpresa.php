@@ -4,10 +4,12 @@ namespace App\Services\Sped\Drivers\Plugnotas;
 
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Models\NFSe;
 use App\Services\Sped\SpedApiReturn;
 use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\SpedRegimesTributarios;
+use App\Services\Sped\SpedStatus;
 use Illuminate\Support\Facades\Log;
 
 class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
@@ -108,4 +110,26 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
         }
     }
 
+    public function atualizarStatusDocsProcessamento()
+    {
+        $driverName = (new PlugnotasDriver())->nome();
+        $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
+            ->where('driver', $driverName)
+            ->get();
+
+        $nfses->each(function ($doc) {
+            try {
+                $result = $this->httpClient()->request('GET', 'nfse/'.$doc->driver_id);
+
+                $docDriver = json_decode($result->getBody()->getContents(), true);
+
+                return $this->toApiReturn($result);
+
+            } catch (\Exception $exception) {
+                Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+                Log::error($exception);
+                return $this->toApiReturn($exception);
+            }
+        });
+    }
 }

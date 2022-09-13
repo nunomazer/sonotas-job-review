@@ -64,4 +64,9 @@ class SpedService
     {
         return $this->driver->nfseDriver($nfse);
     }
+
+    public function cadastrarWebhook()
+    {
+        $this->driver->cadastrarWebhook();
+    }
 }

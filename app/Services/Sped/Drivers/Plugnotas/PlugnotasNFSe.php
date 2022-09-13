@@ -87,4 +87,32 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
             return $this->toApiReturn($exception);
         }
     }
+
+    public function consultar()
+    {
+        $result = $this->httpClient()->request('GET', 'nfse/'.$this->nfse->driver_id);
+
+        $docDriver = json_decode($result->getBody()->getContents(), true);
+
+        // TODO definir um padrão para os drivers na consulta sempre retornarem igual para o service
+        return $docDriver;
+    }
+
+    public function downloadPdf() // TODO definir o tipo de retorno
+    {
+        $result = $this->httpClient()->request('GET', 'nfse/pdf/'.$this->nfse->driver_id);
+
+        $docDriver = (string)$result->getBody();
+
+        return $docDriver;
+    }
+
+    public function downloadXml()
+    {
+        $result = $this->httpClient()->request('GET', 'nfse/xml/'.$this->nfse->driver_id);
+
+        $docDriver = (string)$result->getBody();
+
+        return $docDriver;
+    }
 }

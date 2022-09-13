@@ -36,13 +36,20 @@ class VendasService
         try {
             DB::beginTransaction();
 
+                $valorTotal = 0;
+                foreach ($itens as $item) {
+                    $valorTotal += $item->valor * $item->qtde;
+                }
+                $venda['valor'] = $valorTotal;
+
                 $venda = Venda::create($venda);
 
                 if ($venda->data_emissao_planejada == null) {
                     /**
                      * Definição da data a ser emitido doc fiscal, hoje somente empresa_integrações tem informações
-                     * para este cálculo
+                     * para este cálculo, se não tem driver por hora define como emissão imediata
                      */
+                    $venda->data_emissao_planejada = now();
                     if ($venda->driver) {
                         $venda->data_emissao_planejada = $this->calculoDataPlanejadaEmissaoNF($venda);
                         $venda->save();

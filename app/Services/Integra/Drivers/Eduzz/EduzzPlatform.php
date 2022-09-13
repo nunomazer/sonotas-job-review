@@ -258,6 +258,6 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $cidadeService = new CidadeService();
 
-        return $cidadeService->resolveIdPeloNome($venda['destination_city']);
+        return $cidadeService->resolveIdPeloNome($venda['destination_city'], $venda['source_city'] ?? 'São Paulo');
     }
 }

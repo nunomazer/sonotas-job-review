@@ -30,7 +30,9 @@
                         @foreach($nfses as $nfse)
                             <tr>
                                 <td>
-                                    {{ $nfse->id }}
+                                    <a href="{{ route('notas-servico.show', $nfse) }}">
+                                        {{ $nfse->id }}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ $nfse->venda->empresa->nome }}

@@ -26,7 +26,9 @@ class ServicoService
 
         $config = EmpresaNFSConfig::where('empresa_id', $servico['empresa_id'])
                             ->first();
-
+        if($config == null){
+            $config = [];
+        }
         $config = $config->makeHidden(['id', 'created_at', 'updated_at', 'deleted_at']) ?? [];
 
         $servico = Servico::create(array_merge(

@@ -15,6 +15,12 @@ interface ISpedDriver
      */
     public function nome() : string;
 
+    /**
+     * Cadastra no driver o Webhook geral
+     * @return mixed
+     */
+    public function cadastrarWebhook();
+
     //public function getDriver(): ISpedDriver;
     public function certificado() : ISpedCertificado;
 

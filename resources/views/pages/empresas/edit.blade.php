@@ -60,7 +60,7 @@
 
                 <div class="mb-3 col-12 col-md-8">
                     <label class="form-label required">E-mail</label>
-                    <input type="text" class="form-control" name="email"
+                    <input type="email" class="form-control" name="email"
                            required value="{{ old('email', $empresa->email ?? null) }}"
                     >
                     <div class="form-text">Endereço de e-mail que receberá as notificações da
