@@ -87,7 +87,15 @@
                     DANFE
                 </div>
                 <div class="col-11 border">
-                    LINK PRO XML
+                    @if($nfse->arquivo_pdf_downloaded)
+                        <a href="{{ route('notas-servico.download.xml', $nfse) }}">
+                            clique para baixar
+                        </a>
+                    @else
+                        <span class="text-muted">
+                            arquivo não disponível
+                        </span>
+                    @endif
                 </div>
             </div>
             <div class="row mt-3">
@@ -95,7 +103,15 @@
                     PDF
                 </div>
                 <div class="col-11 border">
-                    LINK PRO PDF
+                    @if($nfse->arquivo_pdf_downloaded)
+                        <a href="{{ route('notas-servico.download.pdf', $nfse) }}">
+                            clique para baixar
+                        </a>
+                    @else
+                        <span class="text-muted">
+                            arquivo não disponível
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>
