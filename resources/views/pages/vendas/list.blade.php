@@ -31,9 +31,8 @@
                         </th>
                         <th>Data Transação</th>
                         <th>NF</th>
-                        <th></th>
-                        <th>Serviço/Produto</th>
-                        <th>Valor</th>
+                        <th>Serviços/Produtos</th>
+                        <th class="text-end">Valor</th>
                         <th>Integração</th>
                         <th></th>
                     </tr>
@@ -80,7 +79,7 @@
                                         <br/>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     {{ number_format($venda->valor, 2, ',', '.') }}
                                 </td>
                                 <td>
