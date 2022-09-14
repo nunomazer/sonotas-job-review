@@ -8,7 +8,7 @@
                 <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" width="110" height="32" alt="{{ config('app.name', 'Só Notas') }}" class="navbar-brand-image">
             </a>
         </h1>
-        <div class="navbar-nav flex-row d-lg-none">
+        <div class="navbar-nav flex-row d-lg-none p- align-items-center">
             <div class="nav-item d-none d-lg-flex me-3">
                 <div class="btn-list">
                     <a href="{{ route('home') }}" class="btn" target="_blank" rel="noreferrer">
@@ -188,6 +188,7 @@
                 </div>
             </div>
 
+            @include('layouts.partials.notifications')
             @include('layouts.partials.dropdown-user')
 
         </div>
@@ -195,7 +196,7 @@
             <ul class="navbar-nav pt-lg-3">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <span class="nav-link-icon d-md-none  d-lg-inline-block ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-desktop-analytics" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                <rect x="3" y="4" width="18" height="12" rx="1"></rect>
@@ -208,7 +209,7 @@
                                <path d="M12 12v-1"></path>
                             </svg>
                         </span>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Início
                         </span>
                     </a>
@@ -228,7 +229,7 @@
                               <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" />
                             </svg>
                         </span>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Empresas
                         </span>
                     </a>
@@ -241,7 +242,7 @@
                             <path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385"></path>
                             <path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0z"></path>
                         </svg>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Serviços
                         </span>
                     </a>
@@ -256,7 +257,7 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
                         </svg>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Clientes
                         </span>
                     </a>
@@ -275,7 +276,7 @@
                                <path d="M5 15v1m0 -8v1"></path>
                             </svg>
                         </span>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Vendas
                         </span>
                     </a>
@@ -292,7 +293,7 @@
                                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
                             </svg>
                         </span>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Notas de Serviço
                         </span>
                     </a>
@@ -308,7 +309,7 @@
                                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                         </span>
-                        <span class="nav-link-title">
+                        <span class="nav-link-title ps-2">
                             Meu Perfil
                         </span>
                     </a>

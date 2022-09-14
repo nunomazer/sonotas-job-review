@@ -7,16 +7,16 @@
                 <div class="card-body">
                     <form action="{{ route('home') }}">
                         <div class="form-group row">
-                            <div class="col-form-label col-1">
+                            <div class="col-form-label col-12 col-lg-1">
                                 Período
                             </div>
-                            <div class="col-9">
+                            <div class="col-md-9 col-12 col-sm-8 mb-2">
                                 <select class="form-select" name="periodo">
                                     <option value="{{ now()->format('Y-m') }}" {{ $periodo ==  now()->format('Y-m') ? 'selected' : '' }}>Mês atual</option>
                                     <option value="{{ now()->subMonths(1)->format('Y-m') }}"  {{ $periodo ==  now()->subMonths(1)->format('Y-m') ? 'selected' : '' }}>Mês anterior</option>
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col-sm-1 d-grid d-sm-block">
                                 <input type="submit" class="btn btn-primary" value="Alterar período"/>
                             </div>
                         </div>

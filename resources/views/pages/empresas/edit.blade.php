@@ -58,7 +58,7 @@
 
             <div class="row">
 
-                <div class="mb-3 col-8">
+                <div class="mb-3 col-12 col-md-8">
                     <label class="form-label required">E-mail</label>
                     <input type="email" class="form-control" name="email"
                            required value="{{ old('email', $empresa->email ?? null) }}"
@@ -68,15 +68,15 @@
                     </div>
                 </div>
 
-                <div class="mb-3 col-1">
+                <div class="mb-3 col-2 col-md-1">
                     <label class="form-label required">DDD</label>
                     <input type="number" class="form-control" name="telefone_ddd"
                            required value="{{ old('telefone_ddd', $empresa->telefone_ddd ?? null) }}"
                     >
                 </div>
 
-                <div class="mb-3 col-3">
-                    <label class="form-label required">Número do telefone</label>
+                <div class="mb-3 col-10 col-md-3">
+                    <label class="form-label required">Telefone</label>
                     <input type="number" class="form-control" name="telefone_num"
                            required value="{{ old('telefone_num', $empresa->telefone_num ?? null) }}"
                     >
@@ -86,7 +86,7 @@
 
             <div class="row">
 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-12 col-md-4">
                     <label for="documento" class="form-label required">CNPJ / CPF</label>
                     <input type="text" class="form-control" name="documento"
                            required value="{{ old('documento', $empresa->documento ?? null) }}"
@@ -95,14 +95,14 @@
                     </div>
                 </div>
 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-6 col-md-4">
                     <label for="name" class="form-label">Inscrição Estadual</label>
                     <input type="text" class="form-control" name="inscricao_estadual"
                            value="{{ old('inscricao_estadual', $empresa->inscricao_estadual ?? null) }}"
                     >
                 </div>
 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-6 col-md-4">
                     <label for="name" class="form-label">Inscrição Municipal</label>
                     <input type="text" class="form-control" name="inscricao_municipal"
                            value="{{ old('inscricao_municipal', $empresa->inscricao_municipal ?? null) }}"
@@ -113,7 +113,7 @@
 
             <div class="row">
 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-5 col-md-4">
                     <label class="form-label required">Regime Tributário</label>
                     <select class="form-select" required name="regime_tributario">
                         @foreach(\App\Services\Sped\SpedRegimesTributarios::toArray() as $regime)
@@ -125,7 +125,7 @@
                     </select>
                 </div>
 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-7 col-md-4">
                     <label class="form-label required">Regime Tributário Especial</label>
                     <select class="form-select" required name="regime_tributario_especial">
                         @foreach(\App\Services\Sped\SpedRegimesTributariosEspeciais::toArray() as $regime)

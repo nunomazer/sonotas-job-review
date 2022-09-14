@@ -26,7 +26,7 @@
                 @csrf
 
                 <div class="row">
-                    <div class="mb-3 col-12">
+                    <div class="mb-3 col-12 col-md-12">
                         <label class="form-label required">Empresa</label>
                         @if (isset($servico))
                             <input type="hidden" name="empresa_id" value="{{$servico->empresa->id}}">
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-7  col-md-3">
                         <div class="form-label">Enviar NFSe email do cliente</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="enviar_nota_email_cliente"
@@ -56,7 +56,7 @@
                         </label>
                     </div>
 
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-5 col-md-2">
                         <div class="form-label">Ativo</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="ativo"
@@ -69,7 +69,7 @@
 
                 <div class="row">
 
-                    <div class="mb-3 col-10">
+                    <div class="mb-3 col-8 col-md-10">
                         <label for="name" class="form-label required">Nome</label>
                         <input type="text" class="form-control" name="nome"
                                required value="{{ old('nome', $servico->nome ?? '') }}"
@@ -77,7 +77,7 @@
                         <div class="form-text">Nome ou identificação resumida do serviço</div>
                     </div>
 
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <label for="name" class="form-label required">Valor</label>
                         <input type="number" step="0.01" class="form-control" name="valor"
                                required value="{{ old('valor', $servico->valor ?? '') }}"
@@ -106,14 +106,14 @@
                         </select>
                     </div>
 
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-6 col-md-3">
                         <label for="name" class="form-label required">Cód.Serviço no Município</label>
                         <input type="text" class="form-control" name="municipio_servico_codigo"
                                required value="{{ old('municipio_servico_codigo', $servico->municipio_servico_codigo ?? null) }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-4">
+                    <div class="mb-3 col-6 col-md-4">
                         <label for="name" class="form-label required">Descrição do Serviço no Município</label>
                         <input type="text" class="form-control" name="municipio_servico_descricao"
                                required value="{{ old('municipio_servico_descricao', $servico->municipio_servico_descricao ?? null) }}"
@@ -124,49 +124,49 @@
 
                 <div class="row">
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">Cofins</label>
                         <input type="number" step="0.01" class="form-control" name="cofins"
                                required value="{{ old('cofins', $servico->cofins ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">CSLL</label>
                         <input type="number" step="0.01" class="form-control" name="csll"
                                required value="{{ old('csll', $servico->csll ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">INSS</label>
                         <input type="number" step="0.01" class="form-control" name="inss"
                                required value="{{ old('inss', $servico->inss ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">IR</label>
                         <input type="number" step="0.01" class="form-control" name="ir"
                                required value="{{ old('ir', $servico->ir ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">PIS</label>
                         <input type="number" step="0.01" class="form-control" name="pis"
                                required value="{{ old('pis', $servico->pis ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-1">
+                    <div class="mb-3 col-3 col-md-1">
                         <label class="form-label required">ISS</label>
                         <input type="number" step="0.01" class="form-control" name="iss"
                                required value="{{ old('iss', $servico->iss ?? '') }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-3 col-md-2">
                         <div class="form-label">ISS Retido Fonte</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="iss_retido_fonte"
