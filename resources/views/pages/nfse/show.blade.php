@@ -7,7 +7,8 @@
     <div class="card">
         <div class="card-header">
             <h2>
-                NFSe {{ $nfse->id }}
+                #{{ $nfse->id }} -
+                <small>{{ $nfse->status }}</small>
             </h2>
             <div class="card-actions">
                 <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
