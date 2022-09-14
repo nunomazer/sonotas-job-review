@@ -115,7 +115,7 @@
                 <hr/>
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="{{ route('servicos.list') }}" class="btn btn-secondary">
+                <a href="{{ route('vendas.list') }}" class="btn btn-secondary">
                     Voltar
                 </a>
             </form>
