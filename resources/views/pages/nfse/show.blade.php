@@ -7,7 +7,8 @@
     <div class="card">
         <div class="card-header">
             <h2>
-                NFSe {{ $nfse->id }}
+                #{{ $nfse->id }} -
+                <small>{{ $nfse->status }}</small>
             </h2>
             <div class="card-actions">
                 <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
@@ -21,7 +22,9 @@
                     Cliente
                 </div>
                 <div class="col-9 border">
-                    {{ $nfse->venda->cliente->nome }}
+                    <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
+                        {{ $nfse->venda->cliente->nome }}
+                    </a>
                 </div>
 
                 <div class="col-1 ">
@@ -85,7 +88,15 @@
                     DANFE
                 </div>
                 <div class="col-11 border">
-                    LINK PRO XML
+                    @if($nfse->arquivo_pdf_downloaded)
+                        <a href="{{ route('notas-servico.download.xml', $nfse) }}">
+                            clique para baixar
+                        </a>
+                    @else
+                        <span class="text-muted">
+                            arquivo não disponível
+                        </span>
+                    @endif
                 </div>
             </div>
             <div class="row mt-3">
@@ -93,7 +104,15 @@
                     PDF
                 </div>
                 <div class="col-11 border">
-                    LINK PRO PDF
+                    @if($nfse->arquivo_pdf_downloaded)
+                        <a href="{{ route('notas-servico.download.pdf', $nfse) }}">
+                            clique para baixar
+                        </a>
+                    @else
+                        <span class="text-muted">
+                            arquivo não disponível
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>

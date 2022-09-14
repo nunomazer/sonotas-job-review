@@ -30,10 +30,9 @@
                             Cliente
                         </th>
                         <th>Data Transação</th>
-                        <th>Emissão Planejada NF</th>
-                        <th></th>
-                        <th>Serviço/Produto</th>
-                        <th>Valor</th>
+                        <th>NF</th>
+                        <th>Serviços/Produtos</th>
+                        <th class="text-end">Valor</th>
                         <th>Integração</th>
                         <th></th>
                     </tr>
@@ -54,16 +53,25 @@
                                     {{ $venda->data_transacao->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    {{ isset($venda->data_emissao_planejada) ? $venda->data_emissao_planejada->format('d/m/Y H:i') : '' }}
-                                </td>
-                                <td>
-                                    <span class="badge badge-outline badge-sm text-{{ $venda->documento_fiscal ? 'blue' : 'warning' }}">
                                         @if($venda->documento_fiscal)
-                                            <a href="{{route('notas-servico.show', $venda->documento_fiscal->id) }}">
-                                                Detalhes NFSe
-                                            </a>
+                                            <span class="badge badge-outline text-success">
+                                                <a href="{{route('notas-servico.show', $venda->documento_fiscal->id) }}"
+                                                   data-bs-toogle="tooltip" title="NF {{$venda->documento_fiscal->id}} emitida em {{$venda->documento_fiscal->emitido_em->format('d/m/Y - H:i:s')}}">
+                                                    # {{$venda->documento_fiscal->id}}
+                                                </a>
+                                            </span>
+                                        @else
+                                            @if(isset($venda->data_emissao_planejada))
+                                                <span class="badge badge-outline text-secondary" data-bs-toogle="tooltip" title="Emissão NF planejada">
+                                                    {{ $venda->data_emissao_planejada->format('d/m/Y H:i') }}
+                                                </span>
+                                            @else
+                                                <small class="text-muted">
+                                                    não planejada
+                                                </small>
+                                            @endif
                                         @endif
-                                    </span>
+                                    </small>
                                 </td>
                                 <td>
                                     @foreach($venda->itens as $item)
@@ -71,7 +79,7 @@
                                         <br/>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     {{ number_format($venda->valor, 2, ',', '.') }}
                                 </td>
                                 <td>

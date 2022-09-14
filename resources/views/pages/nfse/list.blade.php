@@ -16,11 +16,13 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Data emissão</th>
+                        <th>Status</th>
                         <th class="table-sort" data-sort="sort-name">Prestador</th>
                         <th class="table-sort" data-sort="sort-name">
                             Tomador
                         </th>
-                        <th>Data Serviço</th>
+                        <th>Data venda</th>
                         <th>Serviços</th>
                         <th>Valor</th>
                         <th></th>
@@ -35,13 +37,21 @@
                                     </a>
                                 </td>
                                 <td>
+                                    {{ $nfse->emitido_em->format('d/m/Y H:i') }}
+                                </td>
+                                <td>
+                                    {{ $nfse->status }}
+                                </td>
+                                <td>
                                     {{ $nfse->venda->empresa->nome }}
                                 </td>
                                 <td>
-                                    {{ $nfse->venda->cliente->nome }}
+                                    <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
+                                        {{ $nfse->venda->cliente->nome }}
+                                    </a>
                                 </td>
                                 <td>
-                                    {{ $nfse->emitido_em->format('d/m/Y H:i') }}
+                                    {{ $nfse->venda->data_transacao->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
                                     @foreach($nfse->itens_servico as $item)

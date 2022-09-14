@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NFSeRequest;
 use App\Models\NFSe;
 use App\Services\NFSeService;
+use Illuminate\Support\Facades\Storage;
 
 class NFSeController extends Controller
 {
@@ -34,5 +35,23 @@ class NFSeController extends Controller
     public function show(NFSe $nfse)
     {
         return view('pages.nfse.show', compact('nfse'));
+    }
+
+    public function downloadPdf(NFSe $nfse)
+    {
+        if ($nfse->arquivo_pdf_downloaded == false) {
+            return redirect()->back()->withErrors('Arquivo PDF não está disponível');
+        }
+
+        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_pdf));
+    }
+
+    public function downloadXml(NFSe $nfse)
+    {
+        if ($nfse->arquivo_xml_downloaded == false) {
+            return redirect()->back()->withErrors('Arquivo XML não está disponível');
+        }
+
+        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_xml));
     }
 }

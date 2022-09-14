@@ -23,8 +23,24 @@
                 chart: {
                     type: 'bar',
                     width: '100%',
-                    height: '100%',
-                }
+                    height: '90%',
+                    
+                    
+                },
+                responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        
+        
+            xaxis:{
+                type: 'datetime',
+            }
+        
+        
+      }
+    }
+  ]
             };
 
             var chart = new ApexCharts(document.querySelector("#chart-vendas-mes"), opt_chart);

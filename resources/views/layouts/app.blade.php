@@ -44,8 +44,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
-<body class="{{ $class ?? '' }} theme-light">
-    <div class="page page-center" id="app">
+<body  class="  {{ $class ?? '' }} theme-light ">
+    <div  class="page page-center "  id="app">
         @auth()
             @include('layouts.page_templates.auth')
         @endauth()
@@ -61,6 +61,16 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @stack('js')
+
+    <script>
+        $(function() {
+            // habilita tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
 </body>
 
 </html>

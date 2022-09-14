@@ -1,7 +1,7 @@
 window._ = require('lodash');
 
 try {
-    require('bootstrap');
+    window.bootstrap = require("bootstrap");
     require('@tabler/core');
 } catch (e) {}
 
