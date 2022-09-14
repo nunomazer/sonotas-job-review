@@ -21,7 +21,9 @@
                     Cliente
                 </div>
                 <div class="col-9 border">
-                    {{ $nfse->venda->cliente->nome }}
+                    <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
+                        {{ $nfse->venda->cliente->nome }}
+                    </a>
                 </div>
 
                 <div class="col-1 ">

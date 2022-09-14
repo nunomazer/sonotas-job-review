@@ -38,7 +38,9 @@
                                     {{ $nfse->venda->empresa->nome }}
                                 </td>
                                 <td>
-                                    {{ $nfse->venda->cliente->nome }}
+                                    <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
+                                        {{ $nfse->venda->cliente->nome }}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ $nfse->emitido_em->format('d/m/Y H:i') }}
