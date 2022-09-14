@@ -47,4 +47,20 @@ class VendasController extends Controller
 
         return redirect(route('vendas.list'))->with('success', 'Venda inserida com sucesso');
     }
+
+    /**
+     * Disparo manual de uma NF
+     * @return void
+     */
+    public function emitirNF(Venda $venda)
+    {
+        $vendaService =  new VendasService();
+
+        // TODO refatorar para os demais tipos de doc fiscal
+        if($venda->tipo_documento == SpedService::DOCTYPE_NFSE) {
+            $vendaService->gerarEmitirNFSe($venda);
+        }
+
+        return redirect()->back()->with('success', 'NF enviada para processamento');
+    }
 }

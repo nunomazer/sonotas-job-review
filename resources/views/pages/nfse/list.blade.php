@@ -51,7 +51,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {{ $nfse->venda->data_transacao->format('d/m/Y H:i') }}
+                                    {{ $nfse->venda->data_transacao->format('d/m/Y') }}
                                 </td>
                                 <td>
                                     @foreach($nfse->itens_servico as $item)

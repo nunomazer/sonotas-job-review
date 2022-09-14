@@ -44,17 +44,17 @@
                 </div>
 
                 <div class="col-1 ">
-                    Valor
-                </div>
-                <div class="col-2 border">
-                    {{ number_format($nfse->valor, 2, ',', '.') }}
-                </div>
-
-                <div class="col-1 offset-3 ">
                     Dt Venda
                 </div>
                 <div class="col-2 border ">
-                    {{ $nfse->venda->data_transacao->format('d/m/Y H:i') }}
+                    {{ $nfse->venda->data_transacao->format('d/m/Y') }}
+                </div>
+
+                <div class="col-1 offset-3 ">
+                    Valor NF
+                </div>
+                <div class="col-2 border">
+                    {{ number_format($nfse->valor, 2, ',', '.') }}
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
                     <div class="col-1 ">
                         Descrição
                     </div>
-                    <div class="col-6 border">
+                    <div class="col-3 border">
                         {{ $item->servico->nome }}
                     </div>
                     <div class="col-1 ">
@@ -79,13 +79,19 @@
                     <div class="col-2 border">
                         {{ number_format($item->valor, 2, ',', '.') }}
                     </div>
+                    <div class="col-1 ">
+                        Total
+                    </div>
+                    <div class="col-2 border">
+                        {{ number_format($item->valor * $item->qtde, 2, ',', '.') }}
+                    </div>
                 @endforeach
             </div>
 
             <h3 class="mt-3 border-top pt-2">Documentos</h3>
             <div class="row mt-3">
                 <div class="col-1 ">
-                    DANFE
+                    XML
                 </div>
                 <div class="col-11 border">
                     @if($nfse->arquivo_pdf_downloaded)
