@@ -86,7 +86,7 @@
                                     {{ $venda->driver ?? '' }}
                                 </td>
                                 <td>
-                                    @if(($venda->documento_fiscal && isset($venda->data_emissao_planejada)) == false)
+                                    @if($venda->documento_fiscal == false)
                                         <form method="POST" action="{{route('vendas.nf.emitir', $venda)}}">
                                             @csrf
                                             <button class="btn btn-sm">
