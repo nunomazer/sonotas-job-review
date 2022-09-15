@@ -26,6 +26,7 @@
                     height: '90%',
                     
                     
+                    
                 },
                 responsive: [
     {
@@ -34,7 +35,9 @@
         
         
             xaxis:{
-                type: 'datetime',
+                tickAmount: 15,
+                type: 'numeric',
+                
             }
         
         
