@@ -17917,9 +17917,3 @@ Antialiasing
   -webkit-backdrop-filter: blur(2px);
           backdrop-filter: blur(2px);
 }
-
-.card {
-  background: rgba(255, 255, 255, 0.9098039216);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
-}
