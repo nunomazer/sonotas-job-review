@@ -1,4 +1,4 @@
-@extends('layouts.app', [
+@extends('layouts.login', [
     'class' => 'border-top-wide border-primary d-flex flex-column'
 ])
 
