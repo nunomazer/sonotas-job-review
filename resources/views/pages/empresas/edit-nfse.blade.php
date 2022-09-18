@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page-title', 'Configuração padrão NFSe da empresa')
-@section('page-pretitle', (isset($empresa) ? 'Editar dados' : 'Cadastro'))
+@section('page-pretitle', (isset($nfseConfig) ? 'Editar dados' : 'Cadastro'))
 
 @section('content')
     <div class="card">
@@ -53,17 +53,17 @@
                 </div>
 
                 <div class="row">
-                    @if($nfseConfig->certificado != null)
-                    <div class="mb-3 col-2" >
-                        <label class="form-label">Validade do certificado</label>
-                        {{$nfseConfig->certificado->dataValidade}} 
-                    </div>
-                    <div class="mb-3 col-2" >
-                        <label class="form-label">Status do certificado</label>
-                        <span class="badge {{$nfseConfig->certificado->isCertificadoValido ? 'bg-success' : 'bg-warning'}}">
-                            {{$nfseConfig->certificado->isCertificadoValido ? 'Válido' : 'Vencido'}}
-                        </span>
-                    </div>
+                    @if(isset($nfseConfig) && $nfseConfig->certificado != null)
+                        <div class="mb-3 col-2" >
+                            <label class="form-label">Validade do certificado</label>
+                            {{$nfseConfig->certificado->dataValidade}}
+                        </div>
+                        <div class="mb-3 col-2" >
+                            <label class="form-label">Status do certificado</label>
+                            <span class="badge {{$nfseConfig->certificado->isCertificadoValido ? 'bg-success' : 'bg-warning'}}">
+                                {{$nfseConfig->certificado->isCertificadoValido ? 'Válido' : 'Vencido'}}
+                            </span>
+                        </div>
                     @endif
                     <div class="mb-3 col-5">
                         <label class="form-label">Upload certificado</label>
@@ -206,7 +206,7 @@
 @endsection
 
 @push('js')
-<script type="text/javascript">    
+<script type="text/javascript">
     $(function() {
         $('#tipo_servico_codigo, #cnae_codigo').select2({
             language: "pt-BR",
@@ -215,7 +215,7 @@
             allowClear: true,
         });
     });
-    
+
     $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
     });
