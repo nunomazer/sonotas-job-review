@@ -163,7 +163,7 @@ class EstatisticasService
             ->where('venda_item.tipo_documento', SpedService::DOCTYPE_NFSE)
             ->whereBetween('v.data_transacao', [$this->data_inicial, $this->data_final])
             ->groupBy('servicos.nome', 'servicos.id', DB::raw("to_char(v.data_transacao, 'YYYY-MM')"))
-            ->limit(10)
+            ->limit(5)
             ->get();
     }
 
