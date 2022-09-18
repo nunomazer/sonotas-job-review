@@ -146,42 +146,42 @@
                     <div class="mb-3 col-1">
                         <label class="form-label required">Cofins</label>
                         <input type="number" step="0.01" class="form-control" name="cofins"
-                               required value="{{ old('cofins', $nfseConfig->cofins ?? '') }}"
+                               required value="{{ old('cofins', $nfseConfig->cofins ?? 0) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-1">
                         <label class="form-label required">CSLL</label>
                         <input type="number" step="0.01" class="form-control" name="csll"
-                               required value="{{ old('csll', $nfseConfig->csll ?? '') }}"
+                               required value="{{ old('csll', $nfseConfig->csll ?? 0) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-1">
                         <label class="form-label required">INSS</label>
                         <input type="number" step="0.01" class="form-control" name="inss"
-                               required value="{{ old('inss', $nfseConfig->inss ?? '') }}"
+                               required value="{{ old('inss', $nfseConfig->inss ?? 0) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-1">
                         <label class="form-label required">IR</label>
                         <input type="number" step="0.01" class="form-control" name="ir"
-                               required value="{{ old('ir', $nfseConfig->ir ?? '') }}"
+                               required value="{{ old('ir', $nfseConfig->ir ?? 0) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-1">
                         <label class="form-label required">PIS</label>
                         <input type="number" step="0.01" class="form-control" name="pis"
-                               required value="{{ old('pis', $nfseConfig->pis ?? '') }}"
+                               required value="{{ old('pis', $nfseConfig->pis ?? 0) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-1">
                         <label class="form-label required">ISS</label>
                         <input type="number" step="0.01" class="form-control" name="iss"
-                               required value="{{ old('iss', $nfseConfig->iss ?? '') }}"
+                               required value="{{ old('iss', $nfseConfig->iss ?? 0) }}"
                         >
                     </div>
 
