@@ -60,6 +60,7 @@ class EstatisticasService
 
     public function calcularEstatisticas(bool $clearCache = false) : array
     {
+        $clearCache = true; // TODO definir a estratégia de cache quando começar a crescer o DB
         if ($clearCache) $this->clearCache();
 
         $this->estatisticas = Cache::remember($this->getCacheKey(), 60*120, function () {
@@ -141,6 +142,10 @@ class EstatisticasService
 
     private function calcularServicosMaisVendidosSerie()
     {
+        if ($this->user->empresasIdsArray() == []) {
+            return [];
+        }
+
         return DB::table('servicos')
             ->select('servicos.id', 'servicos.nome', DB::raw("to_char(v.data_transacao, 'YYYY-MM') as data_transacao"),
                 DB::raw('SUM(venda_item.qtde) as qtde'), DB::raw('SUM(venda_item.qtde * venda_item.valor) as valor'),
@@ -154,6 +159,7 @@ class EstatisticasService
                                         left join vendas vs on date_part('day', vs.data_transacao) = d.dt
                                         left join venda_item vis on vis.venda_id = vs.id
                                     where vis.item_id = servicos.id OR vis.item_id isnull
+                                    AND vs.empresa_id in (".implode(',',$this->user->empresasIdsArray()).")
                                     group by
                                         d.dt
                                 )) as serie")
@@ -161,6 +167,7 @@ class EstatisticasService
             ->join('venda_item', 'venda_item.item_id', '=', 'servicos.id')
             ->join(DB::raw('vendas v'), 'v.id', '=', 'venda_item.venda_id')
             ->where('venda_item.tipo_documento', SpedService::DOCTYPE_NFSE)
+            ->whereIn('servicos.empresa_id', $this->user->empresasIdsArray())
             ->whereBetween('v.data_transacao', [$this->data_inicial, $this->data_final])
             ->groupBy('servicos.nome', 'servicos.id', DB::raw("to_char(v.data_transacao, 'YYYY-MM')"))
             ->limit(5)
@@ -169,6 +176,10 @@ class EstatisticasService
 
     private function calcularVendasSerie()
     {
+        if ($this->user->empresasIdsArray() == []) {
+            return [];
+        }
+
         //->select(DB::raw("to_char(v.data_transacao, 'DD') as data_transacao"),
         return DB::table('vendas')
             ->select(
@@ -180,7 +191,8 @@ class EstatisticasService
                                     $this->data_final->format('d').") dia) d"
                         ), function($join) {
                             $join->on(DB::raw("date_part('day', vendas.data_transacao)"), '=', "d.dia")
-                                ->whereBetween('vendas.data_transacao', [$this->data_inicial, $this->data_final]);
+                                ->whereBetween('vendas.data_transacao', [$this->data_inicial, $this->data_final])
+                                ->whereIn('vendas.empresa_id', $this->user->empresasIdsArray());
                         })
             ->groupBy('d.dia')
             ->orderBy('d.dia')
