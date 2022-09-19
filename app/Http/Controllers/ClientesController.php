@@ -18,7 +18,8 @@ class ClientesController extends Controller
     public function index()
     {
         $clientes = Cliente::whereIn('empresa_id', auth()->user()->empresasIdsArray())
-            ->simplePaginate(25);
+            ->orderBy('nome')
+            ->paginate(30);
         return view('pages.clientes.list', compact('clientes'));
     }
 
