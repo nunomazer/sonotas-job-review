@@ -153,7 +153,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             $page++;
 
             if ($page <= $paginator['totalPages']) {
-                $result = $this->callTaxDocumentList($from, $page);
+                $result = $this->callContentList($page);
             }
         }
 
