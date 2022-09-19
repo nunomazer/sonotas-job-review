@@ -100,7 +100,7 @@
                         </a>
                     @else
                         <span class="text-muted">
-                            arquivo não disponível
+                            em processamento
                         </span>
                     @endif
                 </div>
@@ -116,7 +116,7 @@
                         </a>
                     @else
                         <span class="text-muted">
-                            arquivo não disponível
+                            em processamento
                         </span>
                     @endif
                 </div>
