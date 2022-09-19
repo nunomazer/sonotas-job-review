@@ -101,5 +101,8 @@
                 </table>
             </div>
         </div>
+        <div class="card-footer">
+            {{ $vendas->links() }}
+        </div>
     </div>
 @endsection
