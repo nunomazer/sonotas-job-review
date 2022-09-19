@@ -25,6 +25,8 @@
 
                 @csrf
 
+                <input type="hidden" value="{{ old('driver', $integracao->driver) }}" name="driver">
+
                 <div class="row">
                     <div class="mb-3 col-2">
                         <div class="form-label">Ativo</div>
@@ -102,7 +104,7 @@
                     @foreach($integracao->fields as $field => $value)
                         <div class="mb-3 col-6">
                             <label for="{{$field}}" class="form-label">{{$driver->fieldLabel($field)}}</label>
-                            <input type="text" class="form-control" name="field[{{$field}}]" aria-describedby="nameHelp"
+                            <input type="text" class="form-control" name="fields[{{$field}}]" aria-describedby="nameHelp"
                                 value="{{ old($field, $value) }}"
                             >
                             <div id="nameHelp" class="form-text">Descrição para identificar a integração.</div>
