@@ -24,7 +24,7 @@
                         </th>
                         <th>Data venda</th>
                         <th>Serviços</th>
-                        <th>Valor</th>
+                        <th class="text-end">Valor</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -59,7 +59,7 @@
                                         <br/>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     {{ number_format($nfse->valor, 2, ',', '.') }}
                                 </td>
                                 <td>
