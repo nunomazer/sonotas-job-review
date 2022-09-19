@@ -87,7 +87,6 @@
                                         <thead>
                                             <tr>
                                                 <th class="table-sort" data-sort="sort-name">Integração</th>
-                                                <th>Vendas</th>
                                                 <th>Serviços</th>
                                                 <th>Última importação vendas</th>
                                                 <th></th>
@@ -106,11 +105,7 @@
                                                     </td>
 
                                                     <td>
-                                                        X Vendas
-                                                    </td>
-
-                                                    <td>
-                                                        X Serviços
+                                                        {{ $empresa->servicos->count() }} Serviços
                                                     </td>
 
                                                     <td>
