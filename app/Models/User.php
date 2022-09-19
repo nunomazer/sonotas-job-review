@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function empresas()
     {
-        return $this->hasManyThrough(Empresa::class, UserEmpresa::class, 'user_id', 'id', 'id', 'id');
+        return $this->hasManyThrough(Empresa::class, UserEmpresa::class, 'user_id', 'id', 'id', 'empresa_id');
     }
 
     public function empresasIdsArray() : array
