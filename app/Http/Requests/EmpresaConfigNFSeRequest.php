@@ -17,6 +17,8 @@ class EmpresaConfigNFSeRequest extends FormRequest
      */
     public function authorize()
     {
+        if (strtolower($this->method()) == 'post') return true;
+
         return auth()->user()->can('updateConfigNFSe', $this->empresa);
     }
 
