@@ -24,7 +24,7 @@
             @foreach($empresas as $empresa)
                 <div class="card d-flex flex-column">
                     <div class="row row-0 flex-fill">
-                        <div class="col-md-2">
+                        <div class="col-3 col-md-2">
                             <a href="#">
                                 <div class="ratio ratio-1x1 placeholder">
                                     <div class="placeholder-image"></div>
@@ -43,7 +43,7 @@
                                         {{ $empresa->nome }}
                                     </a>
                                 </h3>
-                                <div class="col">
+                                <div class="col-12 col-md-4">
                                     @if($empresa->configuracao_nfse)
                                         <span class="mx-1 status-green">
                                             <span class="status-dot"></span>
@@ -63,11 +63,11 @@
                                     @endif
                                 </div>
 
-                                <div class="col">
+                                <div class="ms-3 col-12 col-md-4">
                                     @include('pages.empresas.partials.assinatura-status')
                                 </div>
 
-                                <div class="col">
+                                <div class="col-12 col-md-4">
                                     <div class="ms-3">
                                         <a href="{{route('empresas.integracoes.create.choose-platform', $empresa)}}" class="btn btn-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
