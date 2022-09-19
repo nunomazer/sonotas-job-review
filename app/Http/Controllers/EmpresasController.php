@@ -97,7 +97,7 @@ class EmpresasController extends Controller
             $certificado->file = $fileCertificado;
             $certificado->password = $request->input('certificadoDigitalSenha');
         }
-        $empresa = $this->empresaService->updateConfigNFSe($empresa, $nfseConfig, $certificado);
+        $empresa = $this->empresaService->updateConfigNFSe($empresa, $nfseConfig, $certificado ?? null);
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Configurações de NFSe da empresa '.$empresa->nome.' atualizadas com successo !']);
