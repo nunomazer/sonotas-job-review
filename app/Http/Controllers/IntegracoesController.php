@@ -17,6 +17,28 @@ class IntegracoesController extends Controller
         $this->middleware('auth');
     }
 
+    public function createChoosePlatform(Empresa $empresa)
+    {
+        $platforms = (new IntegraService())->platformsDriverClasses();
+        return view('pages.empresas.integracoes.choose', compact('empresa', 'platforms'));
+    }
+
+    public function create(Empresa $empresa)
+    {
+        $this->validate(\request(), [
+            'platform' => ['Required'],
+        ]);
+
+        $platform = \request()->platform;
+        if (class_exists($platform) == false) {
+            return back()->withErrors('Integração não está disponível !');
+        }
+
+        $integracao = new $platform([]);
+        $driver = (new IntegraService())->driver($integracao->name(), $integracao->fields());
+        return view('pages.empresas.integracoes.new', compact('empresa', 'integracao', 'driver'));
+    }
+
     public function edit(Empresa $empresa, Integracao $integracao)
     {
         $driver = (new IntegraService())->driver($integracao->driver, $integracao->fields);
@@ -29,6 +51,18 @@ class IntegracoesController extends Controller
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Integração atualizada com successo !']);
+    }
+
+    public function store(IntegracaoRequest $request, Empresa $empresa)
+    {
+        // TODO refatorar para o service
+        $request->merge([
+            'empresa_id' => $empresa->id,
+        ]);
+        Integracao::create($request->toArray());
+
+        return redirect()->route('empresas.list', )
+            ->with(['success' => 'Integração criada com successo !']);
     }
 
 
