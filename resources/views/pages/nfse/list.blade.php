@@ -40,7 +40,9 @@
                                     {{ $nfse->emitido_em->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    {{ $nfse->status }}
+                                    <span class="badge badge-outline text-{{ $nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'success' : ($nfse->status == \App\Services\Sped\SpedStatus::PROCESSAMENTO ? 'info' : 'warning')}}">
+                                        {{ $nfse->status }}
+                                    </span>
                                 </td>
                                 <td>
                                     {{ $nfse->venda->empresa->nome }}
