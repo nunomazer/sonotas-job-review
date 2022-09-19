@@ -17,9 +17,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('sync:vendas-plataformas')->hourly();
 
-        $schedule->command('vendas:emitir-nf-planejadas')->hourlyAt(10);
+        $schedule->command('vendas:emitir-nf-planejadas')->hourlyAt(15);
 
-        $schedule->command('sped:atualizar-status-docs')->dailyAt('01:00');
+        //$schedule->command('sped:atualizar-status-docs')->dailyAt('01:00');
+        $schedule->command('sped:atualizar-status-docs')->hourlyAt(30);
+        $schedule->command('sped:download-xml-pdf-docs')->hourlyAt(45);
 
         $schedule->command('ibge:import-states-cities')->monthly();
     }
