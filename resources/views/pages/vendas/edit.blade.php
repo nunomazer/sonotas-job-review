@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-12 col-lg-3">
                         <label for="name" class="form-label required">Tipo NF</label>
                         <select class="form-select" required name="tipo_documento">
                             <option value="nfse" selected>
@@ -76,14 +76,14 @@
                         <div class="form-text">As vendas devem especificar apenas um tipo de NF (Serviços ou Produtos)</div>
                     </div>
 
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-12 col-lg-3">
                         <label class="form-label required">Data da venda</label>
                         <input type="date" class="form-control" name="data_transacao"
                                required value="{{ old('data_transacao', $venda->data_transacao ?? now()->format('Y-m-d')) }}"
                         >
                     </div>
 
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-12 col-lg-3">
                         <label class="form-label">Data planejada NF</label>
                         <input type="date" class="form-control" name="data_emissao_planejada"
                                required value="{{ old('data_transacao', $venda->data_transacao ?? '') }}"
@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-12 col-lg-3">
                         <label for="name" class="form-label required">Valor</label>
                         <input type="number" step="0.01" class="form-control" name="valor" id="valor"
                                readonly="readonly" required value="{{ old('valor', $valor->valor ?? '') }}"
