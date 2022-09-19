@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile/{user}', [UserController::class, 'showProfile'])->name('profile');
 
+    Route::get('/empresas/{empresa}/integracoes/create/choose-platform', [IntegracoesController::class, 'createChoosePlatform'])->name('empresas.integracoes.create.choose-platform');
+    Route::get('/empresas/{empresa}/integracoes/create', [IntegracoesController::class, 'create'])->name('empresas.integracoes.create');
     Route::get('/empresas/{empresa}/integracoes/{integracao}/edit', [IntegracoesController::class, 'edit'])->name('empresas.integracoes.edit');
     Route::post('/empresas/{empresa}/integracoes', [IntegracoesController::class, 'store'])->name('empresas.integracoes.store');
     Route::post('/empresas/{empresa}/integracoes/{integracao}/servicos/importar', [IntegracoesController::class, 'importFromPlatform'])->name('empresas.integracoes.servicos.importar');

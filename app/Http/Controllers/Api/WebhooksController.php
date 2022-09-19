@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Log;
 
 class WebhooksController extends Controller
 {
-    public function sped(Request $request, string $driver, string $id)
+    public function sped(Request $request, string $driver)
     {
-
-        Log::debug($driver . ' = ' . $id);
-        Log::debug('Wehhook', $request->all());
+        Log::debug($driver);
+        Log::debug('Webhook', $request->all());
     }
 }

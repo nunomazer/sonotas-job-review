@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -35,6 +36,12 @@ class HomeController extends Controller
         $data_final = Carbon::createFromFormat('Y-m', $periodo)->endOfMonth()->endOfDay();
         $estatisticasService = new EstatisticasService(auth()->user(), $data_inicial, $data_final);
         $estatisticas = $estatisticasService->calcularEstatisticas(true);
+
+        if (auth()->user()->empresas->count() == 0) {
+            Session::flash('error', 'Para iniciar o uso do sistema é necessário cadastrar e configurar
+                ao menos uma empresa - <a href="'.route('empresas.list').
+                '">clique aqui para iniciar</a>.');
+        }
 
         return view('pages.dashboard.painel', compact('estatisticas'))
             ->with('periodo', $periodo);

@@ -237,11 +237,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('servicos.list') }}">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hammer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385"></path>
                             <path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0z"></path>
                         </svg>
+</span>
                         <span class="nav-link-title ps-2">
                             Serviços
                         </span>
@@ -250,6 +252,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('clientes.list') }}">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="9" cy="7" r="4"></circle>
@@ -257,6 +260,7 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
                         </svg>
+</span>
                         <span class="nav-link-title ps-2">
                             Clientes
                         </span>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
 use App\Http\Requests\EmpresaAssinaturaRequest;
 use App\Http\Requests\EmpresaConfigNFSeRequest;
 use App\Http\Requests\EmpresaRequest;
@@ -35,11 +36,17 @@ class EmpresasController extends Controller
     }
 
     public function store(EmpresaRequest $request)
-    { 
-        $empresa = $this->empresaService->create($request->toArray());
- 
+    {
+        try {
+            $empresa = $this->empresaService->create($request->toArray());
+        } catch (DocumentoDuplicadoCriarEmpresaException $exception) {
+            return back()
+                ->withInput()
+                ->withErrors($exception->getMessage());
+        }
+
         return redirect()->route('empresas.list', )
-            ->with(['success' => 'Empresa '.$empresa->nome.' criada com successo !']); 
+            ->with(['success' => 'Empresa '.$empresa->nome.' criada com successo !']);
     }
 
     public function edit(Empresa $empresa)
@@ -67,7 +74,7 @@ class EmpresasController extends Controller
     }
 
     public function storeConfigNFSe(EmpresaConfigNFSeRequest $request, Empresa $empresa)
-    { 
+    {
         $nfseConfig = new EmpresaNFSConfig($request->toArray());
         $fileCertificado = $request->file('certificadoDigital');
         if($fileCertificado != null){
@@ -75,22 +82,22 @@ class EmpresasController extends Controller
             $certificado->file = $fileCertificado;
             $certificado->password = $request->input('certificadoDigitalSenha');
         }
-        $empresa = $this->empresaService->createConfigNFSe($empresa, $nfseConfig->toArray(), $certificado);
+        $empresa = $this->empresaService->createConfigNFSe($empresa, $nfseConfig->toArray(), $certificado ?? null);
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Configurações de NFSe da empresa '.$empresa->nome.' atualizadas com successo !']);
     }
 
     public function updateConfigNFSe(EmpresaConfigNFSeRequest $request, Empresa $empresa, EmpresaNFSConfig $nfseConfig)
-    {  
-        $nfseConfig->fill($request->toArray()); 
+    {
+        $nfseConfig->fill($request->toArray());
         $fileCertificado = $request->file('certificadoDigital');
         if($fileCertificado != null){
             $certificado = new Certificado();
             $certificado->file = $fileCertificado;
             $certificado->password = $request->input('certificadoDigitalSenha');
         }
-        $empresa = $this->empresaService->updateConfigNFSe($empresa, $nfseConfig, $certificado);
+        $empresa = $this->empresaService->updateConfigNFSe($empresa, $nfseConfig, $certificado ?? null);
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Configurações de NFSe da empresa '.$empresa->nome.' atualizadas com successo !']);

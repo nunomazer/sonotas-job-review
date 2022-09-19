@@ -11,5 +11,12 @@
 @import "~@tabler/core/src/scss/tabler";
 
 .bg-register-link {
-    background-color: #acdaf6;
+    background-color: #a9a9a93d;
+}
+.bg-login {
+    background-image: url("../images/login.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(2px);
 }

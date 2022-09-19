@@ -46,4 +46,11 @@ class EmpresaPolicy
 
         return $this->isEmpresaIdRelatedToUser($empresa);
     }
+
+    public function updateIntegracao(User $user, Empresa $empresa)
+    {
+        if (auth()->user()->hasRole(Role::SYSADMIN)) return true;
+
+        return $this->isEmpresaIdRelatedToUser($empresa);
+    }
 }

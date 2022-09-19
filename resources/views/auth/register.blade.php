@@ -43,7 +43,7 @@
                     <div class="input-group input-group-flat">
                         <input type="password" name="password" class="form-control" placeholder="Insira sua senha"
                             autocomplete="off" required>
-                        <span class="input-group-text">
+                        <!-- <span class="input-group-text">
                             <a href="#" class="link-secondary" data-bs-toggle="tooltip">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -55,7 +55,7 @@
                                     </path>
                                 </svg>
                             </a>
-                        </span>
+                        </span> -->
                     </div>
                     @if ($errors->has('password'))
                         <span class="invalid-feedback">
@@ -68,7 +68,7 @@
                     <div class="input-group input-group-flat">
                         <input type="password" name="password_confirmation" class="form-control"
                             placeholder="Confirme a Senha" autocomplete="off" required>
-                        <span class="input-group-text">
+                        <!-- <span class="input-group-text">
                             <a href="#" class="link-secondary" data-bs-toggle="tooltip">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -80,7 +80,7 @@
                                     </path>
                                 </svg>
                             </a>
-                        </span>
+                        </span> -->
                     </div>
                     @if ($errors->has('password_confirmation'))
                         <span class="invalid-feedback">
