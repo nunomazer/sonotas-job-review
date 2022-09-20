@@ -141,7 +141,7 @@
             <br />
             <h3 class="strong border-top border-bottom p-1">Logo</h3>
             <div class="row">
-                @if($empresa != null && !empty($empresa->logo))
+                @if(!empty($empresa) && !empty($empresa->logo))
                 <div class="mb-3 col-2">
                     <img src="{{asset('storage/'. $empresa->logo) }}" width="80" height="80" alt="Logo" />
                 </div>
