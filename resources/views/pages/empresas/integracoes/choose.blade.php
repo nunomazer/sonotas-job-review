@@ -9,11 +9,11 @@
             <h2>
                 {{'Nova integração'}}
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('empresas.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             <form method="GET" action="{{ route('empresas.integracoes.create', [$empresa]) }}">

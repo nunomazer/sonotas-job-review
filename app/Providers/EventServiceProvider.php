@@ -6,11 +6,13 @@ use App\Events\ClienteAlteradoEvent;
 use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
+use App\Events\WebhookCheckoutEvent; 
 use App\Events\NFSeCriadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
 use App\Listeners\EmiteNFSeDriverSped;
+use App\Listeners\WebhookAssinaturaEmpresa; 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,6 +35,10 @@ class EventServiceProvider extends ServiceProvider
 
         ClienteAlteradoEvent::class => [
         ],
+        /*
+        WebhookCheckoutEvent::class => [
+            WebhookAssinaturaEmpresa::class
+        ],*/
 
         EmpresaCriadaEvent::class => [
             CadastraEmpresaDriverSped::class,

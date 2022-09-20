@@ -9,11 +9,11 @@
             <h2>
                 {{(isset($integracao) ? $integracao->driver : 'Nova integração')}}
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('empresas.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             @if (isset($integracao))
@@ -62,7 +62,7 @@
                     </div>
                     <div class="mb-3 col-2">
                         <div class="form-label">Período</div>
-                        <select class="form-select" name="transmissao_periodo">
+                        <select class="form-select" required name="transmissao_periodo">
                             <option value="hour"
                                 {{ old('transmissao_periodo', $integracao->transmissao_periodo) == 'hour' ? 'selected' : '' }}>Hora</option>
                             <option value="day"
@@ -101,13 +101,13 @@
                         </select>
                     </div>
 
-                    @foreach($integracao->fields as $field => $value)
+                    @foreach($integracao->fields as $field => $value) 
                         <div class="mb-3 col-6">
-                            <label for="{{$field}}" class="form-label">{{$driver->fieldLabel($field)}}</label>
-                            <input type="text" class="form-control" name="fields[{{$field}}]" aria-describedby="nameHelp"
+                            <label for="{{$field}}" class="form-label required">{{$driver->fieldLabel($field)}}</label>
+                            <input required type="text" class="form-control" name="fields[{{$field}}]" aria-describedby="nameHelp"
                                 value="{{ old($field, $value) }}"
                             >
-                            <div id="nameHelp" class="form-text">Descrição para identificar a integração.</div>
+                            <div id="nameHelp" class="form-text">{{$driver->fieldHelpText($field)}}</div>
                         </div>
                     @endforeach
                 </div>
