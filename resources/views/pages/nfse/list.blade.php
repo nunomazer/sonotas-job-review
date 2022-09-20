@@ -24,7 +24,7 @@
                         </th>
                         <th>Data venda</th>
                         <th>Serviços</th>
-                        <th>Valor</th>
+                        <th class="text-end">Valor</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -40,7 +40,9 @@
                                     {{ $nfse->emitido_em->format('d/m/Y H:i') }}
                                 </td>
                                 <td>
-                                    {{ $nfse->status }}
+                                    <span class="badge badge-outline text-{{ $nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'success' : ($nfse->status == \App\Services\Sped\SpedStatus::PROCESSAMENTO ? 'info' : 'warning')}}">
+                                        {{ $nfse->status }}
+                                    </span>
                                 </td>
                                 <td>
                                     {{ $nfse->venda->empresa->nome }}
@@ -59,7 +61,7 @@
                                         <br/>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     {{ number_format($nfse->valor, 2, ',', '.') }}
                                 </td>
                                 <td>
@@ -69,6 +71,9 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="card-footer">
+            {{ $nfses->links() }}
         </div>
     </div>
 @endsection

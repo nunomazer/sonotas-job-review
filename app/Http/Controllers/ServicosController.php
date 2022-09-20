@@ -24,13 +24,18 @@ class ServicosController extends Controller
     public function index()
     {
         $empresasID_array = auth()->user()->empresasIdsArray();
-        $servicos = Servico::whereIn('empresa_id', $empresasID_array)->get();
-        $integracoes = Integracao::whereIn('empresa_id', $empresasID_array)->get();
         $config = EmpresaNFSConfig::whereIn('empresa_id', $empresasID_array)->count();
 
         if($config === 0){
-            return view('pages.servicos.noconfig');            
+            return view('pages.servicos.noconfig');
         }
+
+        $integracoes = Integracao::whereIn('empresa_id', $empresasID_array)->get();
+
+        $servicos = Servico::whereIn('empresa_id', $empresasID_array)
+            ->with('empresa')
+            ->orderBy('nome')
+            ->paginate(30);
 
         return view('pages.servicos.list', compact('servicos','integracoes'));
     }

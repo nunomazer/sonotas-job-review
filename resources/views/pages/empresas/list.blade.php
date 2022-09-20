@@ -24,51 +24,57 @@
             @foreach($empresas as $empresa)
                 <div class="card d-flex flex-column">
                     <div class="row row-0 flex-fill">
-                        <div class="col-md-2">
-                            <a href="#">
+                        <div class="col-3 col-md-2">
+                            <a href="{{route('empresas.edit', $empresa)}}">
+                                @if(empty($empresa->logo))
                                 <div class="ratio ratio-1x1 placeholder">
                                     <div class="placeholder-image"></div>
                                 </div>
-    {{--                            <img src="..." class="w-100 h-100 object-cover" alt="Card side image">--}}
+                                @else
+                                <img src="{{asset('storage/'. $empresa->logo) }}" class="w-100 h-100 object-cover" alt="Logo" />
+                                @endif 
                             </a>
                         </div>
                         <div class="col">
-                            <div class="card-body row">
-                                <h3 class="card-title col-12">
-                                    <span class="mx-1 {{ $empresa->ativo ? 'status-green' : '' }}">
-                                        <span class="status-dot"></span>
-                                    </span>
-
-                                    <a href="{{route('empresas.edit', $empresa)}}">
-                                        {{ $empresa->nome }}
-                                    </a>
-                                </h3>
-                                <div class="col">
-                                    @if($empresa->configuracao_nfse)
-                                        <span class="mx-1 status-green">
+                            <div class="card-body  ">
+                                <div class="row">
+                                    <h3 class="card-title col-12">
+                                        <span class="mx-1 {{ $empresa->ativo ? 'status-green' : '' }}">
                                             <span class="status-dot"></span>
                                         </span>
-                                        <a href="{{route('empresas.nfse.edit', [$empresa, $empresa->configuracao_nfse])}}"
-                                            class="btn btn-sm btn-info">
-                                            Configurar NFSe
-                                        </a>
-                                    @else
-                                        <span class="mx-1 status-warning">
-                                            <span class="status-dot"></span>
-                                        </span>
-                                        <a href="{{route('empresas.nfse.create', [$empresa])}}"
-                                           class="btn btn-sm btn-warning">
-                                            Configurar NFSe
-                                        </a>
-                                    @endif
-                                </div>
 
-                                <div class="col">
-                                    @include('pages.empresas.partials.assinatura-status')
+                                        <a href="{{route('empresas.edit', $empresa)}}">
+                                            {{ $empresa->nome }}
+                                        </a>
+                                    </h3>
                                 </div>
-
-                                <div class="col">
-                                    <div class="ms-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-4">
+                                        @if($empresa->configuracao_nfse)
+                                            <span class="mx-1 status-green">
+                                                <span class="status-dot"></span>
+                                            </span>
+                                            <a href="{{route('empresas.nfse.edit', [$empresa, $empresa->configuracao_nfse])}}"
+                                                class="btn btn-sm btn-info">
+                                                Configurar NFSe
+                                            </a>
+                                        @else
+                                            <span class="mx-1 status-warning">
+                                                <span class="status-dot"></span>
+                                            </span>
+                                            <a href="{{route('empresas.nfse.create', [$empresa])}}"
+                                            class="btn btn-sm btn-warning">
+                                                Configurar NFSe
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <div class="ms-3 col-12 col-md-4">
+                                        @include('pages.empresas.partials.assinatura-status')
+                                    </div> 
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-12"> 
                                         <a href="{{route('empresas.integracoes.create.choose-platform', $empresa)}}" class="btn btn-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -78,70 +84,65 @@
                                             </svg>
 
                                             Nova integração
-                                        </a>
+                                        </a> 
                                     </div>
                                 </div>
-
-                                <div id="table-default" class="table-responsive mt-3">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="table-sort" data-sort="sort-name">Integração</th>
-                                                <th>Vendas</th>
-                                                <th>Serviços</th>
-                                                <th>Última importação vendas</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-tbody">
-                                            @forelse($empresa->integracoes as $integracao)
+                                <div class="row mt-1">
+                                    <div id="table-default" class="table-responsive ">
+                                        <table class="table table-striped">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        <span class="mx-1 {{ $integracao->ativo ? 'status-green' : '' }}">
-                                                            <span class="status-dot"></span>
-                                                        </span>
-                                                        <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
-                                                            {{ $integracao->driver }}
-                                                        </a>
-                                                    </td>
-
-                                                    <td>
-                                                        X Vendas
-                                                    </td>
-
-                                                    <td>
-                                                        X Serviços
-                                                    </td>
-
-                                                    <td>
-                                                        {{ $integracao->vendas_importadas_em ? $integracao->vendas_importadas_em->format('d/m/Y H:i') : 'Nenhuma importação' }}
-                                                    </td>
-
-                                                    <td>
-                                                        <form method="POST" action="{{route('empresas.integracoes.servicos.importar', [$empresa, $integracao])}}">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-sm">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-forward-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                    <path d="M15 13l4 -4l-4 -4m4 4h-11a4 4 0 0 0 0 8h1"></path>
-                                                                </svg>
-
-                                                                Importar serviços
-                                                            </button>
-                                                        </form>
-                                                    </td>
-
+                                                    <th class="table-sort" data-sort="sort-name">Integração</th>
+                                                    <th>Serviços</th>
+                                                    <th>Última importação vendas</th>
+                                                    <th></th>
                                                 </tr>
-                                            @empty
-                                                <span class="mx-1 status-warning">
-                                                    <span class="status-dot"></span>
-                                                </span>
-                                                Nenhuma integração
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody class="table-tbody">
+                                                @forelse($empresa->integracoes as $integracao)
+                                                    <tr>
+                                                        <td>
+                                                            <span class="mx-1 {{ $integracao->ativo ? 'status-green' : '' }}">
+                                                                <span class="status-dot"></span>
+                                                            </span>
+                                                            <a href="{{ route('empresas.integracoes.edit', [$empresa, $integracao]) }}">
+                                                                {{ $integracao->driver }}
+                                                            </a>
+                                                        </td>
 
+                                                        <td>
+                                                            {{ $empresa->servicos->count() }} Serviços
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $integracao->vendas_importadas_em ? $integracao->vendas_importadas_em->format('d/m/Y H:i') : 'Nenhuma importação' }}
+                                                        </td>
+
+                                                        <td>
+                                                            <form method="POST" action="{{route('empresas.integracoes.servicos.importar', [$empresa, $integracao])}}">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-forward-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <path d="M15 13l4 -4l-4 -4m4 4h-11a4 4 0 0 0 0 8h1"></path>
+                                                                    </svg>
+
+                                                                    Importar serviços
+                                                                </button>
+                                                            </form>
+                                                        </td>
+
+                                                    </tr>
+                                                @empty
+                                                    <span class="mx-1 status-warning">
+                                                        <span class="status-dot"></span>
+                                                    </span>
+                                                    Nenhuma integração
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

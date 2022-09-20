@@ -91,5 +91,8 @@
                 </table>
             </div>
         </div>
+        <div class="card-footer">
+            {{ $servicos->links() }}
+        </div>
     </div>
 @endsection

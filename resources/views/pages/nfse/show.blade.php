@@ -18,16 +18,16 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-1 ">
+                <div class="col-3 col-md-1 ">
                     Cliente
                 </div>
-                <div class="col-9 border">
+                <div class="col-5 col-md-9 border">
                     <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
                         {{ $nfse->venda->cliente->nome }}
                     </a>
                 </div>
 
-                <div class="col-1 ">
+                <div class="col-3 col-md-1 ">
                     Venda
                 </div>
                 <div class="col-1 border">
@@ -36,24 +36,24 @@
             </div>
 
             <div class="row mt-2">
-                <div class="col-1 ">
+                <div class="col-3 col-md-1 ">
                     Dt NFSe
                 </div>
-                <div class="col-2 border">
+                <div class="col-9 col-md-2 border">
                     {{ $nfse->created_at->format('d/m/Y H:i') }}
                 </div>
 
-                <div class="col-1 ">
+                <div class="col-3 col-md1 ">
                     Dt Venda
                 </div>
-                <div class="col-2 border ">
+                <div class="col-9 col-md-2 border ">
                     {{ $nfse->venda->data_transacao->format('d/m/Y') }}
                 </div>
 
-                <div class="col-1 offset-3 ">
+                <div class="col-3 col-md-1 offset-md-3 ">
                     Valor NF
                 </div>
-                <div class="col-2 border">
+                <div class="mt-2 col-9 mt-md-0 col-md-2 border">
                     {{ number_format($nfse->valor, 2, ',', '.') }}
                 </div>
             </div>
@@ -61,28 +61,28 @@
             <h3 class="mt-3 border-top pt-2">Serviços</h3>
             <div class="row mt-3">
                 @foreach($nfse->itens_servico as $item)
-                    <div class="col-1 ">
+                    <div class="col-4 col-md-1 ">
                         Descrição
                     </div>
-                    <div class="col-3 border">
+                    <div class="col-8 col-md-3 border">
                         {{ $item->servico->nome }}
                     </div>
-                    <div class="col-1 ">
+                    <div class="col-4 col-md-1 ">
                         Quantidade
                     </div>
-                    <div class="col-1 border">
+                    <div class="col-8 col-md-3 border">
                         {{ number_format($item->qtde, 2, ',', '.') }}
                     </div>
-                    <div class="col-1 ">
+                    <div class="col-4 col-md-1 ">
                         Valor
                     </div>
-                    <div class="col-2 border">
+                    <div class="col-8 col-md-2 border">
                         {{ number_format($item->valor, 2, ',', '.') }}
                     </div>
-                    <div class="col-1 ">
+                    <div class="col-4 col-md-1 ">
                         Total
                     </div>
-                    <div class="col-2 border">
+                    <div class="col-8 col-md-2 border">
                         {{ number_format($item->valor * $item->qtde, 2, ',', '.') }}
                     </div>
                 @endforeach
@@ -90,17 +90,17 @@
 
             <h3 class="mt-3 border-top pt-2">Documentos</h3>
             <div class="row mt-3">
-                <div class="col-1 ">
+                <div class="col-3 col-md-1 ">
                     XML
                 </div>
-                <div class="col-11 border">
+                <div class="col-9 col-md-11 border">
                     @if($nfse->arquivo_pdf_downloaded)
                         <a href="{{ route('notas-servico.download.xml', $nfse) }}">
                             clique para baixar
                         </a>
                     @else
                         <span class="text-muted">
-                            arquivo não disponível
+                            em processamento
                         </span>
                     @endif
                 </div>
@@ -116,7 +116,7 @@
                         </a>
                     @else
                         <span class="text-muted">
-                            arquivo não disponível
+                            em processamento
                         </span>
                     @endif
                 </div>

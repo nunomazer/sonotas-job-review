@@ -9,11 +9,11 @@
             <h2>
                 {{($cliente->nome ?? 'Novo cliente')}}
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('clientes.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             @if (isset($cliente))

@@ -16,6 +16,7 @@ use App\Models\Venda;
 use App\Models\VendaItem;
 use App\Notifications\ErroAoGerarEmitirNF;
 use App\Notifications\ErroAoImportarVenda;
+use App\Notifications\ErroAoSincronizarVendasEmpresa;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
 use Carbon\Carbon;
@@ -243,9 +244,15 @@ class VendasService
 
         $empresas->each(function($empresa) {
             $empresa->integracoes()->isAtivo()->each(function ($integracao) use ($empresa) {
-                $fromDate = ($integracao->vendas_importadas_em) ? $integracao->vendas_importadas_em->format('Y-m-d')
-                                                                : $integracao->data_inicio->format('Y-m-d');
-                $this->syncFromPlatform($empresa, $integracao->driver, $fromDate);
+                try {
+                    $fromDate = ($integracao->vendas_importadas_em) ? $integracao->vendas_importadas_em->format('Y-m-d')
+                        : $integracao->data_inicio->format('Y-m-d');
+                    $this->syncFromPlatform($empresa, $integracao->driver, $fromDate);
+                } catch (\Exception $exception) {
+                    $empresa->owner->notify(new ErroAoSincronizarVendasEmpresa($empresa, $integracao->driver, 'Um erro ao conectar com a integração para importar as vendas.'));
+                    Log::error('ERRO AO IMPORTAR VENDAS - ' . $empresa->nome . ' - ' . $integracao->driver);
+                    Log::error($exception);
+                }
             });
         });
     }

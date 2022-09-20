@@ -19,7 +19,9 @@ class VendasController extends Controller
 
     public function index()
     {
-        $vendas = Venda::whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray())->get();
+        $vendas = Venda::whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray())
+            ->orderBy('data_transacao', 'desc')
+            ->paginate(30);
         return view('pages.vendas.list', compact('vendas'));
     }
 

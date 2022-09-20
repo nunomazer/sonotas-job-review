@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Empresa;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\OnboardFacade;
 
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->setEmpresaOnboardSteps();
+
+        Paginator::useBootstrap();
     }
 
     protected function setEmpresaOnboardSteps()

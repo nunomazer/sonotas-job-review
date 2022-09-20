@@ -20,7 +20,9 @@ class NFSeController extends Controller
     {
         $nfses = NFSe::with('venda')->whereHas('venda', function($q) {
             $q->whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray());
-        })->get();
+        })
+            ->orderBy('emitido_em', 'desc')
+            ->paginate(30);
         return view('pages.nfse.list', compact('nfses'));
     }
 
