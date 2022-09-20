@@ -24,6 +24,13 @@ interface IIntegraDriver
     public function fieldLabel(string $name) : string;
 
     /**
+     * Retorna o texto de ajuda do campo de pelo seu nome
+     * @param string $name
+     * @return string
+     */
+    public function fieldHelpText(string $name) : string;
+    
+    /**
      * Recupera da plataforma integrada a lista de serviços, no formato de um array de models Servico
      *
      * @return array

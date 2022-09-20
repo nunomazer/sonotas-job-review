@@ -44,6 +44,7 @@ class EmpresaRequest extends FormRequest
             'logradouro'        => ['required'],
             'numero'            => ['required'],
             'bairro'            => ['required'],
+            'logo'              => [],
             'cep'               => ['required'],
             'city_id'           => ['required'],
             'telefone_num'      => ['required'],

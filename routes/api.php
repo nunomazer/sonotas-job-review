@@ -23,6 +23,8 @@ Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.c
 Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
 
 Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name('api.webhook.sped');
+ 
+Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
