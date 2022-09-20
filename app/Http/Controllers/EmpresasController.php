@@ -38,17 +38,19 @@ class EmpresasController extends Controller
     public function store(EmpresaRequest $request)
     {
         try {
+            $empresa = $this->empresaService->create($request->toArray());
+            
             $logo = $request->file('logo');
             if($logo != null){
                 $name = uniqid(date('HisYmd'));
                 $extension = $logo->extension();
                 $nameFile = "{$name}.{$extension}"; 
 				$uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);	
-                $request->merge([
+                $empresa->fill([
                     'logo' =>  $uploaded
                 ]);
+                $empresa->save();
             }
-            $empresa = $this->empresaService->create($request->toArray());
         } catch (DocumentoDuplicadoCriarEmpresaException $exception) {
             return back()
                 ->withInput()
