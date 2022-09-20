@@ -42,8 +42,8 @@ class EmpresasController extends Controller
             if($logo != null){
                 $name = uniqid(date('HisYmd'));
                 $extension = $logo->extension();
-                $nameFile = "{$name}.{$extension}";
-                $uploaded = $logo->storeAs("logos", $nameFile);
+                $nameFile = "{$name}.{$extension}"; 
+				$uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);	
                 $request->merge([
                     'logo' =>  $uploaded
                 ]);
@@ -72,7 +72,7 @@ class EmpresasController extends Controller
             $name = uniqid(date('HisYmd'));
             $extension = $logo->extension(); 
             $nameFile = "{$name}.{$extension}";
-            $uploaded = $logo->storeAs("logos", $nameFile);
+            $uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);	
             $empresa->fill([
                 'logo' =>  $uploaded
             ]);
