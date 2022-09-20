@@ -143,7 +143,7 @@
             <div class="row">
                 @if($empresa != null && !empty($empresa->logo))
                 <div class="mb-3 col-2">
-                    <img src="{{ url('storage', $empresa->logo) }}" width="80" height="80" alt="Logo" />
+                    <img src="{{asset('storage/'. $empresa->logo) }}" width="80" height="80" alt="Logo" />
                 </div>
                 @endif
                 <div class="mb-3 col-10">

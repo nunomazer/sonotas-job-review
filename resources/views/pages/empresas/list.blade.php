@@ -31,7 +31,7 @@
                                     <div class="placeholder-image"></div>
                                 </div>
                                 @else
-                                <img src="{{ url('storage', $empresa->logo) }}" class="w-100 h-100 object-cover" alt="Logo" />
+                                <img src="{{asset('storage/'. $empresa->logo) }}" class="w-100 h-100 object-cover" alt="Logo" />
                                 @endif 
                             </a>
                         </div>
