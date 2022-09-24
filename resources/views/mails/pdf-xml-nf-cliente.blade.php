@@ -22,8 +22,7 @@
                                     <td class="pad" style="width:100%;text-align:center"><h1
                                             style="margin:0;color:#555;font-size:23px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;line-height:120%;text-align:center;direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;margin-bottom:0">
                                             <span class="tinyMce-placeholder">
-                                                Notificação de conclusão de processamento de Nota Fiscal, número
-                                                {{ $venda->documento_fiscal()->id }}, da venda {{ $venda->id }}.
+                                                Notificação de conclusão de processamento de Nota Fiscal
                                             </span>
                                         </h1></td>
                                 </tr>
@@ -57,7 +56,13 @@
                                     <td class="pad">
                                         <div
                                             style="color:#000;font-size:14px;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;font-weight:400;line-height:120%;text-align:left;direction:ltr;letter-spacing:0;mso-line-height-alt:16.8px">
-                                            <p style="margin:0">Verifique os arquivos em anexo.</p></div>
+                                            <p>
+                                                Você está recebendo esta mensagem como notificação de que foi concluído o processamento
+                                                da Nota Fiscal número {{ $venda->documento_fiscal->id }},
+                                                da venda {{ $venda->id }}.
+                                            </p>
+                                            <p style="margin:0">O arquivo XML e PDF da Nota estão disponíveis no sistema SóNotas
+                                                e em anexo.</p></div>
                                     </td>
                                 </tr>
                             </table>

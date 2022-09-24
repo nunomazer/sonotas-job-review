@@ -33,7 +33,8 @@ class NfPdfXmlClienteMail extends Mailable implements ShouldQueue
     {
         $nf = $this->venda->documento_fiscal;
 
-        return $this->view('mails.pdf-xml-nf-cliente')
+        return $this->subject('[SóNotas] Aviso de Nota '.$nf->id.' processada')
+            ->view('mails.pdf-xml-nf-cliente')
             ->with([
                 'venda' => $this->venda
             ])
