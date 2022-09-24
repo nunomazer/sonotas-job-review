@@ -31,7 +31,8 @@ class NfPdfXmlClienteMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $nf = $this->venda->documento_fiscal();
+        $nf = $this->venda->documento_fiscal;
+
         return $this->view('mails.pdf-xml-nf-cliente')
             ->with([
                 'venda' => $this->venda
