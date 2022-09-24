@@ -9,6 +9,7 @@
                 <img src="{{ mix('images/sonotas_logo_horizontal.png') }}" alt="{{ config('app.name', 'Só Notas') }}" height="50">
             </a>
         </div>
+        @include('layouts.partials.messages')
         <form class="card card-md" action="{{ route('password.email') }}" method="POST" autocomplete="off">
             @csrf
             <div class="card-body">
@@ -17,7 +18,7 @@
                 </p>
                 <div class="mb-3">
                     <label class="form-label">E-mail</label>
-                    <input type="email" class="form-control" placeholder="Insira seu e-mail" value="{{ old('email') }}"
+                    <input type="email" name="email" class="form-control" placeholder="Insira seu e-mail" value="{{ old('email') }}"
                         required autofocus>
                     @if ($errors->has('email'))
                         <span class="invalid-feedback">

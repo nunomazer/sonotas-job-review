@@ -131,7 +131,8 @@
             let servicoIdx = 0;
 
             $('#cliente_id').select2({
-                language: "pt",
+                theme: 'bootstrap4',
+                language: "pt-BR",
                 placeholder: 'Clique ou pressione ENTER para pesquisar o cliente',
                 // width: '350px',
                 allowClear: true,
@@ -158,8 +159,9 @@
             });
 
             function initSelect2Servico() {
-                $('.servico_select2').select2({
-                    language: "pt",
+                $('.servico_select2').select2({                    
+                    theme: 'bootstrap4',
+                    language: "pt-BR",
                     placeholder: 'Clique ou pressione ENTER para pesquisar o item',
                     // width: '350px',
                     allowClear: true,

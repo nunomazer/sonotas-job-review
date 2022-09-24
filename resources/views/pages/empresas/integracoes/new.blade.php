@@ -9,11 +9,11 @@
             <h2>
                 Nova integração
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('empresas.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('empresas.integracoes.store', [$empresa]) }}">
@@ -91,11 +91,11 @@
 
                     @foreach($integracao->fields() as $field)
                         <div class="mb-3 col-6">
-                            <label for="{{$field['name']}}" class="form-label">{{$field['label']}}</label>
+                            <label for="{{$field['name']}}" class="form-label required">{{$field['label']}}</label>
                             <input type="text" class="form-control" name="fields[{{$field['name']}}]" aria-describedby="nameHelp"
                                 value="{{ old($field['name'], '') }}"
                             >
-                            <div id="nameHelp" class="form-text">Descrição para identificar a integração.</div>
+                            <div id="nameHelp" class="form-text">{{$field['helptext']}}</div>
                         </div>
                     @endforeach
                 </div>

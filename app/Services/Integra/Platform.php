@@ -31,6 +31,14 @@ abstract class Platform implements IIntegraDriver
         }
         return '';
     }
+    
+    public function fieldHelpText(string $name): string
+    {
+        foreach (static::$fields as $field) {
+            if (strtolower($field['name']) == strtolower($name)) return $field['helptext'];
+        }
+        return '';
+    }
 
     public function toArray() : array
     {

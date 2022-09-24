@@ -9,11 +9,11 @@
             <h2>
                 {{(isset($empresa) ? $empresa->nome : 'Nova empresa')}}
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('empresas.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             @if (isset($nfseConfig))
