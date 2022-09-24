@@ -107,7 +107,14 @@
                     Itens da venda
                     <button id="addRow" type="button" class="ms-2 btn btn-sm btn-info">+ Item</button>
                 </h3>
-
+                <hr />
+                <div class="row">
+                    <div class="col-5">Descrição</div>
+                    <div class="col-2">Quantidade</div>
+                    <div class="col-2">Valor unitário</div>
+                    <div class="col-2">Valor total</div>
+                    <div class="col-1">Remover</div>
+                </div>
                 <div class="row">
                     <div id="newRow"></div>
                 </div>
@@ -249,7 +256,47 @@
             function addServicoRow() {
                 servicoIdx++;
 
-                var html = '' +
+                var html = `<div class="row"> 
+                    <div class="input-group mb-3">
+                        <div class="col-5">
+                            <select class="form-select servico_select2" required  
+                                name="servico[${servicoIdx}][id]"
+                                data-idx="${servicoIdx}"></select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" step="0.01" class="form-control ms-1 servico-qtde" 
+                                name="servico[${servicoIdx}][qtde]" 
+                                id="servico_qtde_${servicoIdx}"
+                                data-idx="${servicoIdx}" placeholder="Quantidade" required />
+                        </div>
+                        <div class="col-2">
+                            <input type="number" step="0.01" class="form-control ms-1 servico-valor" 
+                                name="servico[${servicoIdx}][valor]" 
+                                id="servico_valor_${servicoIdx}"
+                                data-idx="${servicoIdx}" placeholder="Valor" required />
+                        </div>
+                        <div class="col-2">
+                            <input type="number" step="0.01" class="form-control ms-1 servico-valor-total" 
+                                id="servico_valor_total_${servicoIdx}"
+                                data-idx="${servicoIdx}" placeholder="Total" readonly="readonly" required />
+                        </div>
+                        <div class="col-1">
+                            <div class="input-group-append ms-1 text-center">
+                                <button id="removeRow" type="button" class="btn btn-danger text-center">
+                                    <svg style="margin-left:5px" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="4" y1="7" x2="20" y2="7"></line>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                /*var html = '' +
                     '<div id="inputFormRow">' +
                         '<div class="input-group mb-3">' +
                             '<select class="form-select servico_select2" required name="servico['+servicoIdx+'][id]"' +
@@ -267,7 +314,7 @@
                                 '<button id="removeRow" type="button" class="btn btn-danger">Remover</button>' +
                             '</div>' +
                         '</div>' +
-                    '</div>';
+                    '</div>';*/
 
                 $('#newRow').append(html);
 

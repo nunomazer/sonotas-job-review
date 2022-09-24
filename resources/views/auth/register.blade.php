@@ -17,7 +17,7 @@
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Criar nova conta</h2>
                 <div class="mb-3">
-                    <label class="form-label">Nome</label>
+                    <label class="form-label required">Nome</label>
                     <input type="text" name="name"
                         class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="Insira seu nome"
                         value="{{ old('name') }}" required autofocus>
@@ -28,10 +28,10 @@
                     @endif
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
+                    <label class="form-label required">E-mail</label>
                     <input type="email" name="email"
                         class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
-                        placeholder="Insira seu e-mail" value="{{ old('email') }}" required>
+                        placeholder="Insira seu e-mail" value="{{ old('email') }}" required />
                     @if ($errors->has('email'))
                         <span class="invalid-feedback">
                             <strong>{{ $errors->first('email') }}</strong>
@@ -39,7 +39,29 @@
                     @endif
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Senha</label>
+                    <label class="form-label  required">CPF</label>
+                    <input type="text" name="cpf"
+                        class="form-control cpf {{ $errors->has('cpf') ? ' is-invalid' : '' }}"
+                        placeholder="Insira seu cpf" value="{{ old('cpf') }}" required />
+                    @if ($errors->has('cpf'))
+                        <span class="invalid-feedback">
+                            <strong>{{ $errors->first('cpf') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label class="form-label required">Telefone (DDD + Número)</label>
+                    <input type="tel" name="telefone"
+                        class="form-control phone_with_ddd {{ $errors->has('telefone') ? ' is-invalid' : '' }}"
+                        placeholder="Insira seu telefone" value="{{ old('telefone') }}" required />
+                    @if ($errors->has('telefone'))
+                        <span class="invalid-feedback">
+                            <strong>{{ $errors->first('telefone') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label class="form-label required">Senha</label>
                     <div class="input-group input-group-flat">
                         <input type="password" name="password" class="form-control" placeholder="Insira sua senha"
                             autocomplete="off" required>
@@ -64,7 +86,7 @@
                     @endif
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Confirme a Senha</label>
+                    <label class="form-label required">Confirme a Senha</label>
                     <div class="input-group input-group-flat">
                         <input type="password" name="password_confirmation" class="form-control"
                             placeholder="Confirme a Senha" autocomplete="off" required>
@@ -90,10 +112,14 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-check">
-                        <input type="checkbox" class="form-check-input">
-                        <span class="form-check-label">Concordo com os <a href="#" tabindex="-1">termos e
-                                política</a>.</span>
+                        <input type="checkbox" name="termos" class="form-check-input {{ $errors->has('termos') ? ' is-invalid' : '' }}">
+                        <span class="form-check-label required ">Concordo com os <a target="_blank" href="{{asset('termos.pdf')}}" tabindex="-1">termos e política</a>.</span>
                     </label>
+                    @if ($errors->has('termos'))
+                        <span class="invalid-feedback">
+                            <strong>{{ $errors->first('termos') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-footer">
                     <button type="submit" class="btn btn-primary w-100">Criar nova conta</button>
@@ -105,3 +131,12 @@
         </div>
     </div>
 @endsection
+@push('js')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.phone_with_ddd').mask('(00) 0000-00009');
+            $('.cpf').mask('000.000.000-00', {reverse: true});
+        });
+        
+    </script>
+@endpush

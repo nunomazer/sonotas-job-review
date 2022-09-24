@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dad788bfe85b740e274b7647aa3fcc8",
+    "content-hash": "da8367dce5a7c1221c72ad59213b287b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1425,6 +1425,52 @@
             "time": "2022-08-28T14:45:39+00:00"
         },
         {
+            "name": "igorescobar/jquery-mask-plugin",
+            "version": "v1.14.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kamihouse/jQuery-Mask-Plugin.git",
+                "reference": "678a7df1f0bb275ce53f365b91af99d86850978d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kamihouse/jQuery-Mask-Plugin/zipball/678a7df1f0bb275ce53f365b91af99d86850978d",
+                "reference": "678a7df1f0bb275ce53f365b91af99d86850978d",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Escobar",
+                    "email": "blog@igorescobar.com",
+                    "homepage": "https://about.me/igorescobar",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Thiago Pereira Rosa",
+                    "email": "thiagor@engineer.com",
+                    "homepage": "http://coderi.com.br",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "A jQuery Plugin to make masks on form fields and html elements.",
+            "homepage": "https://github.com/igorescobar/jQuery-Mask-Plugin",
+            "keywords": [
+                "jquery",
+                "mask",
+                "plugin"
+            ],
+            "support": {
+                "issues": "https://github.com/igorescobar/jQuery-Mask-Plugin/issues",
+                "source": "https://github.com/kamihouse/jQuery-Mask-Plugin/tree/v1.14.1"
+            },
+            "time": "2016-04-27T16:16:55+00:00"
+        },
+        {
             "name": "intervention/image",
             "version": "2.7.2",
             "source": {
@@ -1972,6 +2018,57 @@
                 "source": "https://github.com/laravel/ui/tree/v3.4.6"
             },
             "time": "2022-05-20T13:38:08+00:00"
+        },
+        {
+            "name": "laravellegends/pt-br-validator",
+            "version": "9.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelLegends/pt-br-validator.git",
+                "reference": "c0298e05998618ce174355bff00b34cae571eb39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelLegends/pt-br-validator/zipball/c0298e05998618ce174355bff00b34cae571eb39",
+                "reference": "c0298e05998618ce174355bff00b34cae571eb39",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "phpunit/phpunit": "^8.3 || ^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelLegends\\PtBrValidator\\ValidatorProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelLegends\\PtBrValidator\\": "src/pt-br-validator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wallace de Souza Vizerra",
+                    "email": "wallacemaxters@gmail.com"
+                }
+            ],
+            "description": "Uma biblioteca contendo validações de formatos Brasileiros, para o Laravel",
+            "support": {
+                "issues": "https://github.com/LaravelLegends/pt-br-validator/issues",
+                "source": "https://github.com/LaravelLegends/pt-br-validator/tree/9.1.0"
+            },
+            "time": "2022-09-15T22:23:57+00:00"
         },
         {
             "name": "league/commonmark",
@@ -9284,5 +9381,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.0.0"
 }
