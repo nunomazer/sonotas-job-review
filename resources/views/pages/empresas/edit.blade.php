@@ -9,18 +9,18 @@
             <h2>
                 {{(isset($empresa) ? $empresa->nome : 'Nova empresa')}}
             </h2>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="{{ route('empresas.list') }}" class="btn btn-sm btn-secondary">
                     Voltar
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="card-body">
             @if (isset($empresa))
-                <form method="POST" action="{{ route('empresas.update', [$empresa]) }}">
+                <form method="POST" action="{{ route('empresas.update', [$empresa]) }}" enctype="multipart/form-data">
                     @method('PUT')
             @else
-                <form method="POST" action="{{ route('empresas.store') }}">
+                <form method="POST" action="{{ route('empresas.store') }}" enctype="multipart/form-data">
             @endif
 
             @csrf
@@ -137,7 +137,21 @@
                     </select>
                 </div>
 
+            </div> 
+            <br />
+            <h3 class="strong border-top border-bottom p-1">Logo</h3>
+            <div class="row">
+                @if(!empty($empresa) && !empty($empresa->logo))
+                <div class="mb-3 col-2">
+                    <img src="{{asset('storage/'. $empresa->logo) }}" width="80" height="80" alt="Logo" />
+                </div>
+                @endif
+                <div class="mb-3 col-10">
+                    <label class="form-label">Carregar nova logo</label>
+                    <input type="file" name="logo" accept="jpg, jpeg, png, bmp" />
+                </div>
             </div>
+            <br />
 
             @include('pages.partials.campos-endereco', ['model' => $empresa ?? null])
 

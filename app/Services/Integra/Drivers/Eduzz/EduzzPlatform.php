@@ -21,16 +21,19 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'name' => 'publickey',
             'label' => 'Public Key',
             'required' => true,
+            'helptext' => 'Chave pública de vínculo da plataforma',
         ],
         [
             'name' => 'apikey',
             'label' => 'Api Key',
             'required' => true,
+            'helptext' => 'Chave da API de vínculo da plataforma',
         ],
         [
             'name' => 'email',
             'label' => 'E-mail',
             'required' => true,
+            'helptext' => 'E-mail que recebera atualizações referentes a integração',
         ],
     ];
 

@@ -81,12 +81,20 @@
         }
 
         $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function( data ) { 
-            select2_search($("#city_id"), data.ibge)
+            select2_search($("#city_id"), data.ibge);
+            $("input[name='logradouro']").val(data.logradouro);
+            $("input[name='bairro']").val(data.bairro);
+
+            if(data.logradouro){
+                var prefixo = data.logradouro.split(' ')[0];
+                $("select[name='tipo_logradouro']").val(prefixo);
+            }
         });
     }
     
     $(function() {
         $('#city_id').select2({
+            theme: 'bootstrap4',
             language: "pt-BR",
             placeholder: 'Infome a descrição da cidade',
             // width: '350px',

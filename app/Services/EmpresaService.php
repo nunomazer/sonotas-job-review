@@ -6,7 +6,8 @@ use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
 use App\Models\CartaoCredito;
-use App\Models\Empresa;
+use App\Models\Empresa; 
+use App\Models\Webhook; 
 use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\NFSe;
@@ -20,6 +21,7 @@ use App\Services\Integra\Platform;
 use App\Services\MoneyFlow\MoneyFlowService;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -355,5 +357,73 @@ class EmpresaService
             }
         });
 
+    }
+    
+    
+    /**
+     * Altera a empresa nos serviços Sped para cada tipo de documento e cidade
+     *
+     * @param array $webhook
+     * @return void
+     */
+    public function checarWebhook(array $webhook)
+    {
+        Log::info("CHEGOU AQUI CARAI");
+        //Log::info($webhook);
+        Log::info($webhook['edz_cli_email']);
+        
+        $fields = [
+            'edz_fat_cod' => $webhook['edz_fat_cod'],
+            'edz_cnt_cod' => $webhook['edz_cnt_cod'],
+            'edz_cli_cod' => $webhook['edz_cli_cod'],
+            'edz_cli_taxnumber' => $webhook['edz_cli_taxnumber'],
+            'edz_cli_rsocial' => $webhook['edz_cli_rsocial'],
+            'edz_cli_email' => $webhook['edz_cli_email'],
+            'edz_fat_dtcadastro' => $webhook['edz_fat_dtcadastro'],
+            'edz_cli_cel' => $webhook['edz_cli_cel'],
+            'edz_gtr_dist' => $webhook['edz_gtr_dist'],
+            'edz_fat_status' => $webhook['edz_fat_status'],
+            'edz_cli_apikey' => $webhook['edz_cli_apikey'],
+            'edz_valorpago' => $webhook['edz_valorpago'],
+            'edz_gtr_param1' => $webhook['edz_gtr_param1'],
+            'edz_gtr_param2' => $webhook['edz_gtr_param2'],
+            'edz_gtr_param3' => $webhook['edz_gtr_param3'],
+            'edz_gtr_param4' => $webhook['edz_gtr_param4'],
+        ];
+
+        $stringSid = "";
+        //ordenando os campos para poder gerar o sid
+        ksort($fields);
+        
+        //concatenando os valores em um string para geração do sid
+        foreach ($fields as $key => $value) {
+            $stringSid .= $value;
+        }
+        
+        
+        //caso queira usar o nsid faça assim
+        $nsid = sha1($webhook['edz_fat_cod'] . $webhook['edz_cnt_cod'] . $webhook['edz_cli_cod']);
+          
+        if($nsid != $webhook['nsid']){
+            throw new \Exception("NSID inválido");
+        }
+        //agora voce ja tem todos os dados enviados pela eduzz na entrega customizada
+        
+        //voce pode vailidar a requisição com o $webhook['sid'] ou $webhook['nsid'] que é enviado pela eduzz, é só comparar com o $sid ou $nsid feito por voce. 
+        
+        //depois de validar pode entregar o conteúdo
+
+        $empresa = Empresa::where('documento', $webhook['edz_cli_taxnumber'])->first();
+
+        if($empresa != null){
+            //empresa existe, precisa cadastrar
+
+        }else{
+            //empresa não existe, precisa cadastrar
+
+        }
+
+
+        
     }
 }

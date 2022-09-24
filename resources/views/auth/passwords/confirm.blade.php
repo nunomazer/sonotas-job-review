@@ -10,6 +10,7 @@
             </a>
         </div>
     </div>
+    @include('layouts.partials.messages')
     <form class="card card-md" action="{{ route('password.confirm') }}" method="POST" autocomplete="off">
         @csrf
         <div class="card-body">
