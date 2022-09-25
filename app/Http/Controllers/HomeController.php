@@ -30,7 +30,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $firstAccess = \request()->query('firstAccess', false) == 1; 
         $periodo = \request()->get('periodo', now()->format('Y-m'));
+
+        if($firstAccess){
+            Session::flash('info', 'Algumas informações foram enviadas para seu e-mail!');
+        }
 
         $data_inicial = Carbon::createFromFormat('Y-m', $periodo)->startOfMonth()->startOfDay();
         $data_final = Carbon::createFromFormat('Y-m', $periodo)->endOfMonth()->endOfDay();

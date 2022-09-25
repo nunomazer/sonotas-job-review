@@ -87,14 +87,14 @@
 
                     <div class="mb-3 col-2 col-md-1">
                         <label class="form-label required">DDD</label>
-                        <input type="number" class="form-control" name="telefone_ddd"
+                        <input maxlength="2" type="number" class="form-control" name="telefone_ddd"
                                required value="{{ old('telefone_ddd', $cliente->telefone_ddd ?? null) }}"
                         >
                     </div>
 
                     <div class="mb-3 col-10 col-md-3">
                         <label class="form-label required">Número do telefone</label>
-                        <input type="number" class="form-control" name="telefone_num"
+                        <input maxlength="10" type="number" class="form-control" name="telefone_num"
                                required value="{{ old('telefone_num', $cliente->telefone_num ?? null) }}"
                         >
                     </div>

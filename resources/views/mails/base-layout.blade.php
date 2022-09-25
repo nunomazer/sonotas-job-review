@@ -101,7 +101,7 @@
                             <tr>
                                 <td class="column column-1" width="100%"
                                     style="mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:center;vertical-align:top;padding-top:5px;padding-bottom:5px;border-top:0;border-right:0;border-bottom:0;border-left:0">
-                                    <img src="{{ url('/images/sonotas_logo_horizontal.png') }}" alt="SóNotas" style="height: 110px;"/>
+                                    <img src="{{ url('/images/sonotas_logo_horizontal.png') }}" alt="SóNotas" height="70" width="200"/>
                                 </td>
                             </tr>
                             </tbody>

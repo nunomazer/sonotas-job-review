@@ -209,6 +209,7 @@
 <script type="text/javascript">
     $(function() {
         $('#tipo_servico_codigo, #cnae_codigo').select2({
+            theme: 'bootstrap4',
             language: "pt-BR",
             placeholder: 'Infome uma descrição',
             // width: '350px',
