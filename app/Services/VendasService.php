@@ -46,7 +46,7 @@ class VendasService
                 foreach ($itens as $item) {
                     $valorTotal += $item->valor * $item->qtde;
                 }
-                
+
                 $venda['valor'] = $valorTotal - $vendaDesconto;
 
                 $venda = Venda::create($venda);
@@ -79,7 +79,7 @@ class VendasService
             return null;
         }
     }
-    
+
     /**
      * Atualiza um registro de uma venda, calcula a data planejada de emissão do documento fiscal
      *
@@ -88,11 +88,11 @@ class VendasService
      * @return NFSe|null
      */
     public function update(array $venda, array $itens) : ? Venda
-    { 
+    {
         try {
             DB::beginTransaction();
                 $venda_db = Venda::find($venda['id']);
- 
+
                 $vendaDesconto = $venda['desconto'];
                 if(is_nan($venda['desconto'])){
                     $vendaDesconto = 0;
@@ -101,18 +101,18 @@ class VendasService
                 foreach ($itens as $item) {
                     $valorTotal += $item->valor * $item->qtde;
                 }
-                
+
                 $venda_db['valor'] = $valorTotal - $vendaDesconto;
                 $dataPlanejada = (object) $venda['data_emissao_planejada'];
                 $venda = $venda_db->fill($venda);
- 
+
                 if ($dataPlanejada == null) {
                     /**
                      * Definição da data a ser emitido doc fiscal, hoje somente empresa_integrações tem informações
                      * para este cálculo, se não tem driver por hora define como emissão imediata
                      */
                     $venda->data_emissao_planejada = now();
-                    if ($venda->driver) { 
+                    if ($venda->driver) {
                         $venda->fill([
                             'data_emissao_planejada' => $this->calculoDataPlanejadaEmissaoNF($venda)
                         ]);
@@ -120,7 +120,7 @@ class VendasService
                 }
                 $venda->save();
                 $venda->itens()->delete();
-                $venda->itens()->saveMany($itens); 
+                $venda->itens()->saveMany($itens);
 
             DB::commit();
 
@@ -346,6 +346,8 @@ class VendasService
             'venda_id'      => $venda->id,
             'emitido_em'    => now(),
             'valor'         => $venda->valor,
+            'info_adicional'=> $venda->info_adicional,
+            'desconto'      => $venda->desconto,
         ], $nfseItens->all());
 
         if ($nfse == null) {

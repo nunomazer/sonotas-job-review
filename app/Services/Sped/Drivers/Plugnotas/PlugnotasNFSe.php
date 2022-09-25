@@ -26,6 +26,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                 "iss"=> [
                     //"tipoTributacao": 7,
                     //"exigibilidade": 1,
+                    "retido" => $item->servico->iss_retido_fonte,
                     "aliquota" => $item->servico->iss,
                 ],
                 "valor" => [
@@ -66,6 +67,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                     "bairro" => $nfse->venda->cliente->bairro,
                 ],
             ],
+            "informacoesComplementares" => $nfse->info_adicional,
             "servico" => $this->toArrayServicos(),
         ];
     }
