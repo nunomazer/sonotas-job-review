@@ -7,6 +7,7 @@ use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Events\NFSeCriadaEvent;
+use App\Events\VendaAtualizadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
@@ -34,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
 
         ClienteAlteradoEvent::class => [
         ],
+        
         /*
         WebhookCheckoutEvent::class => [
             WebhookAssinaturaEmpresa::class
@@ -48,6 +50,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         VendaCriadaEvent::class => [
+        ],
+        
+        VendaAtualizadaEvent::class => [
         ],
 
         NFSeCriadaEvent::class => [

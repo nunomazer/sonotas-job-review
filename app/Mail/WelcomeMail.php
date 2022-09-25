@@ -3,7 +3,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class WelcomeMail extends Mailable
 {
@@ -17,16 +17,19 @@ class WelcomeMail extends Mailable
     
     public function build()
     {
-        $address = config('MAIL_FROM_ADDRESS');
+        $address = env('MAIL_FROM_ADDRESS', 'noreply@sonotas.com.br');
         $subject = 'Seja bem vindo ao Só Notas!';
-        $name = config('MAIL_FROM_NAME');
+        $name = env('MAIL_FROM_NAME', 'SóNotas');
         
+        Log::info($name); 
+        Log::info($address); 
+        Log::info($this->data); 
         return $this->view('mails.welcome')
                     ->from($address, $name)
                     ->cc($address, $name)
                     ->bcc($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with([ 'message' => $this->data['message'] ]);    
+                    ->with([ 'message' => '']);    
       }
 }

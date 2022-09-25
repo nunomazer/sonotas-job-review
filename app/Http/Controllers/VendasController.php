@@ -9,6 +9,7 @@ use App\Models\VendaItem;
 use App\Services\NFSeService;
 use App\Services\Sped\SpedService;
 use App\Services\VendasService;
+use Illuminate\Http\Request;
 
 class VendasController extends Controller
 {
@@ -31,6 +32,11 @@ class VendasController extends Controller
         return view('pages.vendas.edit', compact('empresas'));
     }
 
+    public function edit(Venda $venda)
+    {
+        return view('pages.vendas.edit', compact('venda'));
+    }
+
     public function store()
     {
         $vendasService = new VendasService();
@@ -48,6 +54,25 @@ class VendasController extends Controller
         $venda = $vendasService->create(request()->all(), $servicos->all());
 
         return redirect(route('vendas.list'))->with('success', 'Venda inserida com sucesso');
+    }
+    
+    public function update()
+    {
+        $vendasService = new VendasService();
+
+        $servicos = collect(request()->get('servico'))
+            ->map(function ($item) {
+                return new VendaItem([
+                    'item_id' => $item['id'],
+                    'qtde' => $item['qtde'],
+                    'valor' => $item['valor'],
+                    'tipo_documento' => request()->get('tipo_documento', SpedService::DOCTYPE_NFSE),
+                ]);
+            });
+        
+        $vendasService->update(request()->all(), $servicos->all());
+
+        return redirect(route('vendas.list'))->with('success', 'Venda atualizada com sucesso');
     }
 
     /**
