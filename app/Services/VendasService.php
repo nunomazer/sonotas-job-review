@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
+use App\Events\VendaAtualizadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Exceptions\ServicoNaoSincronizadoException;
 use App\Models\Cliente;
@@ -37,11 +38,16 @@ class VendasService
         try {
             DB::beginTransaction();
 
+                $vendaDesconto = $venda['desconto'];
+                if(is_nan($venda['desconto'])){
+                    $vendaDesconto = 0;
+                }
                 $valorTotal = 0;
                 foreach ($itens as $item) {
                     $valorTotal += $item->valor * $item->qtde;
                 }
-                $venda['valor'] = $valorTotal;
+                
+                $venda['valor'] = $valorTotal - $vendaDesconto;
 
                 $venda = Venda::create($venda);
 
@@ -68,6 +74,64 @@ class VendasService
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error('Erros ao gravar a Venda');
+            Log::error($exception);
+
+            return null;
+        }
+    }
+    
+    /**
+     * Atualiza um registro de uma venda, calcula a data planejada de emissão do documento fiscal
+     *
+     * @param array $venda
+     * @param array<array|VendaItem> $itens
+     * @return NFSe|null
+     */
+    public function update(array $venda, array $itens) : ? Venda
+    { 
+        try {
+            DB::beginTransaction();
+                $venda_db = Venda::find($venda['id']);
+ 
+                $vendaDesconto = $venda['desconto'];
+                if(is_nan($venda['desconto'])){
+                    $vendaDesconto = 0;
+                }
+                $valorTotal = 0;
+                foreach ($itens as $item) {
+                    $valorTotal += $item->valor * $item->qtde;
+                }
+                
+                $venda_db['valor'] = $valorTotal - $vendaDesconto;
+                $dataPlanejada = (object) $venda['data_emissao_planejada'];
+                $venda = $venda_db->fill($venda);
+ 
+                if ($dataPlanejada == null) {
+                    /**
+                     * Definição da data a ser emitido doc fiscal, hoje somente empresa_integrações tem informações
+                     * para este cálculo, se não tem driver por hora define como emissão imediata
+                     */
+                    $venda->data_emissao_planejada = now();
+                    if ($venda->driver) { 
+                        $venda->fill([
+                            'data_emissao_planejada' => $this->calculoDataPlanejadaEmissaoNF($venda)
+                        ]);
+                    }
+                }
+                $venda->save();
+                $venda->itens()->delete();
+                $venda->itens()->saveMany($itens); 
+
+            DB::commit();
+
+            VendaAtualizadaEvent::dispatch($venda);
+
+            return $venda;
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            Log::error('Erros ao atualizar a Venda');
             Log::error($exception);
 
             return null;

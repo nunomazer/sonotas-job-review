@@ -16,6 +16,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
+        "laravellegends/pt-br-validator": "^9.1",
         "predis/predis": "^2.0",
         "spatie/laravel-medialibrary": "^9.12",
         "spatie/laravel-onboard": "^1.0",

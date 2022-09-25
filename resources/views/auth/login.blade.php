@@ -56,13 +56,13 @@
                         </span>
                     @endif
                 </div>
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                     <label class="form-check">
                         <input type="checkbox" class="form-check-input" name="remember"
                             {{ old('remember') ? 'checked' : '' }}>
                         <span class="form-check-label">Lembre-me</span>
                     </label>
-                </div>
+                </div> -->
                 <div class="form-footer ">
                     <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 </div>

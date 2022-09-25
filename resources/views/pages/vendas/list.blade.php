@@ -41,7 +41,11 @@
                         @foreach($vendas as $venda)
                             <tr>
                                 <td>
+                                @if($venda->documento_fiscal)
                                     {{ $venda->id }}
+                                @else
+                                    <a href="{{route('vendas.edit', $venda->id)}}">{{ $venda->id }}</a>
+                                @endif
                                 </td>
                                 <td>
                                     {{ $venda->empresa->nome }}

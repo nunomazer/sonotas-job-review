@@ -28,7 +28,7 @@ class NFSeController extends Controller
 
     public function store(NFSeRequest $request)
     {
-        $nfse = $this->nfseService->create($request->toArray());
+        $nfse = $this->nfseService->create($request->toArray(), []);
 
         // TODO implementar visões
         return dump($nfse);
@@ -45,7 +45,7 @@ class NFSeController extends Controller
             return redirect()->back()->withErrors('Arquivo PDF não está disponível');
         }
 
-        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_pdf));
+        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_pdf)); //validar se é método GET ou PATH mesmo
     }
 
     public function downloadXml(NFSe $nfse)
@@ -54,6 +54,6 @@ class NFSeController extends Controller
             return redirect()->back()->withErrors('Arquivo XML não está disponível');
         }
 
-        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_xml));
+        return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_xml)); //validar se é método GET ou PATH mesmo
     }
 }

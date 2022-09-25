@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendas/create', [VendasController::class, 'create'])->name('vendas.create');
     Route::post('/vendas', [VendasController::class, 'store'])->name('vendas.store');
     Route::post('/vendas/{venda}/emitir-nf', [VendasController::class, 'emitirNF'])->name('vendas.nf.emitir');
+    Route::get('/vendas/{venda}/edit', [VendasController::class, 'edit'])->name('vendas.edit');
+    Route::put('/vendas/{venda}', [VendasController::class, 'update'])->name('vendas.update');
 
     Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');

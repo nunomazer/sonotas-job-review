@@ -25,9 +25,18 @@
                     Telefone
                 </div>
                 <div class="strong col-9 col-lg-11">
-                    ({{ $user->phone_area_code }}) {{$user->phone_number}}
+                    {{ $user->telefone }}
                 </div>
             </div>
+            
+            <div class="row mb-1">
+                <div class="col-3 col-lg-1">
+                    CPF
+                </div>
+                <div class="strong col-9 col-lg-11">
+                    {{ $user->cpf }}
+                </div>
+            </div> 
 
             <div class="row mb-1">
                 <div class="col-3 col-lg-1">
