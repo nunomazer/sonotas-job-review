@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
+use App\Listeners\EnviaFilesNFSe;
+use App\Mail\NfPdfXmlClienteMail;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\NFSe;
@@ -13,6 +15,7 @@ use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class NFSeService
 {
@@ -95,5 +98,11 @@ class NFSeService
         return $historico;
     }
 
+    public function sendClientXmlEmail(NFSe $nfse)
+    {
+        if($nfse->venda->empresa->enviar_nota_email_cliente) {
+            Mail::send(new NfPdfXmlClienteMail($nfse->venda));
+        }
+    }
 
 }
