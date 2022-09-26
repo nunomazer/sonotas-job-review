@@ -20,7 +20,7 @@ class EmpresasController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
         $this->empresaService = new EmpresaService();
     }
 
@@ -39,13 +39,13 @@ class EmpresasController extends Controller
     {
         try {
             $empresa = $this->empresaService->create($request->toArray());
-            
+
             $logo = $request->file('logo');
             if($logo != null){
                 $name = uniqid(date('HisYmd'));
                 $extension = $logo->extension();
-                $nameFile = "{$name}.{$extension}"; 
-				$uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);	
+                $nameFile = "{$name}.{$extension}";
+				$uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);
                 $empresa->fill([
                     'logo' =>  $uploaded
                 ]);
@@ -70,11 +70,11 @@ class EmpresasController extends Controller
     {
         $logo = $request->file('logo');
         $empresa->fill($request->toArray());
-        if($logo != null){ 
+        if($logo != null){
             $name = uniqid(date('HisYmd'));
-            $extension = $logo->extension(); 
+            $extension = $logo->extension();
             $nameFile = "{$name}.{$extension}";
-            $uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);	
+            $uploaded = $logo->storeAs('logos', $nameFile,['disk' => 'public']);
             $empresa->fill([
                 'logo' =>  $uploaded
             ]);
@@ -177,4 +177,8 @@ class EmpresasController extends Controller
             ->with(['success' => 'Escolha de plano feita com sucesso para empresa '.$empresa->nome]);
     }
 
+    public function apiGetConfiguracaoNFSe(Empresa $empresa)
+    {
+        return response()->json($empresa->configuracao_nfse);
+    }
 }
