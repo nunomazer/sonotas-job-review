@@ -189,7 +189,7 @@
                         <div class="form-label">ISS Retido Fonte</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="iss_retido_fonte"
-                                {{ old('iss_retido_fonte', $empresa->iss_retido_fonte ?? '') ? 'checked' : '' }}
+                                {{ old('iss_retido_fonte', $nfseConfig->iss_retido_fonte ?? '') ? 'checked' : '' }}
                             >
                         </label>
                     </div>
