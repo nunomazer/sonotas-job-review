@@ -80,7 +80,7 @@
                     <div class="mb-3 col-12 col-lg-3">
                         <label class="form-label required">Data da venda</label>
                         <input type="date" class="form-control" name="data_transacao"
-                               required value="{{ old('data_transacao', $venda->data_transacao->format('Y-m-d') ?? now()->format('Y-m-d')) }}"
+                               required value="{{ old('data_transacao', (isset($venda) ? $venda->data_transacao->format('Y-m-d') : now()->format('Y-m-d'))) }}"
                         >
                     </div>
 
