@@ -83,6 +83,18 @@ class ServicoService
                 $servico->nome = $servicoApi['nome'];
                 $servico->descricao = $servicoApi['descricao'];
                 $servico->valor = $servicoApi['valor'];
+
+                // dados base da configuração da NFSe da empresa
+                $servico->tipo_servico_codigo = $empresa->configuracao_nfse->tipo_servico_codigo;
+                $servico->cofins = $empresa->configuracao_nfse->cofins;
+                $servico->csll = $empresa->configuracao_nfse->csll;
+                $servico->inss = $empresa->configuracao_nfse->inss;
+                $servico->ir = $empresa->configuracao_nfse->ir;
+                $servico->pis = $empresa->configuracao_nfse->pis;
+                $servico->iss = $empresa->configuracao_nfse->iss;
+                $servico->iss_retido_fonte = $empresa->configuracao_nfse->iss_retido_fonte;
+                $servico->enviar_nota_email_cliente = $empresa->configuracao_nfse->enviar_nota_email_cliente;
+
                 $servico->save();
 
                 if ($servicoIntegracao == null) {
