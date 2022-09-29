@@ -109,11 +109,11 @@
                 </h3>
                 <hr />
                 <div class="row">
-                    <div class="col-5">Descrição</div>
-                    <div class="col-2">Quantidade</div>
-                    <div class="col-2">Valor unitário</div>
-                    <div class="col-2">Valor total</div>
-                    <div class="col-1">Remover</div>
+                    <div class=" col-5">Descrição</div>
+                    <div class="col-2">Qtde</div>
+                    <div class="col-2 col-md-2">Valor un</div>
+                    <div class=" col-2 col-md-2">Valor total</div>
+                    <div class="col-1"></div>
                 </div>
                 <div class="row">
                     <div id="newRow">
@@ -124,7 +124,7 @@
                         @foreach($venda->itens as $idx => $vendaItem)
                         <div class="row linhaItem"> 
                             <div class="input-group mb-3">
-                                <div class="col-5">
+                                <div class="col-3 col-md-5">
                                     <select class="form-select servico_select2" required  
                                         name="servico[{{$idx}}][id]"
                                         value="{{$vendaItem->id}}"
@@ -132,12 +132,13 @@
                                         <option selected value="{{$vendaItem->item_id}}">{{$vendaItem->servico->nome}}</option>
                                     </select>
                                 </div>
-                                <div class="col-2">
-                                    <input type="number" step="0.01" class="form-control ms-1 servico-qtde" 
+                                <div class="col-3 col-md-2">
+                                    <input type="number" step="0.01" class="form-control text-center ms-1 servico-qtde "
+                                    style="text-overflow: ellipsis;" 
                                         name="servico[{{$idx}}][qtde]" 
                                         id="servico_qtde_{{$idx}}"
                                         value="{{$vendaItem->qtde}}"
-                                        data-idx="{{$idx}}" placeholder="Quantidade" required />
+                                        data-idx="{{$idx}}" placeholder="Qtde" required />
                                 </div>
                                 <div class="col-2">
                                     <input type="number" step="0.01" class="form-control ms-1 servico-valor" 

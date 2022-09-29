@@ -44,7 +44,7 @@
   --tblr-white-rgb: 255, 255, 255;
   --tblr-black-rgb: 0, 0, 0;
   --tblr-body-color-rgb: 30, 41, 59;
-  --tblr-body-bg-rgb: 248, 250, 252;
+  --tblr-body-bg-rgb: 240, 240, 240;
   --tblr-font-sans-serif: "Nunito", sans-serif;
   --tblr-font-monospace:  Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   --tblr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -53,7 +53,7 @@
   --tblr-body-font-weight: 400;
   --tblr-body-line-height: 1.6;
   --tblr-body-color: #1e293b;
-  --tblr-body-bg: #f8fafc;
+  --tblr-body-bg: #f0f0f0;
 }
 
 *,
@@ -543,7 +543,7 @@ progress {
 
 .img-thumbnail {
   padding: 0.25rem;
-  background-color: #f8fafc;
+  background-color: #f0f0f0;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   max-width: 100%;
@@ -2298,10 +2298,10 @@ textarea.form-control-lg {
   outline: 0;
 }
 .form-range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 1px #f8fafc, 0 0 0 0.25rem rgba(46, 8, 106, 0.25);
+  box-shadow: 0 0 0 1px #f0f0f0, 0 0 0 0.25rem rgba(46, 8, 106, 0.25);
 }
 .form-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #f8fafc, 0 0 0 0.25rem rgba(46, 8, 106, 0.25);
+  box-shadow: 0 0 0 1px #f0f0f0, 0 0 0 0.25rem rgba(46, 8, 106, 0.25);
 }
 .form-range::-moz-focus-outer {
   border: 0;
@@ -3234,8 +3234,8 @@ textarea.form-control-lg {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #334155;
-  background-color: #f8fafc;
-  border-color: #cbd5e1 #cbd5e1 #f8fafc;
+  background-color: #f0f0f0;
+  border-color: #cbd5e1 #cbd5e1 #f0f0f0;
 }
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
@@ -12591,7 +12591,7 @@ a.avatar {
 
 .page-cover ~ * .page-avatar {
   margin-top: calc(calc(-1 * calc(var(--tblr-avatar-size) * .5)) - 1.25rem);
-  box-shadow: 0 0 0 0.25rem #f8fafc;
+  box-shadow: 0 0 0 0.25rem #f0f0f0;
 }
 
 .badge {
@@ -13140,7 +13140,7 @@ a.badge {
 }
 .btn-action:hover, .btn-action.show {
   color: #1e293b;
-  background: #f8fafc;
+  background: #f0f0f0;
 }
 .btn-action.show {
   color: #2e086a;
@@ -15104,7 +15104,7 @@ Form switch
     display: block;
     width: 4px;
     content: "";
-    background-color: #f8fafc;
+    background-color: #f0f0f0;
   }
   .list-timeline:not(.list-timeline-simple) > li {
     z-index: 2;
