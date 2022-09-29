@@ -24,7 +24,7 @@
 
         @foreach($empresas as $empresa)
         <div class="card d-flex flex-column">
-            <div class="row row-0 flex-fill align-items-center align-items-md-start ">
+            <div class="row row-0 flex-fill  ">
                 <div class="col-3 col-md-2">
                     <a href="{{route('empresas.edit', $empresa)}}">
                         @if(empty($empresa->logo))
@@ -47,7 +47,9 @@
                                 </svg>
                             </a>
                             <div class="dropdown-menu ">
-                                <a class="dropdown-item" href="#">
+
+                                <a id="showTable" class="dropdown-item" href="#" onclick="showTable()">
+
                                     Integrações
                                 </a>
                                 <a class="dropdown-item" href="{{route('empresas.integracoes.create.choose-platform', $empresa)}}">
@@ -100,7 +102,7 @@
                         </div>
                         <div class="row mt-1">
                             <div id="table-default" class="table-responsive d-none d-md-block ">
-                                <table class="table table-striped">
+                                <table id="table" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th class="table-sort" data-sort="sort-name">Integração</th>
@@ -162,3 +164,10 @@
     </div>
 </div>
 @endsection
+@push('js')
+<script type="text/javascript">
+    function showTable() {
+        document.getElementById("table-default").classList.toggle('d-none');
+    }
+</script>
+@endpush
