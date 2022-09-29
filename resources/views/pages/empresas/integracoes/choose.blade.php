@@ -20,7 +20,7 @@
                 @csrf
 
                 <div class="row">
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-12 col-md-3">
                         <div class="form-label">Plataforma para configurar a integração</div>
                         <select class="form-select" name="platform">
                             @foreach($platforms as $plat)
