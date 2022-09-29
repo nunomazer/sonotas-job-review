@@ -49,26 +49,21 @@
                                     </h3>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-6 col-md-4">
                                         @if($empresa->configuracao_nfse)
-                                            <span class="mx-1 status-green">
-                                                <span class="status-dot"></span>
-                                            </span>
                                             <a href="{{route('empresas.nfse.edit', [$empresa, $empresa->configuracao_nfse])}}"
                                                 class="btn btn-sm btn-info">
                                                 Configurar NFSe
                                             </a>
                                         @else
-                                            <span class="mx-1 status-warning">
-                                                <span class="status-dot"></span>
-                                            </span>
+                                            
                                             <a href="{{route('empresas.nfse.create', [$empresa])}}"
                                             class="btn btn-sm btn-warning">
                                                 Configurar NFSe
                                             </a>
                                         @endif
                                     </div>
-                                    <div class="ms-3 col-12 col-md-4">
+                                    <div class="ms-3 col-5 col-md-4">
                                         @include('pages.empresas.partials.assinatura-status')
                                     </div> 
                                 </div>
@@ -88,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-1">
-                                    <div id="table-default" class="table-responsive ">
+                                    <div id="table-default" class="table-responsive d-none d-md-block ">
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
