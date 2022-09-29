@@ -17917,3 +17917,19 @@ Antialiasing
   -webkit-backdrop-filter: blur(2px);
           backdrop-filter: blur(2px);
 }
+
+.icon-empresas {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.min-w {
+  min-width: 105px;
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 0.5rem 0.55rem;
+  }
+}
