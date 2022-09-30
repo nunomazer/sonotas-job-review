@@ -17905,6 +17905,10 @@ Antialiasing
   -moz-osx-font-smoothing: auto;
 }
 
+a {
+  color: #5714ff;
+}
+
 .bg-register-link {
   background-color: rgba(169, 169, 169, 0.2392156863);
 }
