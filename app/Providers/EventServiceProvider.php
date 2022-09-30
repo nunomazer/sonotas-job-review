@@ -6,17 +6,24 @@ use App\Events\ClienteAlteradoEvent;
 use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
-use App\Events\WebhookCheckoutEvent; 
+
+use App\Events\NFSeDownloadedFilesEvent;
+use App\Events\WebhookCheckoutEvent;
+
 use App\Events\NFSeCriadaEvent;
+use App\Events\VendaAtualizadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
 use App\Listeners\EmiteNFSeDriverSped;
-use App\Listeners\WebhookAssinaturaEmpresa; 
+
+use App\Listeners\WebhookAssinaturaEmpresa;
+
+use App\Listeners\EnviarEmailBoasVindas;
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,7 +34,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            SendEmailVerificationNotification::class,
+            EnviarEmailBoasVindas::class,
+            SendEmailVerificationNotification::class
         ],
 
         ClienteCriadoEvent::class => [
@@ -35,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
 
         ClienteAlteradoEvent::class => [
         ],
+        
         /*
         WebhookCheckoutEvent::class => [
             WebhookAssinaturaEmpresa::class
@@ -50,9 +59,16 @@ class EventServiceProvider extends ServiceProvider
 
         VendaCriadaEvent::class => [
         ],
+        
+        VendaAtualizadaEvent::class => [
+        ],
 
         NFSeCriadaEvent::class => [
             EmiteNFSeDriverSped::class,
+        ],
+
+        NFSeDownloadedFilesEvent::class => [
+
         ],
     ];
 

@@ -1,55 +1,6 @@
 <h3 class="strong border-top border-bottom p-1">Endereço</h3>
 
-<div class="row">
-
-    <div class="mb-3 col-2">
-        <label class="form-label">Tipo</label>
-        <select class="form-select" name="tipo_logradouro">
-            @foreach(\App\Models\TipoLogradouro::tipos as $tipo)
-                <option value="{{$tipo}}"
-                    {{ old('tipo_logradouro', $model->tipo_logradouro ?? '') == $tipo ? 'selected' : '' }}>
-                        {{$tipo}}
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="mb-3 col-10">
-        <label class="form-label required">Logradouro / Endereço</label>
-        <input type="text" class="form-control" name="logradouro"
-               required value="{{ old('logradouro', $model->logradouro ?? null) }}"
-        >
-    </div>
-
-</div>
-
-<div class="row">
-
-    <div class="mb-3 col-3 col-md-2">
-        <label class="form-label required">Número</label>
-        <input type="text" class="form-control" name="numero"
-               required value="{{ old('numero', $model->numero ?? null) }}"
-        >
-    </div>
-
-    <div class="mb-3 col-9 col-md-10">
-        <label class="form-label">Complemento</label>
-        <input type="text" class="form-control" name="complemento"
-               value="{{ old('complemento', $model->complemento ?? null) }}"
-        >
-    </div>
-
-</div>
-
-<div class="row">
-
-    <div class="mb-3 col-6 col-md-2">
-        <label class="form-label required">Bairro</label>
-        <input type="text" class="form-control" name="bairro"
-               required
-               value="{{ old('cep', $model->bairro ?? null) }}" />
-    </div>
-
+<div class="row">    
     <div class="mb-3 col-6 col-md-2">
         <label class="form-label required">CEP</label>
         <input type="text" class="form-control" 
@@ -60,12 +11,58 @@
             maxlength="8" />
     </div>
 
-    <div class="mb-3 col-12 col-md-8">
+    <div class="mb-3 col-12 col-md-10">
         <label class="form-label required">Cidade</label>
-        <select class="form-control" id="city_id" name="city_id" required></select>
+        <select class="form-control" id="city_id" name="city_id" required>
+            @if(old('city_id', $model->city_id ?? null)) != null)
+            <option value="{{old('city_id', $model->city_id ?? null)}}">{{$model->cidade->name}}</option>
+            @endif
+        </select>
     </div>
 
 </div>
+<div class="row">
+    <div class="mb-3 col-2">
+        <label class="form-label required">Tipo</label>
+        <select class="form-select" name="tipo_logradouro">
+            @foreach(\App\Models\TipoLogradouro::tipos as $tipo)
+                <option value="{{$tipo}}"
+                    {{ old('tipo_logradouro', $model->tipo_logradouro ?? '') == $tipo ? 'selected' : '' }}>
+                        {{$tipo}}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3 col-10">
+        <label class="form-label required">Logradouro / Endereço</label>
+        <input type="text" class="form-control" name="logradouro"
+               required value="{{ old('logradouro', $model->logradouro ?? null) }}"
+        >
+    </div>
+</div>
+
+<div class="row">
+    <div class="mb-3 col-6 col-md-6">
+        <label class="form-label required">Bairro</label>
+        <input type="text" class="form-control" name="bairro"
+               required
+               value="{{ old('bairro', $model->bairro ?? null) }}" />
+    </div>
+
+    <div class="mb-3 col-3 col-md-2">
+        <label class="form-label required">Número</label>
+        <input type="text" class="form-control" name="numero"
+               required value="{{ old('numero', $model->numero ?? null) }}"
+        >
+    </div>
+    <div class="mb-3 col-4 col-md-4">
+        <label class="form-label">Complemento</label>
+        <input type="text" class="form-control" name="complemento"
+               value="{{ old('complemento', $model->complemento ?? null) }}"
+        >
+    </div>
+</div>
+
 <!-- @push('js') -->
 <script type="text/javascript">
     function select2_search ($el, term) {
@@ -81,7 +78,7 @@
         }
 
         $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function( data ) { 
-            select2_search($("#city_id"), data.ibge);
+            select2_search($("#city_id"), data.ibge, true);
             $("input[name='logradouro']").val(data.logradouro);
             $("input[name='bairro']").val(data.bairro);
 

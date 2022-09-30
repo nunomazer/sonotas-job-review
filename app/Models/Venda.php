@@ -44,6 +44,8 @@ class Venda extends Model
         if ($this->tipo_documento == SpedService::DOCTYPE_NFSE) {
             return $this->hasOne(NFSe::class);
         }
+
+        return null;
     }
 
 }

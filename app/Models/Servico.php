@@ -14,6 +14,10 @@ class Servico extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'iss_retido_fonte' => 'boolean',
+    ];
+
     public function scopeIsAtivo($query)
     {
         return $query->where('ativo', true);

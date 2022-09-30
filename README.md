@@ -134,3 +134,28 @@ Controlamos as permissões em nível de papéis (_roles_), verifique o modelo `R
 possui constantes com os nomes utilizados e o racional de cada papel.
 
 > _Se necessário no futuro podemos definir um controle mais granular por permissões, que usarão o mesmo pacote_.
+
+## Utilização de ícones do TABLER
+
+Como utilizar ícones no projeto, oriundos do TABLER (https://tabler-icons.io)
+
+Através dos ícones gratuítos em SVG (posteriormente podemos alterar para WEBFONT e tratar uso em elementos), adicionamos ícones para melhor decorar o projeto.
+
+> ícone de coração é representado pelo link no tabler: https://tabler-icons.io/i/heart, e segue o código SVG:
+```
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+</svg>
+```
+
+
+> Caso seja um botão, basta criar um elemento de botão circundando o mesmo:
+```
+<button class="btn btn-primary" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+  </svg>
+</button>
+```
