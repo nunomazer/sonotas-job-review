@@ -10,11 +10,10 @@
             </a>
         </div>
 
-        @include('layouts.partials.messages')
-
-        <form action="{{ route('login') }}" class="card shadow card-md" method="POST" autocomplete="off">
-            @csrf
-            <div class="card-body">
+        @include('layouts.partials.messages')        
+        <!-- <form action="{{ route('login') }}" class="card shadow card-md" method="POST" autocomplete="off">
+            @csrf -->
+            <div class="card-body" style="display:none">
                 <h2 class="fs-2 card-title text-center mb-4">Login</h2>
                 <div class="mb-3">
                     <label for="email" class="  form-label ">E-mail</label>
@@ -68,11 +67,23 @@
                 </div>
             </div>
             
-            <div class="text-center bg-register-link  text-dark 
-              fs-3 pt-3 mt-2 pb-3 rounded-bottom " >
-                Ainda não tem conta? <a class=" fw-bold fs-3" href="{{ route('register') }}">Registre-se</a>
+            <div class="card-body">
+                <h2 class="fs-2 card-title text-center mb-4">Login</h2>
+                <div class="mb-3 text-center">
+                    <a href="https://accounts.eduzz.com/oauth/authorize?client_id={{env('EDUZZ_APP_ID')}}&redirect_uri={{env('EDUZZ_REDIRECT_URL')}}" target="_self" class="btn btn-block">
+                        <div class="clearfix">
+                            <p>Acessar com</p> 
+                            <p><img src="https://devhub.eduzz.com/api-portal/sites/default/files/logo-eduzz.png" height="34" /></p> 
+                        </div>
+                    </a>
+                </div> 
             </div>
-        </form>
+            
+            <!-- <div class="text-center bg-register-link  text-dark 
+              fs-3 pt-3 mt-2 pb-3 rounded-bottom " style="display:none" >
+                Ainda não tem conta? <a class=" fw-bold fs-3" href="{{ route('register') }}">Registre-se</a>
+            </div> -->
+        <!-- </form> -->
     </div>
 @endsection
 

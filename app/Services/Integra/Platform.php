@@ -32,6 +32,14 @@ abstract class Platform implements IIntegraDriver
         return '';
     }
     
+    public function isFieldVisible(string $fieldName): string
+    {
+        foreach (static::$fields as $field) {
+            if (strtolower($field['name']) == strtolower($fieldName)) return $field['visible'] === true;
+        }
+        return '';
+    }
+    
     public function fieldHelpText(string $name): string
     {
         foreach (static::$fields as $field) {
