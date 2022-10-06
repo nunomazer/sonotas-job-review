@@ -28,7 +28,7 @@
                 <input type="hidden" value="{{ old('driver', $integracao->driver) }}" name="driver">
 
                 <div class="row">
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <div class="form-label">Ativo</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="ativo"
@@ -36,7 +36,7 @@
                             >
                         </label>
                     </div>
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <div class="form-label">Transmissão automática</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="transmissao_automatica"
@@ -44,7 +44,7 @@
                             >
                         </label>
                     </div>
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <div class="form-label">Apenas dias úteis</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="transmissao_apenas_dias_uteis"
@@ -53,14 +53,14 @@
                         </label>
                     </div>
 
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <label for="data_inicio" class="form-label">Transmissão após</label>
                         <input type="number" class="form-control" name="transmissao_frequencia" required aria-describedby="transmissaoFrequenciaHelp"
                                value="{{ old('transmissao_frequencia', $integracao->transmissao_frequencia) }}"
                         >
                         <div id="transmissaoFrequenciaHelp" class="form-text">Exemplo 2</div>
                     </div>
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <div class="form-label">Período</div>
                         <select class="form-select" required name="transmissao_periodo">
                             <option value="hour"
@@ -75,7 +75,7 @@
                         <div class="form-text">Exemplo Dia</div>
                     </div>
 
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-4 col-md-2">
                         <label for="data_inicio" class="form-label">Data de início</label>
                         <input type="date" class="form-control" name="data_inicio" aria-describedby="dataInicioHelp"
                                value="{{ old('data_inicio', $integracao->data_inicio->format('Y-m-d')) }}"

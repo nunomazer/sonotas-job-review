@@ -10,6 +10,10 @@
 // Tabler
 @import "~@tabler/core/src/scss/tabler";
 
+a {
+    color: #5714ff;
+}
+
 .bg-register-link {
     background-color: #a9a9a93d;
 }
@@ -19,4 +23,21 @@
     background-size: cover;
     background-repeat: no-repeat;
     backdrop-filter: blur(2px);
+}
+.icon-empresas {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
+.min-w {
+    min-width: 105px;
+}
+.icon-eye {
+    width: 18px;
+    margin-left: 5px;
+}
+@media (max-width: 768px) {
+    .card-body {
+        padding: 0.5rem 0.55rem;
+    }
 }
