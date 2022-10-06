@@ -21,29 +21,45 @@
                     ]
                 }],
                 chart: {
-                    type: 'bar',
+                    type: 'area',
                     width: '100%',
                     height: '90%',
-                    
-                    
-                    
-                },
-                responsive: [
-    {
-      breakpoint: 768,
-      options: {
-        
-        
-            xaxis:{
-                tickAmount: 15,
-                type: 'numeric',
-                
+                    parentHeightOffset: 0,
+  			toolbar: {
+  				show: false,
+  			},
+  			animations: {
+  				enabled: false
+  			},
+  		},
+  		dataLabels: {
+  			enabled: false,
+  		},
+          
+         
+  		fill: {
+  			opacity: .16,
+  			type: 'solid'
+  		},
+  		stroke: {
+  			width: 2,
+  			lineCap: "round",
+  			curve: "smooth",
+  		},
+        responsive: [{
+            breakpoint: 768,
+            options:{
+
+                xaxis: {
+              tickAmount: 15,
+    
             }
-        
-        
-      }
-    }
-  ]
+            }
+          
+          
+        },
+        ]
+          
             };
 
             var chart = new ApexCharts(document.querySelector("#chart-vendas-mes"), opt_chart);

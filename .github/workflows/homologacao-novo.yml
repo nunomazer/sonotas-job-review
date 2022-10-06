@@ -1,0 +1,33 @@
+name: Homologação - Novo
+
+on:
+  push:
+    branches: [ "homolog" ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+          host: ${{ secrets.HOMOLOGACAO_HOST }}
+          username: ${{ secrets.HOMOLOGACAO_USERNAME }}
+          key: ${{ secrets.HOMOLOGACAO_SSH_KEY }}
+          script_stop: false
+          script: |
+            cd homologacao.sonotas.com.br
+            php artisan down
+            git pull origin homolog
+            composer install
+            sudo supervisorctl stop sonotas-homologacao-worker:*
+            #npm install
+            #npm run dev
+            php artisan migrate --force
+            sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl start sonotas-homologacao-worker:*
+            php artisan up
