@@ -22,6 +22,14 @@ class ServicoDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('nome', function (Servico $servico) {
+                return '<span class="mx-1 ' . ($servico->ativo ? "status-green" : "") .'">
+                            <span class="status-dot"></span>
+                        </span> 
+                        <a href="'. route('servicos.edit', $servico) .'">
+                            '. $servico->nome .'
+                        </a>';
+            })
             ->editColumn('valor', function (Servico $servico) {
                 return number_format($servico->valor, 2, ',', '.');
             })
@@ -31,8 +39,9 @@ class ServicoDataTable extends DataTable
             ->addColumn('integracoes', function (Servico $servico) {
                 return $servico->integracoes->map(function ($integracao) {
                     return $integracao->driver;
-                });
-            });
+                })->implode('<br>');
+            })
+            ->rawColumns(['nome']);
     }
 
     /**
@@ -59,7 +68,7 @@ class ServicoDataTable extends DataTable
                     ->setTableId('servico-table')
                     ->columns($this->getColumns())
                     ->language([
-                        'url' => '//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
+                        'url' => '//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json' //alterar para local
                     ])
                     ->minifiedAjax()
                     ->orderBy(1);
@@ -76,7 +85,7 @@ class ServicoDataTable extends DataTable
             Column::make('empresa', 'empresa.nome')->title('Empresa'),
             Column::make('nome')->title('Nome'),
             Column::make('valor')->title('Valor'),
-            Column::make('integracoes', 'integracoes.driver')->title('Integrações'),
+            Column::make('integracoes')->title('Integrações'),
         ];
     }
 

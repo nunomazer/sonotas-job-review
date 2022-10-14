@@ -31,16 +31,7 @@ class ServicosController extends Controller
             return view('pages.servicos.noconfig');
         }
 
-        return $dataTable->render('pages.servicos.index');
-        
-        // $integracoes = Integracao::whereIn('empresa_id', $empresasID_array)->get();
-
-        // $servicos = Servico::whereIn('empresa_id', $empresasID_array)
-        //     ->with('empresa')
-        //     ->orderBy('nome')
-        //     ->paginate(30);
-
-        // return view('pages.servicos.list', compact('servicos','integracoes'));
+        return $dataTable->render('pages.servicos.list');        
     }
 
     public function create()
