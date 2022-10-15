@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ClienteDataTable;
 use App\Http\Requests\ClienteRequest;
 use App\Models\Cliente;
 use App\Services\ClienteService;
@@ -15,12 +16,9 @@ class ClientesController extends Controller
         $this->clienteService = new ClienteService();
     }
 
-    public function index()
+    public function index(ClienteDataTable $dataTable)
     {
-        $clientes = Cliente::whereIn('empresa_id', auth()->user()->empresasIdsArray())
-            ->orderBy('nome')
-            ->paginate(30);
-        return view('pages.clientes.list', compact('clientes'));
+        return $dataTable->render('pages.clientes.list');
     }
 
     public function create()
