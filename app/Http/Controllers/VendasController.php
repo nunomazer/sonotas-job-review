@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\VendaDataTable;
 use App\Http\Requests\NFSeRequest;
 use App\Models\NFSe;
 use App\Models\Venda;
@@ -18,12 +19,9 @@ class VendasController extends Controller
     {
     }
 
-    public function index()
+    public function index(VendaDataTable $dataTable)
     {
-        $vendas = Venda::whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray())
-            ->orderBy('data_transacao', 'desc')
-            ->paginate(30);
-        return view('pages.vendas.list', compact('vendas'));
+        return $dataTable->render('pages.vendas.list');
     }
 
     public function create()
