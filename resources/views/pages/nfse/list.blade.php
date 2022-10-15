@@ -10,8 +10,9 @@
 
             </div>
         </div>
-        <div class="card-body">
-            <div id="table-default" class="table-responsive">
+        <div class="card-body">            
+            {{$dataTable->table()}} 
+            {{-- <div id="table-default" class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -70,10 +71,10 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="card-footer">
-            {{ $nfses->links() }}
-        </div>
+            </div> --}}
+        </div>        
     </div>
 @endsection
+@push('js')
+    {{$dataTable->scripts()}}
+@endpush
