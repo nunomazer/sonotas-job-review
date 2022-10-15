@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ServicoDataTable;
-use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\ServicoRequest;
 use App\Models\EmpresaNFSConfig;
-use App\Models\Integracao;
 use App\Models\Servico;
 use App\Models\Empresa;
-use App\Services\EmpresaService;
 use App\Services\ServicoService;
 use Illuminate\Http\Request;
 
@@ -31,7 +28,7 @@ class ServicosController extends Controller
             return view('pages.servicos.noconfig');
         }
 
-        return $dataTable->render('pages.servicos.list');        
+        return $dataTable->render('pages.servicos.list');
     }
 
     public function create()

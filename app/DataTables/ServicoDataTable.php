@@ -54,7 +54,9 @@ class ServicoDataTable extends DataTable
     {
         $empresasID_array = auth()->user()->empresasIdsArray();
         
-        return $servico->newQuery()->with('empresa')->whereIn('empresa_id', $empresasID_array);
+        return $servico->newQuery()
+            ->with('empresa')
+            ->whereIn('empresa_id', $empresasID_array);
     }
 
     /**
