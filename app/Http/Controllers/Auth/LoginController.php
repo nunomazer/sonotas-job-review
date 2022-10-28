@@ -37,6 +37,12 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    protected $eduzzAppSlug;
+    protected $eduzzAPI;
+    protected $eduzzAppID;
+    protected $eduzzOAUTHUrl;
+    protected $eduzzAppSecret;
+    
     /**
      * Create a new controller instance.
      *
@@ -45,21 +51,25 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except(['logout', 'oauthConfirmation']);
+
+        $this->eduzzAppSlug = env('EDUZZ_APP_SLUG');
+        $this->eduzzAPI = env('EDUZZ_API_URL');
+        $this->eduzzAppID = env('EDUZZ_APP_ID');
+        $this->eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
+        $this->eduzzAppSecret = env('EDUZZ_APP_SECRET'); 
     }
 
     public function isValidSignatureStatus($accessToken, $producerID){
-        $eduzzAPI = env('EDUZZ_API_URL');
-        $eduzzAppSlug = env('EDUZZ_APP_SLUG');   
         $client = new \GuzzleHttp\Client([
-            'base_uri' => $eduzzAPI,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
+            'base_uri'  => $this->eduzzAPI,
+            'headers'   => [
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
                 'Authorization' => 'Bearer ' . $accessToken
             ],
-            'defaults' => ['verify' => false],
+            'defaults'  => ['verify' => false],
         ]); 
-        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$eduzzAppSlug}/{$producerID}");
+        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$producerID}");
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
 
         return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'active');
@@ -72,24 +82,18 @@ class LoginController extends Controller
             throw new Exception("Não foi possível realizar a autenticação");
         }
 
-        $eduzzAppID = env('EDUZZ_APP_ID');
-        $eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
-        $eduzzAPI = env('EDUZZ_API_URL');
-        $eduzzAppSecret = env('EDUZZ_APP_SECRET'); 
-        $eduzzAppSlug = env('EDUZZ_APP_SLUG');   
-
         $clientOauth = new \GuzzleHttp\Client([
-            'base_uri' => $eduzzOAUTHUrl,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
+            'base_uri'  => $this->eduzzOAUTHUrl,
+            'headers'   => [
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json'
             ],
-            'defaults' => ['verify' => false],
+            'defaults'  => ['verify' => false],
         ]); 
         
         $playload = [
-            "client_id"     => $eduzzAppID,
-            "client_secret" => $eduzzAppSecret,
+            "client_id"     => $this->eduzzAppID,
+            "client_secret" => $this->eduzzAppSecret,
             "code"          => $code,
             "grant_type"    => "authorization_code"
         ];
@@ -104,13 +108,13 @@ class LoginController extends Controller
             if ($requestOauth->getStatusCode() == 200) {
                 $producerID = $resultOauth['user']['id'];
                 $client = new \GuzzleHttp\Client([
-                    'base_uri' => $eduzzAPI,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
+                    'base_uri'  => $this->eduzzAPI,
+                    'headers'   => [
+                        'Content-Type'  => 'application/json',
+                        'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . $resultOauth['user']['access_token']
                     ],
-                    'defaults' => ['verify' => false],
+                    'defaults'  => ['verify' => false],
                 ]); 
                 $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first();
 
