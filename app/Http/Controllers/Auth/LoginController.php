@@ -46,6 +46,24 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except(['logout', 'oauthConfirmation']);
     }
+
+    public function isValidSignatureStatus($accessToken, $producerID){
+        $eduzzAPI = env('EDUZZ_API_URL');
+        $eduzzAppSlug = env('EDUZZ_APP_SLUG');   
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => $eduzzAPI,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $accessToken
+            ],
+            'defaults' => ['verify' => false],
+        ]); 
+        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$eduzzAppSlug}/{$producerID}");
+        $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+
+        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'active');
+    }
     
     public function oauthConfirmation(Request $request)
     {
@@ -55,19 +73,20 @@ class LoginController extends Controller
         }
 
         $eduzzAppID = env('EDUZZ_APP_ID');
+        $eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
         $eduzzAPI = env('EDUZZ_API_URL');
         $eduzzAppSecret = env('EDUZZ_APP_SECRET'); 
         $eduzzAppSlug = env('EDUZZ_APP_SLUG');   
 
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $eduzzAPI,
+        $clientOauth = new \GuzzleHttp\Client([
+            'base_uri' => $eduzzOAUTHUrl,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json'
             ],
             'defaults' => ['verify' => false],
         ]); 
-
+        
         $playload = [
             "client_id"     => $eduzzAppID,
             "client_secret" => $eduzzAppSecret,
@@ -76,7 +95,7 @@ class LoginController extends Controller
         ];
 
         try {
-            $requestOauth = $client->post('/oauth/token', [
+            $requestOauth = $clientOauth->post('/oauth/token', [
                 'json' => $playload,
             ]);
 
@@ -84,9 +103,25 @@ class LoginController extends Controller
             
             if ($requestOauth->getStatusCode() == 200) {
                 $producerID = $resultOauth['user']['id'];
+                $client = new \GuzzleHttp\Client([
+                    'base_uri' => $eduzzAPI,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $resultOauth['user']['access_token']
+                    ],
+                    'defaults' => ['verify' => false],
+                ]); 
                 $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first();
 
                 if(empty($integracaoOauth)){
+                    
+                    $requestDados = $client->post('/myeduzz-producers/v1/producers/' . $producerID, [
+                        'json' => $playload,
+                    ]);
+                    
+                    $resultDados = json_decode($requestDados->getBody()->getContents(), true);
+
                     //não encontrou - primeiro acesso
                     $user = User::create([
                         'name' => $resultOauth['user']['name'],
@@ -95,14 +130,30 @@ class LoginController extends Controller
                         'remember_token' => 0,
                         'password' => Hash::make(uniqid()),
                     ]);
-                    
+
+                    $tipoLogradouro = "";
+                    if(!empty($resultDados['address']['street'])){
+                        $exp_logradouro = explode(" ", $resultDados['address']['street']);
+                        if(!empty($exp_logradouro)){
+                            $tipoLogradouro = $exp_logradouro[0];
+                        }
+                    }
+
                     $empresa = Empresa::create([
                         'owner_user_id' => $user->id,
-                        'name' => $resultOauth['user']['name'],
-                        'email' => $resultOauth['user']['email'],
-                        'email_verified_at' => date('Y-m-d'),
-                        'remember_token' => 0,
-                        'password' => Hash::make(uniqid()),
+                        'nome' => $resultDados['email'],
+                        'alias' => $resultDados['business_name'],
+                        'email' => $resultDados['email'],
+                        'documento' => $resultDados['document_number'],
+                        'telefone_num' => $resultDados['cellphone'],
+                        
+                        'tipo_logradouro' => $tipoLogradouro,
+                        'logradouro' => $resultDados['address']['street'],
+                        'numero' => $resultDados['address']['number'],
+                        'complemento' => $resultDados['address']['complement'],
+                        'bairro' => $resultDados['address']['neighborhood'],
+                        'cep' => $resultDados['address']['zip_code'],
+                        'city_id' => $resultDados['address']['city_id'], //validar se é possível vir o codigo ibge
                     ]);
                     
                     Integracao::create([
@@ -126,24 +177,15 @@ class LoginController extends Controller
                         ]), 
                     ]);
 
-                    Auth::loginUsingId($user->id);
+                    //atualiza variavel integracaoOauth
+                    $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first(); 
+                } 
+                
+                if($this->isValidSignatureStatus($resultOauth['user']['access_token'], $producerID)){
+                    Auth::loginUsingId($integracaoOauth->empresa->owner->id);
                     return view('pages.login.oauth-success');
                 }
-                else{
-                    //já existe
-                    $usuario = $integracaoOauth->empresa->owner;                    
-                    $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$eduzzAppSlug}/{$producerID}");
-                    $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
-
-                    if ($requestOauth->getStatusCode() == 200) {
-                        if($resultSubscription['status'] == 'active'){
-                            Auth::loginUsingId($usuario->id);
-                            return view('pages.login.oauth-success');
-                        }
-                        throw new Exception("A assinatura não está ativa :(");
-                    }
-                    throw new Exception("Não foi possível obter os dados de assinatura :(");
-                }                
+                throw new Exception("A assinatura não está ativa :(");
             }
 
             Log::error('OAUTH Eduzz - Erro', $requestOauth);
