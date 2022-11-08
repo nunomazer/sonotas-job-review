@@ -104,7 +104,8 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected function getToken() : string
     {
-        return $this->config['access_token'];
+        return $this->fields['oauth_access_token'];//TODO
+    //REVER
         /*
         if (!$this->token || $this->token_until->lessThan(now())) {
             $this->generateToken();
@@ -144,7 +145,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $query = [];
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/content/content_list', [
+        $result = $http->get('/myeduzz-products/v1/products', [
             'query' => $query,
         ]);
 
@@ -165,7 +166,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
             foreach ($servicosApi as $servicoApi) {
                 $servicos[] = [
-                    'driver_id' => $servicoApi['content_id'],
+                    'driver_id' => $servicoApi['id'],
                     'nome' => $servicoApi['title'],
                     'descricao' => $servicoApi['description'],
                     'valor' => $servicoApi['price'],

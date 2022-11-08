@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\IntegracaoImportarServicos;
 use App\Models\Cidade;
 use App\Models\Empresa;
 use App\Models\Integracao;
@@ -165,7 +166,7 @@ class LoginController extends Controller
                         'city_id' => $city->id,
                     ]);
                     
-                    Integracao::create([
+                    $integracao = Integracao::create([
                         'empresa_id' => $empresa->id,
                         'name' => 'Integração com Eduzz',
                         'driver' => 'Eduzz',
@@ -188,6 +189,8 @@ class LoginController extends Controller
 
                     //atualiza variavel integracaoOauth
                     $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first(); 
+                    
+                    $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
                 } 
                 
                 if($this->isValidSignatureStatus($resultOauth['user']['access_token'], $producerID)){
