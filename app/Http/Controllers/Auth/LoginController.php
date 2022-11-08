@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cidade;
 use App\Models\Empresa;
 use App\Models\Integracao;
 use App\Models\User;
@@ -39,6 +40,7 @@ class LoginController extends Controller
 
     protected $eduzzAppSlug;
     protected $eduzzAPI;
+    protected $eduzzSignatureUrl;
     protected $eduzzAppID;
     protected $eduzzOAUTHUrl;
     protected $eduzzAppSecret;
@@ -54,6 +56,7 @@ class LoginController extends Controller
 
         $this->eduzzAppSlug = env('EDUZZ_APP_SLUG');
         $this->eduzzAPI = env('EDUZZ_API_URL');
+        $this->eduzzSignatureUrl = env('EDUZZ_SIGNATURE_URL');
         $this->eduzzAppID = env('EDUZZ_APP_ID');
         $this->eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
         $this->eduzzAppSecret = env('EDUZZ_APP_SECRET'); 
@@ -61,44 +64,45 @@ class LoginController extends Controller
 
     public function isValidSignatureStatus($accessToken, $producerID){
         $client = new \GuzzleHttp\Client([
-            'base_uri'  => $this->eduzzAPI,
+            'base_uri'  => $this->eduzzSignatureUrl,
             'headers'   => [
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
-                'Authorization' => 'Bearer ' . $accessToken
+                'clientToken' => $accessToken
             ],
             'defaults'  => ['verify' => false],
         ]); 
         $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$producerID}");
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
 
-        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'active');
+        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
     }
     
     public function oauthConfirmation(Request $request)
     {
         $code = $request->query('code'); 
-        if(empty($code)){
-            throw new Exception("Não foi possível realizar a autenticação");
-        }
-
-        $clientOauth = new \GuzzleHttp\Client([
-            'base_uri'  => $this->eduzzOAUTHUrl,
-            'headers'   => [
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json'
-            ],
-            'defaults'  => ['verify' => false],
-        ]); 
-        
-        $playload = [
-            "client_id"     => $this->eduzzAppID,
-            "client_secret" => $this->eduzzAppSecret,
-            "code"          => $code,
-            "grant_type"    => "authorization_code"
-        ];
 
         try {
+            if(empty($code)){
+                throw new Exception("Não foi possível realizar a autenticação");
+            }
+    
+            $clientOauth = new \GuzzleHttp\Client([
+                'base_uri'  => $this->eduzzOAUTHUrl,
+                'headers'   => [
+                    'Content-Type'  => 'application/json',
+                    'Accept'        => 'application/json'
+                ],
+                'defaults'  => ['verify' => false],
+            ]); 
+            
+            $playload = [
+                "client_id"     => $this->eduzzAppID,
+                "client_secret" => $this->eduzzAppSecret,
+                "code"          => $code,
+                "grant_type"    => "authorization_code"
+            ];
+
             $requestOauth = $clientOauth->post('/oauth/token', [
                 'json' => $playload,
             ]);
@@ -120,7 +124,7 @@ class LoginController extends Controller
 
                 if(empty($integracaoOauth)){
                     
-                    $requestDados = $client->post('/myeduzz-producers/v1/producers/' . $producerID, [
+                    $requestDados = $client->post('/myeduzz-producers/v1/producers/' . $producerID . '/profile', [
                         'json' => $playload,
                     ]);
                     
@@ -143,21 +147,22 @@ class LoginController extends Controller
                         }
                     }
 
+                    $city = Cidade::where('ibge_id', $resultDados['address_city_ibge'])->first();
                     $empresa = Empresa::create([
                         'owner_user_id' => $user->id,
-                        'nome' => $resultDados['email'],
+                        'nome' => $resultDados['name'],
                         'alias' => $resultDados['business_name'],
                         'email' => $resultDados['email'],
                         'documento' => $resultDados['document_number'],
                         'telefone_num' => $resultDados['cellphone'],
                         
                         'tipo_logradouro' => $tipoLogradouro,
-                        'logradouro' => $resultDados['address']['street'],
-                        'numero' => $resultDados['address']['number'],
-                        'complemento' => $resultDados['address']['complement'],
-                        'bairro' => $resultDados['address']['neighborhood'],
-                        'cep' => $resultDados['address']['zip_code'],
-                        'city_id' => $resultDados['address']['city_id'], //validar se é possível vir o codigo ibge
+                        'logradouro' => $resultDados['address_street'],
+                        'numero' => $resultDados['address_number'],
+                        'complemento' => $resultDados['address_complement'],
+                        'bairro' => $resultDados['address_neighborhood'],
+                        'cep' => $resultDados['address_zip_code'],
+                        'city_id' => $city->id,
                     ]);
                     
                     Integracao::create([
