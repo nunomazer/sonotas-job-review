@@ -38,4 +38,17 @@ interface ISpedNFSe
      * @return mixed
      */
     public function downloadXml();
+
+    
+    /**
+     * Realiza cancelamento no driver correto o documento fiscal de NFSe
+     * @return SpedApiReturn
+     */
+    public function cancelar() : SpedApiReturn;
+    
+    /**
+     * Realiza a atualização de status no driver correto o documento fiscal de NFSe
+     * @return SpedApiReturn
+     */
+    public function consultarStatusCancelamento() : SpedApiReturn;
 }

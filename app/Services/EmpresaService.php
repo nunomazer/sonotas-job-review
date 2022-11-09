@@ -304,9 +304,43 @@ class EmpresaService
                 Log::error($exception);
             }
         });
-
-
     }
+
+    /**
+     * Método realizado para consultar o status atual do cancelamento, que ocorre de forma assincrona
+     *
+     * Este método deve ser executado por processamento em batch de linha de comando
+     * ou filas
+     *
+     * @param Empresa $empresa
+     * @return void
+     */
+    public function atualizarStatusNFseEmCancelamentos(Empresa $empresa)
+    {
+        $nfses = NFSe::where('status', SpedStatus::PROCESSO_CANCELAMENTO)
+            ->whereRelation('venda', 'empresa_id', $empresa->id)
+            ->get();
+
+        $spedService = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
+
+        $nfses->each(function ($doc) use ($empresa, $spedService){
+            try {
+                $nfseDriver = $spedService->nfseDriver($doc);
+
+                $docDriver = $nfseDriver->consultarStatusCancelamento();
+                
+                if($docDriver->code == 200){
+                    $doc->status = SpedStatus::CANCELADO; 
+                    $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver->data);
+                    $doc->save();
+                }
+            } catch (\Exception $exception) {
+                Log::error('Erro ao consultar NFSe Driver');
+                Log::error($exception);
+            }
+        });
+    }
+    
     /**
      * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída, porém não foi baixado pdf ou xml.
      * Orquestra esta atualização chamando corretamente os drivers de cada documento fiscal emitido,

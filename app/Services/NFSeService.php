@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
+use App\Events\NFSeSolicitadoCancelamentoEvent; 
 use App\Listeners\EnviaFilesNFSe;
 use App\Mail\NfPdfXmlClienteMail;
 use App\Models\Cliente;
@@ -11,6 +12,8 @@ use App\Models\NFSe;
 use App\Models\NFSeItemServico;
 use App\Models\Servico;
 use App\Models\ServicoIntegracao;
+use App\Notifications\ErroAoCancelarNFSe;
+use App\Notifications\ErroAoGerarEmitirNF;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
 use Illuminate\Support\Facades\DB;
@@ -57,8 +60,8 @@ class NFSeService
 
     public function emitirSped(NFSe $nfse) : NFSe
     {
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
         try {
-            $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
             $driverNFSe = $sped->nfseDriver($nfse);
             $result = $driverNFSe->emitir();
 
@@ -75,7 +78,7 @@ class NFSeService
             $nfse->status = SpedStatus::ERRO;
             $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
             $nfse->save();
-
+            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'Um erro ocorreu ao emitir a NFSe para venda ' . $nfse->id));
             Log::error($exception);
         }
 
@@ -104,5 +107,64 @@ class NFSeService
             Mail::send(new NfPdfXmlClienteMail($nfse->venda));
         }
     }
+    
+    /**
+     * Método responsável por disparar serviço que realiza cancelamento da NFSe
+     *
+     * @param NFSe $nfse 
+     * @return NFSe|null
+     */
+    public function cancel(NFSe $nfse) : ? NFSe
+    {
+        try {
+            DB::beginTransaction();
 
+                $nfse['status'] = SpedStatus::PROCESSO_CANCELAMENTO;
+                $nfse['status_historico'] = $this->addStatusDados(null, SpedStatus::PROCESSO_CANCELAMENTO, ['message' => 'Cancelamento solicitado']);
+
+                $nfse->save();
+            DB::commit();
+
+            NFSeSolicitadoCancelamentoEvent::dispatch($nfse);
+
+            return $nfse;
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Log::error('Erros ao solicitar cancelamento da NFSe');
+            Log::error($exception);
+
+            return null;
+        }
+    }
+    
+    /**
+     * Método responsável por disparar serviço que realiza cancelamento da NFSe
+     *
+     * @param NFSe $nfse 
+     * @return NFSe|null
+     */
+    public function cancelarSped(NFSe $nfse) : ? NFSe
+    {
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
+        try {
+            $driverNFSe = $sped->nfseDriver($nfse);
+            $result = $driverNFSe->cancelar();
+
+            $nfse->driver = $sped->driver()->nome();
+
+            throw_if($result->code > 200, 'Erro no retorno da API Plugnotas: ' . $result->message);
+            
+
+        } catch (\Exception $exception) {
+            $nfse->status = SpedStatus::ERRO;
+            $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
+            $nfse->save(); 
+            $nfse->venda->empresa->owner->notify(new ErroAoCancelarNFSe($nfse->venda->empresa, $sped->driver()->nome(), 'Problemas ao realizar cancelamento de NFSe: para venda ' . $nfse->id));
+
+            Log::error($exception);
+        }
+
+        return $nfse;
+    }
 }

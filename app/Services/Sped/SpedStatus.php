@@ -44,7 +44,12 @@ class SpedStatus
      * Documento fiscal emitido e solicitação de cancelada finalizada na api
      */
     const CANCELADO = 'cancelado';
-
+    
+    /**
+     * Documento fiscal pendente de cancelamento
+     */
+    const PROCESSO_CANCELAMENTO = 'solicitado cancelamento';
+    
     /**
      * Erro no processo de envio e geração
      */

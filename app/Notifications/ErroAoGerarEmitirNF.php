@@ -38,7 +38,10 @@ class ErroAoGerarEmitirNF extends Notification implements ShouldQueue
      * @return array
      */
     public function via($notifiable)
-    {
+    { 
+        if($this->empresa->receber_notificacao_por_email){
+            return ['database', 'mail'];
+        }
         return ['database'];
     }
 

@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\NFSe;
 use App\Services\Sped\SpedStatus;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -31,9 +32,15 @@ class NFSeDataTable extends DataTable
                 return $nfse->emitido_em->format('d/m/Y H:i');
             })
             ->editColumn('status', function (NFSe $nfse) {
-                return '<span class="badge badge-outline text-'. $nfse->status == SpedStatus::CONCLUIDO ? 'success' : ($nfse->status == SpedStatus::PROCESSAMENTO ? 'info' : 'warning') .'">
-                            '. $nfse->status .'
-                        </span>';
+                $isError = $nfse->status == SpedStatus::ERRO;
+                $statusTXT = $nfse->status == SpedStatus::CONCLUIDO ? 'success' : ($nfse->status == SpedStatus::PROCESSAMENTO || $nfse->status == SpedStatus::PROCESSO_CANCELAMENTO ? 'info' : 'warning');
+
+                if($isError){
+                    $txtErro = $nfse->status_historico[SpedStatus::ERRO]['message'];
+                    $txtDataAtualizacao = Carbon::parse($nfse->status_historico[SpedStatus::ERRO]['created_at'])->format('d/m/Y H:i');
+                    return "<a href='#' onclick='javascript: fillModalError(\"$txtErro\", \"$txtDataAtualizacao\")' data-bs-toggle='modal' data-bs-target='#modalError'><span class='badge badge-outline text-$statusTXT'>$nfse->status</span></a>";
+                }
+                return "<span class='badge badge-outline text-$statusTXT'>$nfse->status</span>";
             })
             ->addColumn('empresa', function (NFSe $nfse) {
                 return $nfse->venda->empresa->nome;
