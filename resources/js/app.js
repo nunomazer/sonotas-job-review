@@ -4,9 +4,15 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+ window.$ = window.jQuery = require('jquery');
+
 // require('./bootstrap');
 
 require("@tabler/core");
+
+// DataTables
+require('datatables.net-bs4');
+require('datatables.net-buttons-bs4');
 
 window.Vue = require("vue").default;
 

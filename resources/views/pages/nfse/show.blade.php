@@ -64,26 +64,32 @@
             <div class="  col-4 col-md-1 ">
                 Descrição
             </div>
-            <div class="col-8 col-md-4 border">
+            <div class="col-8 col-md-3 border">
                 {{ $item->servico->nome }}
             </div>
-            <div class="text-md-center col-4 col-md-1 ">
+            <div class="text-md-center col-2 col-md-1 ">
                 Quantidade
             </div>
             <div class=" col-8 col-md-1 border">
                 {{ number_format($item->qtde, 2, ',', '.') }}
             </div>
-            <div class=" text-md-center col-4 col-md-1 ">
+            <div class=" text-md-center col-2 col-md-1 ">
                 Valor
             </div>
             <div class="col-8 col-md-1 border">
                 {{ number_format($item->valor, 2, ',', '.') }}
             </div>
+            <div class=" text-md-center col-2 col-md-1 ">
+                Desconto
+            </div>
+            <div class="col-8 col-md-1 border">
+                {{ number_format($item->desconto, 2, ',', '.') }}
+            </div>
             <div class="text-md-center col-4 col-md-1 ">
                 Total
             </div>
             <div class="col-8 col-md-1 border ">
-                {{ number_format($item->valor * $item->qtde, 2, ',', '.') }}
+                {{ number_format($item->valor * $item->qtde - $item->desconto, 2, ',', '.') }}
             </div>
             @endforeach
         </div>
@@ -93,7 +99,7 @@
             <div class="col-3 col-md-1 ">
                 XML
             </div>
-            <div class="col-9 col-md-1 text-center border border-primary">
+            <div class="col-9 col-md-9 text-center border border-primary">
                 @if($nfse->arquivo_pdf_downloaded)
                 <a href="{{ route('notas-servico.download.xml', $nfse) }}">
                     Baixar
@@ -109,7 +115,7 @@
             <div class="col-3 col-md-1 ">
                 PDF
             </div>
-            <div class="col-9 col-md-1 text-center border border-primary">
+            <div class="col-9 col-md-9 text-center border border-primary">
                 @if($nfse->arquivo_pdf_downloaded)
                 <a href="{{ route('notas-servico.download.pdf', $nfse) }}">
                     Baixar

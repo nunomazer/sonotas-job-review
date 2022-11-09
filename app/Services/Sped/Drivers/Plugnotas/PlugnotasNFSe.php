@@ -32,8 +32,8 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                 "valor" => [
                     "servico" => $item->valor,
                     "quantidade" => $item->quantidade,
-                    //"descontoCondicionado": 0,
-                    //"descontoIncondicionado": 0
+                    //"descontoCondicionado" => $item->desconto,
+                    "descontoIncondicionado" => $item->desconto,
                 ],
             ];
         }

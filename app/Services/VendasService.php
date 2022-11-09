@@ -37,17 +37,12 @@ class VendasService
     {
         try {
             DB::beginTransaction();
-
-                $vendaDesconto = $venda['desconto'];
-                if(is_nan($venda['desconto'])){
-                    $vendaDesconto = 0;
-                }
                 $valorTotal = 0;
                 foreach ($itens as $item) {
-                    $valorTotal += $item->valor * $item->qtde;
+                    $valorTotal += $item->valor * $item->qtde - $item->desconto;
                 }
 
-                $venda['valor'] = $valorTotal - $vendaDesconto;
+                $venda['valor'] = $valorTotal;
 
                 $venda = Venda::create($venda);
 
@@ -92,17 +87,12 @@ class VendasService
         try {
             DB::beginTransaction();
                 $venda_db = Venda::find($venda['id']);
-
-                $vendaDesconto = $venda['desconto'];
-                if(is_nan($venda['desconto'])){
-                    $vendaDesconto = 0;
-                }
                 $valorTotal = 0;
                 foreach ($itens as $item) {
-                    $valorTotal += $item->valor * $item->qtde;
+                    $valorTotal += $item->valor * $item->qtde - $item->desconto;
                 }
 
-                $venda_db['valor'] = $valorTotal - $vendaDesconto;
+                $venda_db['valor'] = $valorTotal;
                 $dataPlanejada = (object) $venda['data_emissao_planejada'];
                 $venda = $venda_db->fill($venda);
 
@@ -288,6 +278,7 @@ class VendasService
             $item->tipo_documento = $vendaApi['venda']['tipo_documento'];
             $item->qtde = $servico['qtde'];
             $item->valor = $servico['valor'];
+            $item->desconto = $servico['desconto'];
 
             $itens[] = $item;
         }
@@ -336,6 +327,7 @@ class VendasService
                 'servico_id'        => $item->item_id,
                 'qtde'              => $item->qtde,
                 'valor'             => $item->valor,
+                'desconto'          => $item->desconto,
             ]);
         });
 
@@ -346,8 +338,7 @@ class VendasService
             'venda_id'      => $venda->id,
             'emitido_em'    => now(),
             'valor'         => $venda->valor,
-            'info_adicional'=> $venda->info_adicional,
-            'desconto'      => $venda->desconto,
+            'info_adicional'=> $venda->info_adicional, 
         ], $nfseItens->all());
 
         if ($nfse == null) {

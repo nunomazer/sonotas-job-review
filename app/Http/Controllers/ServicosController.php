@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EmpresaRequest;
+use App\DataTables\ServicoDataTable;
 use App\Http\Requests\ServicoRequest;
 use App\Models\EmpresaNFSConfig;
-use App\Models\Integracao;
 use App\Models\Servico;
 use App\Models\Empresa;
-use App\Services\EmpresaService;
 use App\Services\ServicoService;
 use Illuminate\Http\Request;
 
@@ -21,7 +19,7 @@ class ServicosController extends Controller
         $this->servicoService = new ServicoService();
     }
 
-    public function index()
+    public function index(ServicoDataTable $dataTable)
     {
         $empresasID_array = auth()->user()->empresasIdsArray();
         $config = EmpresaNFSConfig::whereIn('empresa_id', $empresasID_array)->count();
@@ -30,14 +28,7 @@ class ServicosController extends Controller
             return view('pages.servicos.noconfig');
         }
 
-        $integracoes = Integracao::whereIn('empresa_id', $empresasID_array)->get();
-
-        $servicos = Servico::whereIn('empresa_id', $empresasID_array)
-            ->with('empresa')
-            ->orderBy('nome')
-            ->paginate(30);
-
-        return view('pages.servicos.list', compact('servicos','integracoes'));
+        return $dataTable->render('pages.servicos.list');
     }
 
     public function create()
