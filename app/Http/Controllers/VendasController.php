@@ -42,9 +42,10 @@ class VendasController extends Controller
         $servicos = collect(request()->get('servico'))
             ->map(function ($item) {
                 return new VendaItem([
-                    'item_id' => $item['id'],
-                    'qtde' => $item['qtde'],
-                    'valor' => $item['valor'],
+                    'item_id'   => $item['id'],
+                    'qtde'      => $item['qtde'],
+                    'valor'     => $item['valor'],
+                    'desconto'  => $item['desconto'],
                     'tipo_documento' => request()->get('tipo_documento', SpedService::DOCTYPE_NFSE),
                 ]);
             });
@@ -61,9 +62,10 @@ class VendasController extends Controller
         $servicos = collect(request()->get('servico'))
             ->map(function ($item) {
                 return new VendaItem([
-                    'item_id' => $item['id'],
-                    'qtde' => $item['qtde'],
-                    'valor' => $item['valor'],
+                    'item_id'   => $item['id'],
+                    'qtde'      => $item['qtde'],
+                    'valor'     => $item['valor'],
+                    'desconto'  => $item['desconto'],
                     'tipo_documento' => request()->get('tipo_documento', SpedService::DOCTYPE_NFSE),
                 ]);
             });

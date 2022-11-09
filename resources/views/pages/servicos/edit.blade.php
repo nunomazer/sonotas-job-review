@@ -196,7 +196,7 @@
 @push('js')
 <script type="text/javascript">
     $(function() {
-        const creating = {{isset($servico) ? 'false' : 'true'}};
+        const creating = {{ isset($servico) ? false : true }};
 
         $('#tipo_servico_codigo').select2({
             theme: 'bootstrap4',
