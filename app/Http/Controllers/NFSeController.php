@@ -52,4 +52,12 @@ class NFSeController extends Controller
 
         return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_xml)); //validar se é método GET ou PATH mesmo
     }
+    
+    public function cancel(NFSe $nfse)
+    {
+        $nfse = $this->nfseService->cancel($nfse);
+
+        return redirect()->route('notas-servico.list', )
+            ->with(['success' => 'Cancelamento solicitado com successo !']);
+    }
 }

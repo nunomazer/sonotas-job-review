@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
 
         //$schedule->command('sped:atualizar-status-docs')->dailyAt('01:00');
         $schedule->command('sped:atualizar-status-docs')->hourlyAt(30);
+        $schedule->command('sped:atualizar-status-cancelamentos-nfse')->everyFiveMinutes(); //validar tempo
         $schedule->command('sped:download-xml-pdf-docs')->hourlyAt(45);
 
         $schedule->command('ibge:import-states-cities')->monthly();

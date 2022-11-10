@@ -40,7 +40,9 @@ class ServicosImportados extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        //return ['mail'];
+        if($this->empresa->receber_notificacao_por_email){
+            return ['database', 'mail'];
+        }
         return ['database'];
     }
 

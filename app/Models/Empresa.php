@@ -16,6 +16,7 @@ class Empresa extends Model
 
     protected $casts = [
         'ativo' => 'boolean',
+        'receber_notificacao_por_email' => 'boolean'
     ];
 
     public function scopeIsAtivo($query)

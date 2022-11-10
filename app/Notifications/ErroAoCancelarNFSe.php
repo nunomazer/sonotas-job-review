@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ErroAoSincronizarVendasEmpresa extends Notification implements ShouldQueue
+class ErroAoCancelarNFSe extends Notification implements ShouldQueue
 {
     use Queueable;
 

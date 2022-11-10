@@ -4,21 +4,32 @@
 @section('page-title', 'Nota Fiscal de Serviço'))
 
 @section('content')
+
 <div class="card">
     <div class="card-header">
         <h2>
-            #{{ $nfse->id }} -
-            <small>{{ $nfse->status }}</small>
+            #{{ $nfse->id }} - <small>{{ $nfse->status }}</small>
         </h2>
         <div class="card-actions">
-            <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
-                Voltar
-            </a>
+            <div class="row">
+                @if($nfse->canCancel) 
+                <div class="col">
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
+                        Cancelar
+                    </button>
+                </div>
+                @endif
+                <div class="col">
+                    <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
+                        Voltar
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-3 col-md-1  ">
+            <div class="col-3 col-md-1">
                 Cliente
             </div>
             <div class="col-5 col-md-9 border">
@@ -129,4 +140,29 @@
         </div>
     </div>
 </div>
+
+@if($nfse->canCancel)
+<div class="modal fade" id="modalCancelamento" tabindex="-1" role="dialog" aria-labelledby="modalCancelamentoLabel" aria-hidden="true">
+    <form method="POST" action="{{ route('notas-servico.cancelar', $nfse) }}">
+        @csrf
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelamentoLabel">Cancelamento de nota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Motivo:</label>
+                    <textarea class="form-control" minlength="12" name="cancelamento_motivo" required style="width: 100%; min-height:60px"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+    
+@endif
 @endsection

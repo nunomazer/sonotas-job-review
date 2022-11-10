@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
+    Route::post('/notas-servico/{nfse}/cancelar', [NFSeController::class, 'cancel'])->name('notas-servico.cancelar');
     Route::get('/notas-servico/{nfse}/download-pdf', [NFSeController::class, 'downloadPdf'])->name('notas-servico.download.pdf');
     Route::get('/notas-servico/{nfse}/download-xml', [NFSeController::class, 'downloadXml'])->name('notas-servico.download.xml');
 
