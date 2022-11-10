@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\Sped\SpedStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class NFSe extends Model
 {
@@ -22,6 +24,9 @@ class NFSe extends Model
         'cliente_id',
         'valor',
         'driver_dados',
+        'cancelamento_codigo',
+        'cancelamento_motivo',
+        'cancelamento_protocolo'
     ];
 
     protected $casts = [
@@ -44,4 +49,13 @@ class NFSe extends Model
         return $this->belongsTo(TipoServico::class);
     }
 
+    public function getCanCancelAttribute()
+    {
+        return true;
+        return $this->attributes['status'] == SpedStatus::CONCLUIDO && 
+            empty($this->attributes['cancelamento_protocolo']) /*&& 
+            Carbon::parse($this->attributes['emitido_em'])->gt(now() - 2)*/;
+        //validar quantos dias permite cancelar
+        //
+    }    
 }

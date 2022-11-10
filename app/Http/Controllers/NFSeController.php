@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\NFSeDataTable;
 use App\Http\Requests\NFSeRequest;
 use App\Models\NFSe;
 use App\Services\NFSeService;
@@ -16,14 +17,9 @@ class NFSeController extends Controller
         $this->nfseService = new NFSeService();
     }
 
-    public function index()
+    public function index(NFSeDataTable $dataTable)
     {
-        $nfses = NFSe::with('venda')->whereHas('venda', function($q) {
-            $q->whereIn('empresa_id', auth()->user()->empresas->pluck('id')->toArray());
-        })
-            ->orderBy('emitido_em', 'desc')
-            ->paginate(30);
-        return view('pages.nfse.list', compact('nfses'));
+        return $dataTable->render('pages.nfse.list');        
     }
 
     public function store(NFSeRequest $request)
@@ -55,5 +51,13 @@ class NFSeController extends Controller
         }
 
         return response()->download(Storage::disk($nfse->disk)->path($nfse->arquivo_xml)); //validar se é método GET ou PATH mesmo
+    }
+    
+    public function cancel(NFSe $nfse)
+    {
+        $nfse = $this->nfseService->cancel($nfse);
+
+        return redirect()->route('notas-servico.list', )
+            ->with(['success' => 'Cancelamento solicitado com successo !']);
     }
 }

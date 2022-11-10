@@ -20,46 +20,10 @@
             </div>
         </div>
         <div class="card-body">
-            <div id="table-default" class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th class="table-sort" data-sort="sort-name">Empresa</th>
-                        <th class="table-sort" data-sort="sort-name">
-                            Nome
-                        </th>
-                        <th>Telefone</th>
-                        <th>E-mail</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-tbody">
-                        @foreach($clientes as $cliente)
-                            <tr>
-                                <td>
-                                    {{ $cliente->empresa->nome }}
-                                </td>
-                                <td>
-                                    <a href="{{route('clientes.edit', $cliente)}}">
-                                        {{ $cliente->nome }}
-                                    </a>
-                                </td>
-                                <td>
-                                    ({{ $cliente->telefone_ddd }}) {{ $cliente->telefone_num }}
-                                </td>
-                                <td>
-                                    {{ $cliente->email }}
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="card-footer">
-                    {{ $clientes->links() }}
-                </div>
-            </div>
+            {{$dataTable->table()}}                
         </div>
     </div>
 @endsection
+@push('js')
+    {{$dataTable->scripts()}}
+@endpush

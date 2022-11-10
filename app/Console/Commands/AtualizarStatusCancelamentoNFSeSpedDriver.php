@@ -8,21 +8,21 @@ use App\Services\Sped\SpedService;
 use App\Services\VendasService;
 use Illuminate\Console\Command;
 
-class AtualizarDocsSpedDriver extends Command
+class AtualizarStatusCancelamentoNFSeSpedDriver extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'sped:atualizar-status-docs';
+    protected $signature = 'sped:atualizar-status-cancelamentos-nfse';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Percorre todas as empresas atualizando os statis das NF';
+    protected $description = 'Percorre todas as empresas atualizando os status de cancelamentos das NFSe';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,7 @@ class AtualizarDocsSpedDriver extends Command
 
         Empresa::isAtivo()->get()->each(
             function ($empresa) use ($empresaService) {
-                $empresaService->atualizarStatusDocsProcessamento($empresa);
+                $empresaService->atualizarStatusNFseEmCancelamentos($empresa);
         });
     }
 }

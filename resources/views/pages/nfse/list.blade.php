@@ -10,70 +10,36 @@
 
             </div>
         </div>
-        <div class="card-body">
-            <div id="table-default" class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Data emissão</th>
-                        <th>Status</th>
-                        <th class="table-sort" data-sort="sort-name">Prestador</th>
-                        <th class="table-sort" data-sort="sort-name">
-                            Tomador
-                        </th>
-                        <th>Data venda</th>
-                        <th>Serviços</th>
-                        <th class="text-end">Valor</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-tbody">
-                        @foreach($nfses as $nfse)
-                            <tr>
-                                <td>
-                                    <a href="{{ route('notas-servico.show', $nfse) }}">
-                                        {{ $nfse->id }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ $nfse->emitido_em->format('d/m/Y H:i') }}
-                                </td>
-                                <td>
-                                    <span class="badge badge-outline text-{{ $nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'success' : ($nfse->status == \App\Services\Sped\SpedStatus::PROCESSAMENTO ? 'info' : 'warning')}}">
-                                        {{ $nfse->status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    {{ $nfse->venda->empresa->nome }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('clientes.edit', $nfse->venda->cliente) }}">
-                                        {{ $nfse->venda->cliente->nome }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ $nfse->venda->data_transacao->format('d/m/Y') }}
-                                </td>
-                                <td>
-                                    @foreach($nfse->itens_servico as $item)
-                                        {{ $item->servico->nome }}
-                                        <br/>
-                                    @endforeach
-                                </td>
-                                <td class="text-end">
-                                    {{ number_format($nfse->valor, 2, ',', '.') }}
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <div class="card-body">            
+            {{$dataTable->table()}}            
+        </div>        
+    </div>
+    <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="modalErrorLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalErrorLabel">Erro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Descrição:</label>
+                    <textarea class="form-control" id="modalErrorTextarea" readonly style="width: 100%; min-height:100px"></textarea>
+                    <sub id="modalErrorDate"></sub>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
             </div>
-        </div>
-        <div class="card-footer">
-            {{ $nfses->links() }}
         </div>
     </div>
 @endsection
+@push('js')
+    {{$dataTable->scripts()}}
+    <script>
+        function fillModalError(message, dt){
+            //$("#modalError").modal('show');
+            $("#modalErrorTextarea").html(message);
+            $("#modalErrorDate").html(dt);
+        }
+    </script>
+@endpush

@@ -40,6 +40,9 @@ class ErroAoImportarVenda extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
+        if($this->empresa->receber_notificacao_por_email){
+            return ['database', 'mail'];
+        }
         return ['database'];
     }
 

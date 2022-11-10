@@ -89,11 +89,6 @@
                             salvar a venda ou de acordo com as configurações padrões da empresa.
                         </div>
                     </div>
-
-                    <div class="mb-3 col-12 col-lg-3">
-                        <label for="name" class="form-label required">Descontos</label>
-                        <input type="number" step="0.01" class="form-control" name="desconto" id="desconto" required value="{{ old('desconto', $venda->desconto ?? '0') }}">
-                    </div>
                 </div>
 
                 <h3>
@@ -102,9 +97,10 @@
                 </h3>
                 <hr />
                 <div class="row">
-                    <div class=" col-5">Descrição</div>
+                    <div class=" col-3">Descrição</div>
                     <div class="col-2">Qtde</div>
                     <div class="col-2 col-md-2">Valor un</div>
+                    <div class="col-2 col-md-2">Desconto</div>                    
                     <div class=" col-2 col-md-2">Valor total</div>
                     <div class="col-1"></div>
                 </div>
@@ -117,7 +113,7 @@
                         @foreach($venda->itens as $idx => $vendaItem)
                         <div class="row linhaItem">
                             <div class="input-group mb-3">
-                                <div class="col-3 col-md-5">
+                                <div class="col-3 col-md-3">
                                     <select class="form-select servico_select2" required name="servico[{{$idx}}][id]" value="{{$vendaItem->id}}" data-idx="{{$idx}}">
                                         <option selected value="{{$vendaItem->item_id}}">{{$vendaItem->servico->nome}}</option>
                                     </select>
@@ -127,6 +123,9 @@
                                 </div>
                                 <div class="col-2">
                                     <input type="number" step="0.01" class="form-control ms-1 servico-valor" name="servico[{{$idx}}][valor]" id="servico_valor_{{$idx}}" value="{{$vendaItem->valor}}" data-idx="{{$idx}}" placeholder="Valor" required />
+                                </div>
+                                <div class="col-2">
+                                    <input type="number" step="0.01" class="form-control ms-1 servico-desconto" name="servico[{{$idx}}][desconto]" id="servico_desconto_{{$idx}}" value="{{$vendaItem->desconto}}" data-idx="{{$idx}}" placeholder="Desconto" required />
                                 </div>
                                 <div class="col-2">
                                     <input type="number" step="0.01" class="form-control ms-1 servico-valor-total" id="servico_valor_total_{{$idx}}" data-idx="{{$idx}}" placeholder="Total" readonly="readonly" required />
@@ -253,6 +252,7 @@
 
                 $('#servico_valor_' + $(this).data("idx")).val(data.valor);
                 $('#servico_qtde_' + $(this).data("idx")).val(1);
+                $('#servico_desconto_' + $(this).data("idx")).val(0);
 
                 calculaValorTotal()
             });
@@ -314,7 +314,7 @@
 
             var html = `<div class="row linhaItem"> 
                     <div class="input-group mb-3">
-                        <div class="col-5">
+                        <div class="col-3">
                             <select class="form-select servico_select2" required  
                                 name="servico[${servicoIdx}][id]"
                                 data-idx="${servicoIdx}"></select>
@@ -330,6 +330,12 @@
                                 name="servico[${servicoIdx}][valor]" 
                                 id="servico_valor_${servicoIdx}"
                                 data-idx="${servicoIdx}" placeholder="Valor" required />
+                        </div>
+                        <div class="col-2">
+                            <input type="number" step="0.01" class="form-control ms-1 servico-desconto" 
+                                name="servico[${servicoIdx}][desconto]" 
+                                id="servico_desconto_${servicoIdx}"
+                                data-idx="${servicoIdx}" placeholder="Desconto" required />
                         </div>
                         <div class="col-2">
                             <input type="number" step="0.01" class="form-control ms-1 servico-valor-total" 
@@ -360,32 +366,27 @@
         }
 
         function calculaValorTotal() {
-            var valorTotal = 0;
-            var txtDesconto = $("#desconto").val();
-            if (isNaN(txtDesconto)) {
-                txtDesconto = 0;
-            }
-            var valorDesconto = parseFloat(txtDesconto);
+            var valorTotal = 0; 
             $('.servico-valor').each(function() {
-                valorLinha = parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val()) * parseFloat($(this).val());
+                var quantidade = parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val());
+                var valor_unitario =  parseFloat($(this).val());
+                var desconto = parseFloat($(`#servico_desconto_${$(this).data('idx')}`).val());
+                valorLinha = quantidade * valor_unitario - desconto;
                 valorTotal += valorLinha;
                 $(`#servico_valor_total_${$(this).data('idx')}`).val(valorLinha.toFixed(2));
             });
-            valorTotal -= valorDesconto;
             $('#valor').val(valorTotal.toFixed(2));
         }
 
         function initEventValor() {
             $('.servico-qtde').on('change', calculaValorTotal);
             $('.servico-valor').on('change', calculaValorTotal);
-            $('#desconto').on('change', calculaValorTotal);
+            $('.servico-desconto').on('change', calculaValorTotal); 
         }
 
         // carrega a primeira linha do form de serviços
         <?= (empty($venda->itens) ? "addServicoRow();" : "calculaValorTotal();") ?>
         initEventValor();
-
-
     });
 </script>
 @endpush

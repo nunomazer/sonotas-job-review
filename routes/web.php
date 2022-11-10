@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/oauth-confirmation', [LoginController::class, 'oauthConfirmation'])->name('oauthConfirmation');
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -62,6 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notas-servico', [NFSeController::class, 'index'])->name('notas-servico.list');
     Route::get('/notas-servico/{nfse}', [NFSeController::class, 'show'])->name('notas-servico.show');
+    Route::post('/notas-servico/{nfse}/cancelar', [NFSeController::class, 'cancel'])->name('notas-servico.cancelar');
     Route::get('/notas-servico/{nfse}/download-pdf', [NFSeController::class, 'downloadPdf'])->name('notas-servico.download.pdf');
     Route::get('/notas-servico/{nfse}/download-xml', [NFSeController::class, 'downloadXml'])->name('notas-servico.download.xml');
 

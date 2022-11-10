@@ -101,8 +101,8 @@
                         </select>
                     </div>
 
-                    @foreach($integracao->fields as $field => $value) 
-                        <div class="mb-3 col-6">
+                    @foreach($integracao->fields as $field => $value)
+                        <div class="mb-3 col-6 {{($driver->isFieldVisible($field) ? 'd-block' : 'd-none')}}" >
                             <label for="{{$field}}" class="form-label required">{{$driver->fieldLabel($field)}}</label>
                             <input required type="text" class="form-control" name="fields[{{$field}}]" aria-describedby="nameHelp"
                                 value="{{ old($field, $value) }}"

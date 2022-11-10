@@ -29,6 +29,13 @@ interface IIntegraDriver
      * @return string
      */
     public function fieldHelpText(string $name) : string;
+
+    /**
+     * Retorna se o campo é visível
+     * @param string $name
+     * @return string
+     */
+    public function isFieldVisible(string $fieldName) : string;
     
     /**
      * Recupera da plataforma integrada a lista de serviços, no formato de um array de models Servico

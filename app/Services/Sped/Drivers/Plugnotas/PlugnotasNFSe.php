@@ -32,8 +32,8 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                 "valor" => [
                     "servico" => $item->valor,
                     "quantidade" => $item->quantidade,
-                    //"descontoCondicionado": 0,
-                    //"descontoIncondicionado": 0
+                    //"descontoCondicionado" => $item->desconto,
+                    "descontoIncondicionado" => $item->desconto,
                 ],
             ];
         }
@@ -117,4 +117,38 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         return $docDriver;
     }
+    
+    public function cancelar() : SpedApiReturn
+    {
+        try {
+            $result = $this->httpClient()->request('POST', 'nfse/cancelar/' . $this->nfse->driver_id, [
+                'json' => [
+                    'codigo' => $this->nfse->cancelamento_codigo,
+                    'motivo' => $this->nfse->cancelamento_motivo,
+                ],
+            ]);
+
+            return $this->toApiReturn($result);
+
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Cancelar NFSe');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+    }
+
+    public function consultarStatusCancelamento() : SpedApiReturn
+    {
+        try {
+            $result = $this->httpClient()->request('GET', 'nfse/cancelar/status/' . $this->nfse->driver_id);
+
+            return $this->toApiReturn($result);
+
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Consultar status cancelamento NFSe');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+    }
+    
 }

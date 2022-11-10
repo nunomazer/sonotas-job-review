@@ -138,6 +138,21 @@
                 </div>
 
             </div> 
+
+            
+            <br />
+            <h3 class="strong border-top border-bottom p-1">Notificação</h3>
+            <div class="row"> 
+                
+                <div class="mb-3 col-2">
+                    <div class="form-label">Receber por e-mail</div>
+                    <label class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" value="1" name="receber_notificacao_por_email"
+                            {{ old('receber_notificacao_por_email', $empresa->receber_notificacao_por_email ?? false) ? 'checked' : '' }}
+                        >
+                    </label>
+                </div>
+            </div> 
             <br />
             <h3 class="strong border-top border-bottom p-1">Logo</h3>
             <div class="row">

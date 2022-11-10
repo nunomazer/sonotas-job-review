@@ -56,12 +56,17 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <!-- Select2 -->
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script src="{{ asset('js/app.js') }}" ></script> 
     
+    <!-- DataTables -->
+    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+    
+    <!-- Select2 -->    
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/pt.js"></script>
+    
+    <!-- jQuery Mask-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     @stack('js')

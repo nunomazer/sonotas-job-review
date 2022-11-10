@@ -6,19 +6,15 @@ use App\Events\ClienteAlteradoEvent;
 use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
-
 use App\Events\NFSeDownloadedFilesEvent;
-use App\Events\WebhookCheckoutEvent;
-
 use App\Events\NFSeCriadaEvent;
+use App\Events\NFSeSolicitadoCancelamentoEvent;
 use App\Events\VendaAtualizadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
 use App\Listeners\EmiteNFSeDriverSped;
-
-use App\Listeners\WebhookAssinaturaEmpresa;
-
+use App\Listeners\CancelarNFSeDriverSped;
 use App\Listeners\EnviarEmailBoasVindas;
 
 use Illuminate\Auth\Events\Registered;
@@ -65,6 +61,10 @@ class EventServiceProvider extends ServiceProvider
 
         NFSeCriadaEvent::class => [
             EmiteNFSeDriverSped::class,
+        ],
+
+        NFSeSolicitadoCancelamentoEvent::class => [
+            CancelarNFSeDriverSped::class,
         ],
 
         NFSeDownloadedFilesEvent::class => [
