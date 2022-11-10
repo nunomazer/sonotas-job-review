@@ -7,7 +7,7 @@ return [
      */
     'drivers' => [
         'eduzz' => [
-            'base_url' => env('EDUZZ_BASE_URL','https://api2.eduzz.com'),
+            'base_url' => env('EDUZZ_BASE_URL','https://api-devhub.eduzz.com'),
             'base_class' => \App\Services\Integra\Drivers\Eduzz\EduzzPlatform::class,
         ],
     ],

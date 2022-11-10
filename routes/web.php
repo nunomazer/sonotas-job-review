@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/oauth-confirmation', [LoginController::class, 'oauthConfirmation'])->name('oauthConfirmation');
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

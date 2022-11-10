@@ -21,29 +21,45 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'name' => 'publickey',
             'label' => 'Public Key',
             'required' => true,
+            'visible' => true,
             'helptext' => 'Chave pública de vínculo da plataforma',
         ],
         [
             'name' => 'apikey',
             'label' => 'Api Key',
             'required' => true,
+            'visible' => true,
             'helptext' => 'Chave da API de vínculo da plataforma',
         ],
         [
             'name' => 'email',
             'label' => 'E-mail',
             'required' => true,
+            'visible' => true,
             'helptext' => 'E-mail que recebera atualizações referentes a integração',
+        ],
+        
+        [
+            'name' => 'oauth_access_token',
+            'label' => 'OAUTH Access Token',
+            'visible' => false,
+            'helptext' => '',
+        ],
+        [
+            'name' => 'oauth_user_id',
+            'label' => 'UserID',
+            'visible' => false,
+            'helptext' => '',
         ],
     ];
 
-    protected $token = null;
+    //protected $token = null;
 
     /**
      * @var Carbon
      */
-    protected $token_until = null;
-
+    //protected $token_until = null;
+    /*
     private function setTokensFromResult($result)
     {
         if (isset($result['data']['token'])) {
@@ -57,9 +73,9 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         }
 
         return $this->token;
-    }
+    }*/
 
-    private function generateToken() : string
+    /*private function generateToken() : string
     {
         $http = new \GuzzleHttp\Client([
             'base_uri' => config('integra.drivers.eduzz.base_url'),
@@ -80,18 +96,23 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $result = json_decode($result->getBody()->getContents(), true);
 
         return $this->setTokensFromResult($result);
-    }
+    }*/
+
     /**
      * Pega o token de acesso ou gera um novo caso tenha expirao ou não exista
      * @return string
      */
     protected function getToken() : string
     {
+        return $this->fields['oauth_access_token'];//TODO
+    //REVER
+        /*
         if (!$this->token || $this->token_until->lessThan(now())) {
             $this->generateToken();
         }
 
         return $this->token;
+        */
     }
 
     /**
@@ -104,9 +125,9 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         return new \GuzzleHttp\Client([
             'base_uri' => config('integra.drivers.eduzz.base_url'),
             'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'token' => $this->getToken(),
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+                'Authorization' => "Bearer {$this->getToken()}",
             ],
         ]);
     }
@@ -124,7 +145,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $query = [];
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/content/content_list', [
+        $result = $http->get('/myeduzz-products/v1/products', [
             'query' => $query,
         ]);
 
@@ -145,7 +166,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
             foreach ($servicosApi as $servicoApi) {
                 $servicos[] = [
-                    'driver_id' => $servicoApi['content_id'],
+                    'driver_id' => $servicoApi['id'],
                     'nome' => $servicoApi['title'],
                     'descricao' => $servicoApi['description'],
                     'valor' => $servicoApi['price'],
@@ -178,7 +199,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $query['start_date'] = $from;
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/fiscal/get_taxdocumentlist', [
+        $result = $http->get('/fiscal/v1', [
             'query' => $query,
         ]);
 
