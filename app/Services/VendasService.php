@@ -338,7 +338,7 @@ class VendasService
             'venda_id'      => $venda->id,
             'emitido_em'    => now(),
             'valor'         => $venda->valor,
-            'info_adicional'=> $venda->info_adicional, 
+            'info_adicional'=> $venda->info_adicional,
         ], $nfseItens->all());
 
         if ($nfse == null) {
@@ -361,7 +361,7 @@ class VendasService
     public function gerarEmitirNFsPlanejadas(Empresa $empresa)
     {
         $vendas = $empresa->vendas()
-            ->where('data_emissao_planejada', '<=', now())
+            ->where('data_emissao_planejada', '<=', now()->endOfDay())
             ->whereNull('documento_id')
             ->get();
 
