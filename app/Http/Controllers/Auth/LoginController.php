@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Jobs\IntegracaoImportarServicos;
 use App\Models\Cidade;
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
 use App\Models\Integracao;
+use App\Models\Plan;
 use App\Models\User;
+use App\Models\UserEmpresa;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use Exception;
@@ -16,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -60,21 +64,39 @@ class LoginController extends Controller
         $this->eduzzSignatureUrl = env('EDUZZ_SIGNATURE_URL');
         $this->eduzzAppID = env('EDUZZ_APP_ID');
         $this->eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
+        $this->eduzzOAUTHApiUrl = env('EDUZZ_OAUTH_URL_API');
         $this->eduzzAppSecret = env('EDUZZ_APP_SECRET'); 
     }
 
-    public function isValidSignatureStatus($accessToken, $producerID){
+    public function isValidSignatureStatus($clientToken, $integracaoOauth){
         $client = new \GuzzleHttp\Client([
             'base_uri'  => $this->eduzzSignatureUrl,
             'headers'   => [
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
-                'clientToken' => $accessToken
+                'clientToken'   => $clientToken
             ],
             'defaults'  => ['verify' => false],
         ]); 
-        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$producerID}");
+        $orbitaID = $integracaoOauth->fields['orbita_id'];
+        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+  
+        $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+        EmpresaAssinatura::updateOrCreate(
+            [
+                'empresa_id' => $integracaoOauth->empresa->id, 
+                'driver' => 'Eduzz',
+            ],
+            [
+                'empresa_id' => $integracaoOauth->empresa->id, 
+                'driver' => 'Eduzz',
+                'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
+                'driver_id' => $resultSubscription['plan'],
+                'plan_id' => $plan->id,
+                'status_historico' => ''
+            ]
+        );
 
         return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
     }
@@ -89,7 +111,7 @@ class LoginController extends Controller
             }
     
             $clientOauth = new \GuzzleHttp\Client([
-                'base_uri'  => $this->eduzzOAUTHUrl,
+                'base_uri'  => $this->eduzzOAUTHApiUrl,
                 'headers'   => [
                     'Content-Type'  => 'application/json',
                     'Accept'        => 'application/json'
@@ -106,76 +128,101 @@ class LoginController extends Controller
 
             $requestOauth = $clientOauth->post('/oauth/token', [
                 'json' => $playload,
-            ]);
+            ]); 
 
             $resultOauth = json_decode($requestOauth->getBody()->getContents(), true);
             
+
             if ($requestOauth->getStatusCode() == 200) {
+ 
                 $producerID = $resultOauth['user']['id'];
                 $client = new \GuzzleHttp\Client([
                     'base_uri'  => $this->eduzzAPI,
                     'headers'   => [
                         'Content-Type'  => 'application/json',
                         'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . $resultOauth['user']['access_token']
+                        'Authorization' => 'Bearer ' . $resultOauth['access_token']
                     ],
                     'defaults'  => ['verify' => false],
-                ]); 
-                $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first();
+                ]);
+
+                $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id' = ?", [$producerID])->first();
 
                 if(empty($integracaoOauth)){
+                    $requestDados = $client->get('/myeduzz-producers/v1/producers/' . $producerID . '/profile');
                     
-                    $requestDados = $client->post('/myeduzz-producers/v1/producers/' . $producerID . '/profile', [
-                        'json' => $playload,
-                    ]);
+                    if($requestDados->getStatusCode() != 200){
+                        throw new Exception("Não foi possível obter os dados de produtor.");
+                    }
                     
                     $resultDados = json_decode($requestDados->getBody()->getContents(), true);
-
-                    //não encontrou - primeiro acesso
-                    $user = User::create([
-                        'name' => $resultOauth['user']['name'],
-                        'email' => $resultOauth['user']['email'],
-                        'email_verified_at' => date('Y-m-d'),
-                        'remember_token' => 0,
-                        'password' => Hash::make(uniqid()),
-                    ]);
-
-                    $tipoLogradouro = "";
-                    if(!empty($resultDados['address']['street'])){
-                        $exp_logradouro = explode(" ", $resultDados['address']['street']);
-                        if(!empty($exp_logradouro)){
-                            $tipoLogradouro = $exp_logradouro[0];
-                        }
-                    }
-
-                    $city = Cidade::where('ibge_id', $resultDados['address_city_ibge'])->first();
-                    $empresa = Empresa::create([
-                        'owner_user_id' => $user->id,
-                        'nome' => $resultDados['name'],
-                        'alias' => $resultDados['business_name'],
-                        'email' => $resultDados['email'],
-                        'documento' => $resultDados['document_number'],
-                        'telefone_num' => $resultDados['cellphone'],
-                        
-                        'tipo_logradouro' => $tipoLogradouro,
-                        'logradouro' => $resultDados['address_street'],
-                        'numero' => $resultDados['address_number'],
-                        'complemento' => $resultDados['address_complement'],
-                        'bairro' => $resultDados['address_neighborhood'],
-                        'cep' => $resultDados['address_zip_code'],
-                        'city_id' => $city->id,
-                    ]);
+                    $resultDados = $resultDados['data'];
                     
-                    $integracao = Integracao::create([
-                        'empresa_id' => $empresa->id,
-                        'name' => 'Integração com Eduzz',
-                        'driver' => 'Eduzz',
-                        'fields' => json_encode([ 
-                            "email"                         => $resultOauth['user']['email'],
-                            "apikey"                        => null,
-                            "publickey"                     => null,
-                            "oauth_access_token"            => $resultOauth['access_token'],
-                            "oauth_user_id"                 => $producerID,
+                    $requestIdentificacao = $client->get('/my-account/v1/identification');
+                    
+                    if($requestIdentificacao->getStatusCode() != 200){
+                        throw new Exception("Não foi possível obter os dados de identificação.");
+                    }
+                    
+                    $resultIdentificacao = json_decode($requestIdentificacao->getBody()->getContents(), true); 
+                    
+                    DB::beginTransaction();
+                    try{
+
+                        
+                        //não encontrou - primeiro acesso
+                        $user = User::create([
+                            'name' => $resultOauth['user']['name'],
+                            'email' => $resultOauth['user']['email'],
+                            'email_verified_at' => date('Y-m-d'),
+                            'remember_token' => 0,
+                            'password' => Hash::make(uniqid()),
+                        ]);
+
+                        $tipoLogradouro = "";
+                        if(!empty($resultDados['address_street'])){
+                            $exp_logradouro = explode(" ", $resultDados['address_street']);
+                            if(!empty($exp_logradouro)){
+                                $tipoLogradouro = $exp_logradouro[0];
+                            }
+                        } 
+
+                        $city = Cidade::where('ibge_id', $resultDados['address_city_ibge'])->first();
+                        $empresa = Empresa::create([
+                            'owner_user_id' => $user->id,
+                            'nome' => $resultDados['name'],
+                            'alias' => $resultDados['business_name'],
+                            'email' => $resultDados['email'],
+                            'documento' => $resultDados['document_number'],
+                            'telefone_num' => $resultDados['cellphone'],
+                            
+                            'tipo_logradouro' => $tipoLogradouro,
+                            'logradouro' => $resultDados['address_street'],
+                            'numero' => $resultDados['address_number'],
+                            'complemento' => $resultDados['address_complement'],
+                            'bairro' => $resultDados['address_neighborhood'],
+                            'cep' => $resultDados['address_zip_code'],
+                            'city_id' => $city->id,
+                        ]);
+                        
+                        UserEmpresa::create([
+                            'user_id' => $user->id,
+                            'empresa_id' => $empresa->id,
+                            'ativo' => true
+                        ]);
+
+                        $integracao = Integracao::create([
+                            'empresa_id' => $empresa->id,
+                            'name' => 'Integração com Eduzz',
+                            'driver' => 'Eduzz',
+                            'fields' => [ 
+                                "email"                         => $resultOauth['user']['email'],
+                                "apikey"                        => null,
+                                "publickey"                     => null,
+                                "oauth_access_token"            => $resultOauth['access_token'],
+                                "oauth_user_id"                 => $producerID,
+                                'orbita_id'                     => $resultIdentificacao['eduzzIds'][0]
+                            ],
                             "ativo"                         => true,
                             "tipo_documento"                => "nfse",
                             "data_inicio"                   => date('Y-m-d'),
@@ -183,17 +230,22 @@ class LoginController extends Controller
                             "transmissao_periodo"           => 'month',
                             "transmissao_apenas_dias_uteis" => false,
                             "transmissao_frequencia"        => 1,
-                            "vendas_importadas_em"          => null,
-                        ]), 
-                    ]);
+                            "vendas_importadas_em"          => null, 
+                        ]);
 
-                    //atualiza variavel integracaoOauth
-                    $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id'", [$producerID])->first(); 
+                        //atualiza variavel integracaoOauth
+                        $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id' = ?", [$producerID])->first(); 
+                        
+                        DB::commit();
+                    }catch(Exception $e){
+                        DB::rollBack();
+                        throw($e);
+                    }
                     
                     $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
                 } 
                 
-                if($this->isValidSignatureStatus($resultOauth['user']['access_token'], $producerID)){
+                if($this->isValidSignatureStatus(config('integra.drivers.eduzz.clientToken'), $integracaoOauth)){
                     Auth::loginUsingId($integracaoOauth->empresa->owner->id);
                     return view('pages.login.oauth-success');
                 }
