@@ -9,8 +9,10 @@ return [
         'eduzz' => [
             'base_url' => env('EDUZZ_BASE_URL','https://api-devhub.eduzz.com'),
             'base_class' => \App\Services\Integra\Drivers\Eduzz\EduzzPlatform::class,
-            'app_id' => env('EDUZZ_APP_ID', '09123'),
-            'redirect_url' => env('EDUZZ_REDIRECT_URL', '12309'),
+            'app_id' => env('EDUZZ_APP_ID', '9b9873bb-a50f-434f-8491-ef033a73a637'),            
+            'oauth_url' => env('EDUZZ_OAUTH_URL','https://accounts.testzz.ninja'),
+            'redirect_url' => env('EDUZZ_REDIRECT_URL', 'localhost'),
+            'clientToken' => env('EDUZZ_CLIENT_TOKEN', '3CDD1DFE-CC4D-4C4C-B9F3-96C59936F7B1')
         ],
     ],
 
