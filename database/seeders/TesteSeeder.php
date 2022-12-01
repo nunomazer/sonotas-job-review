@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\Integracao;
+use App\Models\Plan;
 use App\Models\Role;
 use App\Models\Servico;
 use App\Models\User;
@@ -243,6 +245,13 @@ class TesteSeeder extends Seeder
             $empresaService = new EmpresaService();
             $empresa = $empresaService->create($empresa->toArray());
         }
+
+        $plan = Plan::first();
+
+        EmpresaAssinatura::updateOrCreate([
+            'empresa_id' => $empresa->id,
+            'plan_id' => $plan->id,
+        ]);
 
         /**
          * Cliente

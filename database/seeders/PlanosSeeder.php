@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Plan;
+use App\Models\PlanFeature;
 use Illuminate\Database\Seeder;
 
 class PlanosSeeder extends Seeder
@@ -14,13 +15,22 @@ class PlanosSeeder extends Seeder
      */
     public function run()
     {
+        $features = [];
+        $feature = new PlanFeature();
+        $feature->slug = PlanFeature::FEATURE_QTDE_NOTAS;
+        $feature->unlimited = false;
+        $feature->value = 60;
+        $feature->period = PlanFeature::PERIOD_MONTH;
+        $feature->frequency = 1;
+        $features[] = $feature;
+
         Plan::create([
             'name' => 'Básico mensal',
             'description' => '',
             'price' => '97',
             'grace_period' => 0,
             'grace_interval' => 'day',
-            'features' => [],
+            'features' => $features,
             'active' => true,
             'driver' => 'Eduzz',
             'driver_id' => "so-notas_basic_monthly",
@@ -33,7 +43,7 @@ class PlanosSeeder extends Seeder
             'price' => '970',
             'grace_period' => 0,
             'grace_interval' => 'day',
-            'features' => [],
+            'features' => $features,
             'active' => true,
             'driver' => 'Eduzz',
             'driver_id' => "so-notas_basic_yearly",
