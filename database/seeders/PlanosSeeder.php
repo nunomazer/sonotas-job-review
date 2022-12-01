@@ -19,7 +19,7 @@ class PlanosSeeder extends Seeder
         $feature = new PlanFeature();
         $feature->slug = PlanFeature::FEATURE_QTDE_NOTAS;
         $feature->unlimited = false;
-        $feature->value = 60;
+        $feature->value = 200;
         $feature->period = PlanFeature::PERIOD_MONTH;
         $feature->frequency = 1;
         $features[] = $feature;
