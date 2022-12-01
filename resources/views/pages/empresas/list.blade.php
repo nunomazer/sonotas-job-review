@@ -93,7 +93,7 @@
                                 @endif
                             </div>
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
-                                @include('pages.empresas.partials.assinatura-status')
+{{--                                @include('pages.empresas.partials.assinatura-status')--}}
                             </div>
                         </div>
                         <br />
