@@ -239,11 +239,11 @@ class LoginController extends Controller
                             "vendas_importadas_em"          => null,
                         ]);
 
-                        //atualiza variavel integracaoOauth
-                        $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id' = ?", [$producerID])->first();
-
                         $role = Role::findByName(Role::OWNER);
                         $empresa->owner->assignRole($role);
+
+                        //atualiza variavel integracaoOauth
+                        $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id' = ?", [$producerID])->first();
 
                         DB::commit();
                     }catch(Exception $e){
