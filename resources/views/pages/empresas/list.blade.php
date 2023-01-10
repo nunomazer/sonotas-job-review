@@ -95,6 +95,8 @@
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
 {{--                                @include('pages.empresas.partials.assinatura-status')--}}
                                 Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                <br/>
+                                Docs: {{$empresa->assinatura->featureSaldo(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}} / {{$empresa->assinatura->featureBase(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}}
                             </div>
                         </div>
                         <br />
