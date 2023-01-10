@@ -71,6 +71,8 @@ class LoginController extends Controller
     }
 
     public function isValidSignatureStatus($clientToken, $integracaoOauth){
+        // TODO refatorar para um service e driver corretos
+
         $client = new \GuzzleHttp\Client([
             'base_uri'  => $this->eduzzSignatureUrl,
             'headers'   => [
@@ -85,6 +87,11 @@ class LoginController extends Controller
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
 
         $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+        $features = $plan->features;
+        $features = $features->map(function($feature) {
+            $feature['balance'] = $feature['value'];
+            return $feature;
+        });
         EmpresaAssinatura::updateOrCreate(
             [
                 'empresa_id' => $integracaoOauth->empresa->id,
@@ -96,7 +103,8 @@ class LoginController extends Controller
                 'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
                 'driver_id' => $resultSubscription['plan'],
                 'plan_id' => $plan->id,
-                'status_historico' => ''
+                'status_historico' => '',
+                'features' => $features,
             ]
         );
 
