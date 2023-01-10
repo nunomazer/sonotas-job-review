@@ -31,7 +31,7 @@ class EmpresaAssinatura extends Model
      */
     public function featureHas($slug)
     {
-        return isset($this->features[$slug]);
+        return (array_search($slug, array_column($this->features, 'slug')) !== false);
     }
 
     /**
@@ -42,7 +42,7 @@ class EmpresaAssinatura extends Model
     public function featureBase($slug)
     {
         if ($this->featureHas($slug)) {
-            return $this->features[$slug]['value'];
+            return $this->features[array_search($slug, array_column($this->features, 'slug'))]['value'];
         }
     }
 
@@ -55,7 +55,7 @@ class EmpresaAssinatura extends Model
     public function featureSaldo($slug)
     {
         if ($this->featureHas($slug)) {
-            return $this->features[$slug]['balance'];
+            return $this->features[array_search($slug, array_column($this->features, 'slug'))]['balance'];
         }
 
         return false;
@@ -64,7 +64,7 @@ class EmpresaAssinatura extends Model
     public function featureSaldoIncrement($slug, $value = 1)
     {
         if ($this->featureHas($slug)) {
-            $this->features[$slug]['balance'] += $value;
+            $this->features[array_search($slug, array_column($this->features, 'slug'))]['balance'] += $value;
             $this->save();
         }
 
@@ -74,7 +74,7 @@ class EmpresaAssinatura extends Model
     public function featureSaldoDecrement($slug, $value = 1)
     {
         if ($this->featureHas($slug)) {
-            $this->features[$slug]['balance'] -= $value;
+            $this->features[array_search($slug, array_column($this->features, 'slug'))]['balance'] -= $value;
             $this->save();
         }
 
