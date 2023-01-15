@@ -61,6 +61,11 @@ class NFSeService
 
     public function emitirSped(NFSe $nfse) : NFSe
     {
+        // se o status não é pendente então já foi emitido em algum ponto da aplicação, ou
+        // por job ou por comando
+        if ($nfse->status != SpedStatus::PENDENTE) return;
+
+        // se não tiver saldo de bilhetagem mantem o status pendente e atualiza o histórico
         if ($nfse->empresa->assinatura->featureSaldo(PlanFeature::FEATURE_QTDE_NOTAS) == 0) {
             $nfse->status = SpedStatus::PENDENTE;
             $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::PENDENTE, ['message' => 'Saldo de documentos fiscais insuficiente no período, será emitida na renovação do saldo']);
@@ -69,6 +74,8 @@ class NFSeService
             return $nfse;
         }
 
+        // emite NF
+        // TODO: refatorar para qualquer doc fiscal
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
         try {
             $driverNFSe = $sped->nfseDriver($nfse);
