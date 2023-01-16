@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('sync:vendas-plataformas')->hourly();
 
-        $schedule->command('vendas:emitir-nf-planejadas')->hourlyAt(15);
+        $schedule->command('vendas:gerar-nf-planejadas')->hourlyAt(15);
 
         //$schedule->command('sped:atualizar-status-docs')->dailyAt('01:00');
         $schedule->command('sped:atualizar-status-docs')->hourlyAt(30);
