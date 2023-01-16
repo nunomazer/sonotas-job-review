@@ -191,4 +191,36 @@ class NFSeService
 
         return $nfse;
     }
+
+    public function emitirNFsPendentes(Empresa $empresa)
+    {
+        // TODO adicionar outros docs fiscais
+
+        $nfs = NFSe::with('venda')
+            ->where('status', SpedStatus::PENDENTE)
+            ->whereHas('venda', function ($query) use($empresa) {
+                $query->where('empresa_id', $empresa->id);
+            })
+            ->get();
+
+        $nfs->each(function ($nfse) {
+            if ($nfse->venda->tipo_documento == SpedService::DOCTYPE_NFSE) {
+                $this->emitirSped($nfse);
+            }
+        });
+    }
+
+    /**
+     * Percorre cada empresa ativa, as NF que estão pendentes para emitir
+     *
+     * @return void
+     */
+    public function emitirAllCompaniesNFPendentes()
+    {
+        $empresas = Empresa::isAtivo()->get();
+
+        $empresas->each(function($empresa) {
+            $this->emitirNFsPendentes($empresa);
+        });
+    }
 }
