@@ -65,12 +65,19 @@ class NFSeService
         // por job ou por comando
         if ($nfse->status != SpedStatus::PENDENTE) return $nfse;
 
+        if ($nfse->venda->empresa->assinatura == null) {
+            $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::PENDENTE, ['message' => 'É necessário assinar um plano para a empresa emitir documentos fiscais.']);
+            $nfse->save();
+            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'É necessário assinar um plano para a empresa emitir documentos fiscais, NF ' . $nfse->id . ' será emitida após assinatura'));
+            return $nfse;
+        }
+
         // se não tiver saldo de bilhetagem mantem o status pendente e atualiza o histórico
-        if ($nfse->empresa->assinatura->featureSaldo(PlanFeature::FEATURE_QTDE_NOTAS) == 0) {
+        if ($nfse->venda->empresa->assinatura->featureSaldo(PlanFeature::FEATURE_QTDE_NOTAS) == 0) {
             $nfse->status = SpedStatus::PENDENTE;
             $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::PENDENTE, ['message' => 'Saldo de documentos fiscais insuficiente no período, será emitida na renovação do saldo']);
             $nfse->save();
-            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'Saldo de documentos fiscais insuficiente no período, será emitida na renovação do saldo, ao emitir a NFSe para venda ' . $nfse->id));
+            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'Saldo de documentos fiscais insuficiente no período, NF ' . $nfse->id . ' será emitida na renovação do saldo'));
             return $nfse;
         }
 
@@ -89,7 +96,7 @@ class NFSeService
             $nfse->driver_id = $result->objects[0]['idApi'];
             $nfse->status_historico = $this->addStatusDados($nfse, $nfse->status, $result->toArray());
             $nfse->save();
-            $nfse->empresa->assinatura->featureSaldoDecrement(PlanFeature::FEATURE_QTDE_NOTAS);
+            $nfse->venda->empresa->assinatura->featureSaldoDecrement(PlanFeature::FEATURE_QTDE_NOTAS);
 
         } catch (\Exception $exception) {
             $nfse->status = SpedStatus::ERRO;
