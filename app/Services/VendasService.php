@@ -358,7 +358,7 @@ class VendasService
      * @param Empresa $empresa
      * @return void
      */
-    public function gerarEmitirNFsPlanejadas(Empresa $empresa)
+    public function gerarNFsPlanejadas(Empresa $empresa)
     {
         $vendas = $empresa->vendas()
             ->where('data_emissao_planejada', '<=', now()->endOfDay())
@@ -377,12 +377,12 @@ class VendasService
      *
      * @return void
      */
-    public function gerarEmitirAllCompaniesNFs()
+    public function gerarAllCompaniesNFs()
     {
         $empresas = Empresa::isAtivo()->get();
 
         $empresas->each(function($empresa) {
-            $this->gerarEmitirNFsPlanejadas($empresa);
+            $this->gerarNFsPlanejadas($empresa);
         });
     }
 }

@@ -41,6 +41,6 @@ class GerarNFPlanejadas extends Command
     {
         $vendasService = new VendasService();
 
-        $vendasService->gerarEmitirAllCompaniesNFs();
+        $vendasService->gerarAllCompaniesNFs();
     }
 }
