@@ -373,7 +373,7 @@ class VendasService
     }
 
     /**
-     * Percorre cada empresa ativa, as vendas que não foram emitidas NF, gera e emite de acordo com a data planejada
+     * Percorre cada empresa ativa, as vendas que não foram geradas a NF, gera e emite de acordo com a data planejada
      *
      * @return void
      */
