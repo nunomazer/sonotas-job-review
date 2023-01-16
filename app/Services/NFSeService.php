@@ -63,7 +63,7 @@ class NFSeService
     {
         // se o status não é pendente então já foi emitido em algum ponto da aplicação, ou
         // por job ou por comando
-        if ($nfse->status != SpedStatus::PENDENTE) return;
+        if ($nfse->status != SpedStatus::PENDENTE) return $nfse;
 
         // se não tiver saldo de bilhetagem mantem o status pendente e atualiza o histórico
         if ($nfse->empresa->assinatura->featureSaldo(PlanFeature::FEATURE_QTDE_NOTAS) == 0) {
