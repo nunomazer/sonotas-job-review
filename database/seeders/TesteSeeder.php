@@ -251,6 +251,8 @@ class TesteSeeder extends Seeder
         EmpresaAssinatura::updateOrCreate([
             'empresa_id' => $empresa->id,
             'plan_id' => $plan->id,
+        ],[
+            'features' => $plan->features,
         ]);
 
         /**
@@ -351,4 +353,5 @@ class TesteSeeder extends Seeder
         $integracao->transmissao_apenas_dias_uteis = false;
         $integracao->save();
     }
+
 }
