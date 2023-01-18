@@ -249,11 +249,15 @@ class TesteSeeder extends Seeder
 
         $plan = Plan::first();
 
+        $features = collect($plan->features)->map(function($feature) {
+            $feature['balance'] = $feature['value'];
+            return $feature;
+        });
         EmpresaAssinatura::updateOrCreate([
             'empresa_id' => $empresa->id,
             'plan_id' => $plan->id,
         ],[
-            'features' => $plan->features,
+            'features' => $features,
             'status' => MoneyFlowAssinaturaStatus::ATIVA,
         ]);
 
