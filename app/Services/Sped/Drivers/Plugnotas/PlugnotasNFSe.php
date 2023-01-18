@@ -45,7 +45,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
     {
         $nfse = $this->nfse;
         return [
-            "idIntegracao" => $nfse->id,
+            "idIntegracao" => (string)$nfse->id,
             "prestador" => [
                 "cpfCnpj" => $nfse->venda->empresa->documento,
             ],
