@@ -8,11 +8,14 @@
 <div class="card">
     <div class="card-header">
         <h2>
-            #{{ $nfse->id }} - <small>{{ $nfse->status }}</small>
+            #{{ $nfse->id }} -
+            <small class="badge {{$nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'bg-green-lt' : ''}}">
+                {{ $nfse->status }}
+            </small>
         </h2>
         <div class="card-actions">
             <div class="row">
-                @if($nfse->canCancel) 
+                @if($nfse->canCancel)
                 <div class="col">
                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
                         Cancelar
@@ -112,13 +115,17 @@
             </div>
             <div class="col-9 col-md-9 text-center border border-primary">
                 @if($nfse->arquivo_pdf_downloaded)
-                <a href="{{ route('notas-servico.download.xml', $nfse) }}">
-                    Baixar
-                </a>
+                    <a href="{{ route('notas-servico.download.xml', $nfse) }}">
+                        Baixar
+                    </a>
                 @else
-                <span class="text-muted">
-                    em processamento
-                </span>
+                    <span class="text-muted">
+                        @if ($nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO)
+                            em processamento
+                        @else
+                            disponível quando NF estiver concluída
+                        @endif
+                    </span>
                 @endif
             </div>
         </div>
@@ -133,7 +140,11 @@
                 </a>
                 @else
                 <span class="text-muted">
-                    em processamento
+                    @if ($nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO)
+                        em processamento
+                    @else
+                        disponível quando NF estiver concluída
+                    @endif
                 </span>
                 @endif
             </div>
@@ -163,6 +174,6 @@
         </div>
     </form>
 </div>
-    
+
 @endif
 @endsection
