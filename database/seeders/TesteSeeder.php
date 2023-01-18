@@ -13,6 +13,7 @@ use App\Models\Servico;
 use App\Models\User;
 use App\Services\EmpresaService;
 use App\Services\Integra\IntegraService;
+use App\Services\MoneyFlow\MoneyFlowAssinaturaStatus;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedRegimesTributariosEspeciais;
 use App\Services\Sped\SpedService;
@@ -253,6 +254,7 @@ class TesteSeeder extends Seeder
             'plan_id' => $plan->id,
         ],[
             'features' => $plan->features,
+            'status' => MoneyFlowAssinaturaStatus::ATIVA,
         ]);
 
         /**
