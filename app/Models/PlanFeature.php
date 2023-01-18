@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +36,14 @@ class PlanFeature
      */
     public int $frequency;
 
+    public int $balance = 0;
+
+    /**
+     * @var Carbon The expiration date of the plan, at expiration date the system tries to renew the subscription
+     * based on period and frequency
+     */
+    public Carbon $expiration;
+
     public function toArray()
     {
         return [
@@ -45,6 +54,8 @@ class PlanFeature
             'value' => $this->value,
             'period' => $this->period,
             'frequency' => $this->frequency,
+            'balance' => $this->balance,
+            'expiration' => $this->expiration->format('Y-m-d'),
         ];
     }
 }
