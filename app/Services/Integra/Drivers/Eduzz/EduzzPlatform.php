@@ -199,7 +199,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $query['start_date'] = $from;
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/fiscal/v1', [
+        $result = $http->get('/myeduzz-financial/v1/sales', [
             'query' => $query,
         ]);
 
@@ -219,41 +219,41 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
         $paginator = $result['paginator'];
         while ($page <= $paginator['totalPages']) {
-            $vendasApi = $result['data'];
+            $vendasApi = $result['items'];
 
             foreach ($vendasApi as $vendaApi) {
                 $vendas[] = [
-                    'driver_id' => $vendaApi['document_id'],
+                    'driver_id' => $vendaApi['id'],
                     'venda' => [
-                        'nome' => $vendaApi['document_name'],
-                        'status' => $vendaApi['document_status'],
+                        'nome' => $vendaApi['main_content']['name'],
+                        'status' => $vendaApi['status']['name'],
                         'tipo_documento' => SpedService::DOCTYPE_NFSE, // TODO refatorar quando trabalhar com NFe
-                        'valor' => $vendaApi['document_basevalue'],
-                        'data_emissao' => $vendaApi['document_emissiondate'],
-                        'data_referencia' => $vendaApi['document_referencedate'],
-                        'data_processamento' => $vendaApi['document_processingdate'],
+                        'valor' => $vendaApi['total_value'],
+                        'data_emissao' => $vendaApi['created_at'],
+                        'data_referencia' => $vendaApi['created_at'],
+                        'data_processamento' => $vendaApi['paid_at'],
                     ],
                     'cliente' => [
-                        'nome' => $vendaApi['destination_company_name'],
-                        'tipo_pessoa' => $vendaApi['destination_taxtype'],
-                        'documento' => $vendaApi['destination_taxid'],
-                        'email' => $vendaApi['destination_email'],
+                        'nome' => $vendaApi['custom']['name'],
+                        'tipo_pessoa' => $vendaApi['custom']['name'],
+                        'documento' => $vendaApi['custom']['document'],
+                        'email' => $vendaApi['custom']['email'],
                         'tipo_logradouro' => $this->resolveTipoLogradouro($vendaApi),
-                        'logradouro' => $vendaApi['destination_street'] ?? '',
-                        'numero' => $vendaApi['destination_number'] ?? '',
-                        'complemento' => $vendaApi['destination_complement'] ?? '',
-                        'bairro' => $vendaApi['destination_district'] ?? '',
-                        'cep' => $vendaApi['destination_zipcode'] ?? '',
-                        'cidade' => $vendaApi['destination_city'] ?? '',
+                        'logradouro' => $vendaApi['custom']['street'],
+                        'numero' => $vendaApi['custom']['addr_number'],
+                        'complemento' => $vendaApi['custom']['addr_complement'],
+                        'bairro' => $vendaApi['custom']['neighborhood'],
+                        'cep' => $vendaApi['custom']['zipcode'],
+                        'cidade' => $vendaApi['custom']['city'],
                         'city_id' => $this->resolveCidadeId($vendaApi),
-                        'estado' => $vendaApi['destination_uf'] ?? '',
-                        'telefone_ddd' => Str::substr($vendaApi['destination_tel'], 0,2),
-                        'telefone_num' => Str::substr($vendaApi['destination_tel'], 2),
+                        'estado' => $vendaApi['custom']['state'] ?? '',
+                        'telefone_ddd' => Str::substr($vendaApi['custom']['cellphone'], 0, 2),
+                        'telefone_num' => Str::substr($vendaApi['custom']['cellphone'], 2),
                     ],
                     'servicos' => [
                         [
-                            'driver_id' => $vendaApi['content_id'],
-                            'valor' => $vendaApi['document_basevalue'],
+                            'driver_id' => $vendaApi['main_content']['id'],
+                            'valor' => $vendaApi['total_value'],
                             'qtde' => 1,
                         ]
                     ],
@@ -275,13 +275,13 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $tipoLogService = new TipoLogradouroService();
 
-        return $tipoLogService->resolvePeloLogradouro($venda['destination_street']);
+        return $tipoLogService->resolvePeloLogradouro($venda['custom']['street']);
     }
 
     protected function resolveCidadeId(array $venda) : int
     {
         $cidadeService = new CidadeService();
 
-        return $cidadeService->resolveIdPeloNome($venda['destination_city'], $venda['source_city'] ?? 'São Paulo');
+        return $cidadeService->resolveIdPeloNome($venda['custom']['city'], 'São Paulo');
     }
 }
