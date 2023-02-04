@@ -10,6 +10,7 @@ use App\Services\Sped\SpedService;
 use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class EduzzPlatform extends Platform implements IIntegraDriver
@@ -60,6 +61,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     ];
 
     //protected $token = null;
+
+    public function routes()
+    {
+        Route::get('/eduzz/oauth-confirmation', [EduzzController::class, 'oauthConfirmation'])->name('integra.eduzz.oauth-confirmation');
+    }
 
     /**
      * @var Carbon
