@@ -38,7 +38,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'visible' => true,
             'helptext' => 'E-mail que recebera atualizações referentes a integração',
         ],
-        
+
         [
             'name' => 'oauth_access_token',
             'label' => 'OAUTH Access Token',
@@ -48,6 +48,12 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         [
             'name' => 'oauth_user_id',
             'label' => 'UserID',
+            'visible' => false,
+            'helptext' => '',
+        ],
+        [
+            'name' => 'orbita_id',
+            'label' => 'Id Orbita Eduzz',
             'visible' => false,
             'helptext' => '',
         ],
@@ -104,15 +110,15 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected function getToken() : string
     {
-        return $this->fields['oauth_access_token'];//TODO
-    //REVER
-        /*
+//        return $this->fields['oauth_access_token'];//TODO
+//    //REVER
+
         if (!$this->token || $this->token_until->lessThan(now())) {
             $this->generateToken();
         }
 
         return $this->token;
-        */
+
     }
 
     /**
