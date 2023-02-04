@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes();
+(new \App\Services\Integra\IntegraService())->routes();
 
 Route::get('/oauth-confirmation', [LoginController::class, 'oauthConfirmation'])->name('oauthConfirmation');
 Route::middleware('auth')->group(function () {
