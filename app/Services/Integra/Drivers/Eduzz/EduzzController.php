@@ -129,26 +129,31 @@ class EduzzController extends Controller
                         // TODO refatorar esse fluxo para dentro do service pois teve que ser replicado aqui
                         // o comportamento inicial do service por falta de tempo para testes na refatoração neste momento
                         $city = Cidade::where('ibge_id', $eduzzProdutor['address_city_ibge'])->first();
-                        $empresa = Empresa::create([
-                            'owner_user_id' => $user->id,
-                            'nome' => $eduzzProdutor['name'],
-                            'alias' => $eduzzProdutor['business_name'],
-                            'email' => $eduzzProdutor['email'],
-                            'documento' => $eduzzProdutor['document_number'],
-                            'telefone_num' => $eduzzProdutor['cellphone'],
+                        $empresa = Empresa::where('documento', $eduzzProdutor['document_number'])->first();
 
-                            'tipo_logradouro' => $tipoLogradouro,
-                            'logradouro' => $eduzzProdutor['address_street'],
-                            'numero' => $eduzzProdutor['address_number'],
-                            'complemento' => $eduzzProdutor['address_complement'],
-                            'bairro' => $eduzzProdutor['address_neighborhood'],
-                            'cep' => $eduzzProdutor['address_zip_code'],
-                            'city_id' => $city->id,
-                        ]);
+                        if (empty($empresa)) {
+                            $empresa = Empresa::create([
+                                'owner_user_id' => $user->id,
+                                'nome' => $eduzzProdutor['name'],
+                                'alias' => $eduzzProdutor['business_name'],
+                                'email' => $eduzzProdutor['email'],
+                                'documento' => $eduzzProdutor['document_number'],
+                                'telefone_num' => $eduzzProdutor['cellphone'],
 
-                        UserEmpresa::create([
+                                'tipo_logradouro' => $tipoLogradouro,
+                                'logradouro' => $eduzzProdutor['address_street'],
+                                'numero' => $eduzzProdutor['address_number'],
+                                'complemento' => $eduzzProdutor['address_complement'],
+                                'bairro' => $eduzzProdutor['address_neighborhood'],
+                                'cep' => $eduzzProdutor['address_zip_code'],
+                                'city_id' => $city->id,
+                            ]);
+                        }
+
+                        UserEmpresa::updateOrCreate([
                             'user_id' => $user->id,
                             'empresa_id' => $empresa->id,
+                        ],[
                             'ativo' => true
                         ]);
 
@@ -216,7 +221,10 @@ class EduzzController extends Controller
                     ->withErrors('Usuário não encontrado na Eduzz.');
             }
 
-            return view('pages.login.oauth-error', ['message' => $exception->getMessage()]);
+            //return view('pages.login.oauth-error', ['message' => $exception->getMessage()]);
+
+            return redirect('login')
+                ->withErrors('Um erro inesperado aconteceu no serviço Eduzz, por favor tente novamente ou entre em contato com nosso suporte informando a data e hora do erro.');
         }
     }
 
