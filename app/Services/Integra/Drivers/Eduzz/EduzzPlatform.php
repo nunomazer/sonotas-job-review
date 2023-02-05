@@ -2,6 +2,9 @@
 
 namespace App\Services\Integra\Drivers\Eduzz;
 
+use App\Models\EmpresaAssinatura;
+use App\Models\Integracao;
+use App\Models\Plan;
 use App\Models\Servico;
 use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
@@ -16,6 +19,13 @@ use Illuminate\Support\Str;
 class EduzzPlatform extends Platform implements IIntegraDriver
 {
     public static $name = 'Eduzz';
+
+    protected $eduzzAppSlug;
+    protected $eduzzApiUrl;
+    protected $eduzzSignatureUrl;
+    protected $eduzzAppID;
+    protected $eduzzOAUTHUrl;
+    protected $eduzzAppSecret;
 
     public static array $fields = [
         [
@@ -59,6 +69,19 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'helptext' => '',
         ],
     ];
+
+    public function __construct(array $config)
+    {
+        parent::__construct($config);
+
+        $this->eduzzApiUrl = config('integra.drivers.eduzz.api_url');
+        $this->eduzzAppSlug = config('integra.drivers.eduzz.app_slug');
+        $this->eduzzSignatureUrl = config('integra.drivers.eduzz.signature_url');
+        $this->eduzzAppID = config('integra.drivers.eduzz.app_id');
+        $this->eduzzOAUTHUrl = config('integra.drivers.eduzz.oauth_url');
+        $this->eduzzOAUTHApiUrl = config('integra.drivers.eduzz.oauth_url_api');
+        $this->eduzzAppSecret = config('integra.drivers.eduzz.app_secret');
+    }
 
     //protected $token = null;
 
@@ -295,5 +318,49 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $cidadeService = new CidadeService();
 
         return $cidadeService->resolveIdPeloNome($venda['custom']['city'], 'São Paulo');
+    }
+
+    public function isValidSignatureStatus(Integracao $integracaoOauth)
+    {
+        // TODO refatorar para um service e driver corretos
+
+        $clientToken = config('integra.drivers.eduzz.clientToken');
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri'  => $this->eduzzSignatureUrl,
+            'headers'   => [
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+                'clientToken'   => $clientToken
+            ],
+            'defaults'  => ['verify' => false],
+        ]);
+        $orbitaID = $integracaoOauth->fields['orbita_id'] ?? 0;
+        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
+        $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+
+        $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+        $features = $plan->features;
+        $features = $features->map(function($feature) {
+            $feature['balance'] = $feature['value'];
+            return $feature;
+        });
+        EmpresaAssinatura::updateOrCreate(
+            [
+                'empresa_id' => $integracaoOauth->empresa->id,
+                'driver' => 'Eduzz',
+            ],
+            [
+                'empresa_id' => $integracaoOauth->empresa->id,
+                'driver' => 'Eduzz',
+                'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
+                'driver_id' => $resultSubscription['plan'],
+                'plan_id' => $plan->id,
+                'status_historico' => '',
+                'features' => $features,
+            ]
+        );
+
+        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
     }
 }

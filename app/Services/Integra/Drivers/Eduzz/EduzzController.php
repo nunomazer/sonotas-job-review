@@ -22,62 +22,22 @@ use Illuminate\Support\Facades\Log;
 class EduzzController extends Controller
 {
     protected $eduzzAppSlug;
-    protected $eduzzAPI;
+    protected $eduzzApiUrl;
     protected $eduzzSignatureUrl;
     protected $eduzzAppID;
     protected $eduzzOAUTHUrl;
     protected $eduzzAppSecret;
     public function __construct()
     {
-        $this->eduzzAppSlug = env('EDUZZ_APP_SLUG');
-        $this->eduzzAPI = env('EDUZZ_API_URL');
-        $this->eduzzSignatureUrl = env('EDUZZ_SIGNATURE_URL');
-        $this->eduzzAppID = env('EDUZZ_APP_ID');
-        $this->eduzzOAUTHUrl = env('EDUZZ_OAUTH_URL');
-        $this->eduzzOAUTHApiUrl = env('EDUZZ_OAUTH_URL_API');
-        $this->eduzzAppSecret = env('EDUZZ_APP_SECRET');
+        $this->eduzzApiUrl = config('integra.drivers.eduzz.api_url');
+        $this->eduzzAppSlug = config('integra.drivers.eduzz.app_slug');
+        $this->eduzzSignatureUrl = config('integra.drivers.eduzz.signature_url');
+        $this->eduzzAppID = config('integra.drivers.eduzz.app_id');
+        $this->eduzzOAUTHUrl = config('integra.drivers.eduzz.oauth_url');
+        $this->eduzzOAUTHApiUrl = config('integra.drivers.eduzz.oauth_url_api');
+        $this->eduzzAppSecret = config('integra.drivers.eduzz.app_secret');
     }
 
-    public function isValidSignatureStatus($clientToken, $integracaoOauth){
-        // TODO refatorar para um service e driver corretos
-
-        $client = new \GuzzleHttp\Client([
-            'base_uri'  => $this->eduzzSignatureUrl,
-            'headers'   => [
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
-                'clientToken'   => $clientToken
-            ],
-            'defaults'  => ['verify' => false],
-        ]);
-        $orbitaID = $integracaoOauth->fields['orbita_id'];
-        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
-        $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
-
-        $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
-        $features = $plan->features;
-        $features = $features->map(function($feature) {
-            $feature['balance'] = $feature['value'];
-            return $feature;
-        });
-        EmpresaAssinatura::updateOrCreate(
-            [
-                'empresa_id' => $integracaoOauth->empresa->id,
-                'driver' => 'Eduzz',
-            ],
-            [
-                'empresa_id' => $integracaoOauth->empresa->id,
-                'driver' => 'Eduzz',
-                'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
-                'driver_id' => $resultSubscription['plan'],
-                'plan_id' => $plan->id,
-                'status_historico' => '',
-                'features' => $features,
-            ]
-        );
-
-        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
-    }
     public function oauthConfirmation(Request $request)
     {
         $code = $request->query('code');
@@ -114,7 +74,7 @@ class EduzzController extends Controller
 
                 $producerID = $resultOauth['user']['id'];
                 $client = new \GuzzleHttp\Client([
-                    'base_uri'  => $this->eduzzAPI,
+                    'base_uri'  => $this->eduzzApiUrl,
                     'headers'   => [
                         'Content-Type'  => 'application/json',
                         'Accept'        => 'application/json',
@@ -124,16 +84,18 @@ class EduzzController extends Controller
                 ]);
 
                 $integracaoOauth = Integracao::query()->whereRaw("fields->>'oauth_user_id' = ?", [$producerID])->first();
+                $user = User::where('email', $resultOauth['user']['email'])->first();
 
-                if(empty($integracaoOauth)){
-                    $requestDados = $client->get('/myeduzz-producers/v1/producers/' . $producerID . '/profile');
+                // se não encontrou uma integração vai criar
+                if(empty($integracaoOauth)) {
+                    $requestDadosProdutor = $client->get('/myeduzz-producers/v1/producers/' . $producerID . '/profile');
 
-                    if($requestDados->getStatusCode() != 200){
-                        throw new Exception("Não foi possível obter os dados de produtor.");
+                    if($requestDadosProdutor->getStatusCode() != 200){
+                        throw new Exception("Não foi possível obter os dados de produtor na Eduzz.");
                     }
 
-                    $resultDados = json_decode($requestDados->getBody()->getContents(), true);
-                    $resultDados = $resultDados['data'];
+                    $eduzzProdutor = json_decode($requestDadosProdutor->getBody()->getContents(), true);
+                    $eduzzProdutor = $eduzzProdutor['data'];
 
                     $requestIdentificacao = $client->get('/my-account/v1/identification');
 
@@ -145,20 +107,20 @@ class EduzzController extends Controller
 
                     DB::beginTransaction();
                     try{
-
-
-                        //não encontrou - primeiro acesso
-                        $user = User::create([
-                            'name' => $resultOauth['user']['name'],
-                            'email' => $resultOauth['user']['email'],
-                            'email_verified_at' => date('Y-m-d'),
-                            'remember_token' => 0,
-                            'password' => Hash::make(uniqid()),
-                        ]);
+                        if (empty($user)) {
+                            //não encontrou usuário - primeiro acesso
+                            $user = User::create([
+                                'name' => $resultOauth['user']['name'],
+                                'email' => $resultOauth['user']['email'],
+                                'email_verified_at' => date('Y-m-d'),
+                                'remember_token' => 0,
+                                'password' => Hash::make(uniqid()),
+                            ]);
+                        }
 
                         $tipoLogradouro = "";
-                        if(!empty($resultDados['address_street'])){
-                            $exp_logradouro = explode(" ", $resultDados['address_street']);
+                        if(!empty($eduzzProdutor['address_street'])){
+                            $exp_logradouro = explode(" ", $eduzzProdutor['address_street']);
                             if(!empty($exp_logradouro)){
                                 $tipoLogradouro = $exp_logradouro[0];
                             }
@@ -166,21 +128,21 @@ class EduzzController extends Controller
 
                         // TODO refatorar esse fluxo para dentro do service pois teve que ser replicado aqui
                         // o comportamento inicial do service por falta de tempo para testes na refatoração neste momento
-                        $city = Cidade::where('ibge_id', $resultDados['address_city_ibge'])->first();
+                        $city = Cidade::where('ibge_id', $eduzzProdutor['address_city_ibge'])->first();
                         $empresa = Empresa::create([
                             'owner_user_id' => $user->id,
-                            'nome' => $resultDados['name'],
-                            'alias' => $resultDados['business_name'],
-                            'email' => $resultDados['email'],
-                            'documento' => $resultDados['document_number'],
-                            'telefone_num' => $resultDados['cellphone'],
+                            'nome' => $eduzzProdutor['name'],
+                            'alias' => $eduzzProdutor['business_name'],
+                            'email' => $eduzzProdutor['email'],
+                            'documento' => $eduzzProdutor['document_number'],
+                            'telefone_num' => $eduzzProdutor['cellphone'],
 
                             'tipo_logradouro' => $tipoLogradouro,
-                            'logradouro' => $resultDados['address_street'],
-                            'numero' => $resultDados['address_number'],
-                            'complemento' => $resultDados['address_complement'],
-                            'bairro' => $resultDados['address_neighborhood'],
-                            'cep' => $resultDados['address_zip_code'],
+                            'logradouro' => $eduzzProdutor['address_street'],
+                            'numero' => $eduzzProdutor['address_number'],
+                            'complemento' => $eduzzProdutor['address_complement'],
+                            'bairro' => $eduzzProdutor['address_neighborhood'],
+                            'cep' => $eduzzProdutor['address_zip_code'],
                             'city_id' => $city->id,
                         ]);
 
@@ -227,10 +189,11 @@ class EduzzController extends Controller
                     }
 
                     EmpresaCriadaEvent::dispatch($empresa);
-                    $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
+                        $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
                 }
 
-                if($this->isValidSignatureStatus(config('integra.drivers.eduzz.clientToken'), $integracaoOauth)){
+                $eduzzDriver = new EduzzPlatform($integracaoOauth->fields);
+                if($eduzzDriver->isValidSignatureStatus($integracaoOauth)){
                     Auth::loginUsingId($integracaoOauth->empresa->owner->id);
                     return view('pages.login.oauth-success');
                 }
@@ -240,8 +203,19 @@ class EduzzController extends Controller
             Log::error('OAUTH Eduzz - Erro', $requestOauth);
             throw new Exception("Não foi possível obter as informações da EDUZZ :(");
 
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             Log::error($exception);
+
+            if (strpos($exception->getMessage(), 'Token already used') !== false) {
+                return redirect('login')
+                    ->withErrors('Ocorreu um erro na autenticação com Eduzz, por favor tente novamente.');
+            }
+
+            if (strpos($exception->getMessage(), 'User_not_found') !== false) {
+                return redirect('login')
+                    ->withErrors('Usuário não encontrado na Eduzz.');
+            }
+
             return view('pages.login.oauth-error', ['message' => $exception->getMessage()]);
         }
     }
