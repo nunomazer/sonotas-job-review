@@ -179,6 +179,9 @@ class TesteSeeder extends Seeder
             'publickey' => env('MAZER_EDUZZ_PUBLIC_KEY'),
             'apikey' => env('MAZER_EDUZZ_API_KEY'),
             'email' => env('MAZER_EDUZZ_EMAIL'),
+            'orbita_id' => env('MAZER_EDUZZ_ORBITA_ID'),
+            'oauth_user_id' => env('MAZER_EDUZZ_OAUTH_USER_ID'),
+            'oauth_access_token' => env('MAZER_EDUZZ_OAUTH_ACCESS_TOKEN'),
         ];
 
         $integracao = Integracao::where('empresa_id', $empresa->id)->first() ?? new Integracao();
