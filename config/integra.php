@@ -8,6 +8,7 @@ return [
     'drivers' => [
         'eduzz' => [
             'base_url' => env('EDUZZ_BASE_URL','https://api-devhub.eduzz.com'),
+            'api_url' => env('EDUZZ_API_URL','https://sandbox-api.eduzz.com'),
             'base_class' => \App\Services\Integra\Drivers\Eduzz\EduzzPlatform::class,
             'app_id' => env('EDUZZ_APP_ID', '9b9873bb-a50f-434f-8491-ef033a73a637'),
             'app_secret' => env('EDUZZ_APP_SECRET'),
