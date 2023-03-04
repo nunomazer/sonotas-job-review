@@ -20,21 +20,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
-Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
-Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+Route::get('/', [\App\Http\Controllers\Api\Controller::class, 'index']);
+
+Route::prefix('privado')->group(function(){
+    Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+    Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
+    Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+
+    Route::get('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'apiGetConfiguracaoNFSe'])->name('api.empresas.configuracao-nfse.get');
+});
 
 Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name('api.webhook.sped');
-
 Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
-
-Route::get('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'apiGetConfiguracaoNFSe'])->name('api.empresas.configuracao-nfse.get');
-
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});

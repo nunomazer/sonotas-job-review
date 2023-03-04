@@ -9,12 +9,12 @@ return [
     /*
      * The HTML <title> for the generated documentation. If this is empty, Scribe will infer it from config('app.name').
      */
-    'title' => null,
+    'title' => 'Só Notas',
 
     /*
      * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
      */
-    'description' => '',
+    'description' => 'Documentação técnica das APIs da plataforma Só Notas',
 
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url').
@@ -63,6 +63,9 @@ return [
              */
             'exclude' => [
                 // '/health', 'admin.*'
+                'api/privado/*',
+                'api/sped/webhook/*',
+                'api/checkout/webhook/*',
             ],
 
             /*
@@ -138,7 +141,7 @@ return [
      * - "static" will generate a static HTMl page in the /public/docs folder,
      * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
      */
-    'type' => 'static',
+    'type' => 'laravel',
 
     /*
      * Settings for `static` type output.
@@ -165,7 +168,7 @@ return [
          * URL path to use for the docs endpoint (if `add_routes` is true).
          * By default, `/docs` opens the HTML page, `/docs.postman` opens the Postman collection, and `/docs.openapi` the OpenAPI spec.
          */
-        'docs_url' => '/docs',
+        'docs_url' => '/developers/api/docs',
 
         /*
          * Directory within `public` in which to store CSS and JS assets.
@@ -185,7 +188,7 @@ return [
          * Add a Try It Out button to your endpoints so consumers can test endpoints right from their browser.
          * Don't forget to enable CORS headers for your endpoints.
          */
-        'enabled' => true,
+        'enabled' => false,
 
         /**
          * The base URL for the API tester to use (for example, you can set this to your staging URL).
@@ -254,10 +257,12 @@ return [
      * Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
      */
     'intro_text' => <<<INTRO
-This documentation aims to provide all the information you need to work with our API.
+Esta documentação descreve a utilização da API de uso do Só Notas.
 
-<aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
-You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+<aside>Ao rolar a tela, você verá exemplos de código para trabalhar com a API em diferentes linguagens de programação
+na área escura à direita (ou como parte do conteúdo em dispositivos móveis).
+Você pode alternar a linguagem usado com as guias no canto superior direito
+(ou no menu de navegação no canto superior esquerdo no celular).</aside>
 INTRO
     ,
 
@@ -310,7 +315,7 @@ INTRO
         /*
          * Endpoints which don't have a @group will be placed in this default group.
          */
-        'default' => 'Endpoints',
+        'default' => 'Endpoints gerais',
 
         /*
          * By default, Scribe will sort groups alphabetically, and endpoints in the order their routes are defined.
