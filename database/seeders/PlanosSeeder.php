@@ -24,8 +24,10 @@ class PlanosSeeder extends Seeder
         $feature->frequency = 1;
         $features[] = $feature;
 
-        Plan::create([
+        Plan::updateOrCreate([
             'name' => 'Básico mensal',
+        ],
+        [
             'description' => '',
             'price' => '97',
             'grace_period' => 0,
@@ -37,8 +39,10 @@ class PlanosSeeder extends Seeder
             'frequence' => 'month'
         ]);
 
-        Plan::create([
+        Plan::updateOrCreate([
             'name' => 'Básico anual',
+        ],
+        [
             'description' => '',
             'price' => '970',
             'grace_period' => 0,

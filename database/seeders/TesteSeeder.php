@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Afiliado;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\EmpresaAssinatura;
@@ -11,6 +12,7 @@ use App\Models\Plan;
 use App\Models\Role;
 use App\Models\Servico;
 use App\Models\User;
+use App\Services\AfiliadoService;
 use App\Services\EmpresaService;
 use App\Services\Integra\IntegraService;
 use App\Services\Sped\SpedRegimesTributarios;
@@ -39,6 +41,8 @@ class TesteSeeder extends Seeder
         $user = $this->userLucasMktDigital();
         $empresa = $this->empresaMktDigitalBr($user);
         $this->empresaMktDigitalBrIntegraEduzz($empresa);
+
+        $afiliado = $this->createAfiliado();
     }
 
     public function userAdemir()
@@ -168,6 +172,43 @@ class TesteSeeder extends Seeder
         $nfseConf->save();
 
         return $empresa;
+    }
+
+    public function createAfiliado()
+    {
+        /**
+         * Empresa
+         */
+        $documento = '25156736000184';
+        $afiliado = Afiliado::where('documento', $documento)->first();
+
+        if (!$afiliado) $afiliado = new Afiliado();
+
+        $afiliado->documento = $documento;
+        $afiliado->nome = 'System X';
+        $afiliado->inscricao_municipal = '9292929';
+        $afiliado->inscricao_estadual = '922222777';
+//                'certificado' => $empresa->certificado->sped_id,
+        $afiliado->regime_tributario = SpedRegimesTributarios::LUCRO_PRESUMIDO;
+        $afiliado->regime_tributario_especial = SpedRegimesTributariosEspeciais::NENHUM;
+        $afiliado->bairro = 'Uvaranas';
+        $afiliado->cep = '84031120';
+        $afiliado->city_id = 3062;
+        $afiliado->logradouro = 'Januário de Napoli';
+        $afiliado->numero = 18;
+        $afiliado->tipo_logradouro = 'Rua';
+        $afiliado->telefone_num = '996655447';
+        $afiliado->telefone_ddd = '41';
+        $afiliado->email = 'afiliado@gmail.com';
+        //$empresa->save();
+
+        if ($afiliado->id) {
+            (new AfiliadoService())->update($afiliado);
+        } else {
+            (new AfiliadoService())->create($afiliado);
+        }
+
+        return $afiliado;
     }
 
     public function empresaWPIntegraEduzz($empresa)
