@@ -189,8 +189,6 @@ class TesteSeeder extends Seeder
         $afiliado->inscricao_municipal = '9292929';
         $afiliado->inscricao_estadual = '922222777';
 //                'certificado' => $empresa->certificado->sped_id,
-        $afiliado->regime_tributario = SpedRegimesTributarios::LUCRO_PRESUMIDO;
-        $afiliado->regime_tributario_especial = SpedRegimesTributariosEspeciais::NENHUM;
         $afiliado->bairro = 'Uvaranas';
         $afiliado->cep = '84031120';
         $afiliado->city_id = 3062;
@@ -205,7 +203,7 @@ class TesteSeeder extends Seeder
         if ($afiliado->id) {
             (new AfiliadoService())->update($afiliado);
         } else {
-            (new AfiliadoService())->create($afiliado);
+            (new AfiliadoService())->create($afiliado->toArray());
         }
 
         return $afiliado;
