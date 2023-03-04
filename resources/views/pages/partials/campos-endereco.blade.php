@@ -1,9 +1,9 @@
 <h3 class="strong border-top border-bottom p-1">Endereço</h3>
 
-<div class="row">    
+<div class="row">
     <div class="mb-3 col-6 col-md-2">
         <label class="form-label required">CEP</label>
-        <input type="text" class="form-control" 
+        <input type="text" class="form-control"
             name="cep"
             required
             value="{{ old('cep', $model->cep ?? null) }}"
@@ -66,7 +66,7 @@
 <!-- @push('js') -->
 <script type="text/javascript">
     function select2_search ($el, term) {
-        $el.select2('open'); 
+        $el.select2('open');
         var $search = $el.data('select2').dropdown.$search || $el.data('select2').selection.$search;
         $search.val(term);
         $search.trigger('input');
@@ -77,7 +77,7 @@
             return;
         }
 
-        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function( data ) { 
+        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function( data ) {
             select2_search($("#city_id"), data.ibge, true);
             $("input[name='logradouro']").val(data.logradouro);
             $("input[name='bairro']").val(data.bairro);
@@ -107,17 +107,17 @@
                     }
                 },
                 cache: true,
-                processResults: function (data) { 
+                processResults: function (data) {
                     return {
                         results: data.data.map(item => ({...{'text': item.name}, ...item}))
                     };
                 }
             },
             minimumInputLength: 2,
-            templateResult: formatCidade, 
+            templateResult: formatCidade,
                 
-            <?php 
-            if($model != null && !empty($model->city_id)){
+            <?php
+            if ($model != null && !empty($model->city_id)) {
             ?>
             data: [{id: <?=$model->city_id?>, text: "<?=$model->cidade->name?>"}]
             <?php } ?>

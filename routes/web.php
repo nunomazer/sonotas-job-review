@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AfiliadosController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\EmpresasController;
@@ -82,5 +83,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notificacoes', [NotificacoesController::class, 'index'])->name('notificacoes.list');
     Route::get('/notificacoes/{notification}/mark-as-read', [NotificacoesController::class, 'markAsRead'])->name('notificacoes.marcar-como-lida');
+
+    Route::get('/afiliados', [AfiliadosController::class, 'index'])->name('afiliados.list');
+    Route::get('/afiliados/create', [AfiliadosController::class, 'create'])->name('afiliados.create');
+    Route::post('/afiliados', [AfiliadosController::class, 'store'])->name('afiliados.store');
+    Route::get('/afiliados/{afiliado}/edit', [AfiliadosController::class, 'edit'])->name('afiliados.edit');
+    Route::put('/afiliados/{afiliado}', [AfiliadosController::class, 'update'])->name('afiliados.update');
+
 });
 
