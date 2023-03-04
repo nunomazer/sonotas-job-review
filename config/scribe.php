@@ -63,6 +63,9 @@ return [
              */
             'exclude' => [
                 // '/health', 'admin.*'
+                'api/privado/*',
+                'api/sped/webhook/*',
+                'api/checkout/webhook/*',
             ],
 
             /*
