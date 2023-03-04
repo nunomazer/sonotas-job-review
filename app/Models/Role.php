@@ -18,4 +18,8 @@ class Role extends SpatieModel
      * Role de usuário com permissão de gerenciamento de uma empresa
      */
     const MANAGER = 'manager';
+    /**
+     * Role de usuário afiliado
+     */
+    const AFFILIATE = 'affiliate';
 }

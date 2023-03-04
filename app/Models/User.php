@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->empresas->pluck('id')->toArray();
     }
+
+    public function afiliado()
+    {
+        return $this->belongsTo(Afiliado::class);
+    }
 }
