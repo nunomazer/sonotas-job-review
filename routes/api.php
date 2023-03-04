@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientesController;
 use App\Http\Controllers\Api\CidadesController;
 use App\Http\Controllers\Api\EstadosController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\Api\ServicosController;
 use App\Http\Controllers\Api\WebhooksController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\Api\Controller::class, 'index']);
+
+Route::post('/auth', [AuthController::class, 'login'])->name('api.auth.login');
 
 Route::prefix('privado')->group(function(){
     Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');

@@ -14,10 +14,9 @@ use Laravel\Sanctum\PersonalAccessToken;
 class AuthController extends Controller
 {
     /**
-     * Login - receber token para api
+     * Login - Generate API token
      *
-     * Utilize este token para se autenticar na API e receber o token que deve ser enviado a todos os endpoints
-     * que requerem autenticação.
+     * Utilize este endpoint para se autenticar na API e receber o Bearer token que deve ser enviado no Header a todos os endpoints.
      *
      * @bodyParam email string required O email válido, registrado para login do usuário. Example: jose@meuemail.com
      * @bodyParam password string required A senha do usuário. Example: minhaSenhaForteSQN
