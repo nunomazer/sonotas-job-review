@@ -27,6 +27,12 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     protected $eduzzOAUTHUrl;
     protected $eduzzAppSecret;
 
+    protected $token = null;
+    /**
+     * @var Carbon
+     */
+    protected $token_until = null;
+
     public static array $fields = [
         [
             'name' => 'publickey',
@@ -83,17 +89,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $this->eduzzAppSecret = config('integra.drivers.eduzz.app_secret');
     }
 
-    //protected $token = null;
-
     public function routes()
     {
         Route::get('/eduzz/oauth-confirmation', [EduzzController::class, 'oauthConfirmation'])->name('integra.eduzz.oauth-confirmation');
     }
 
-    /**
-     * @var Carbon
-     */
-    //protected $token_until = null;
     /*
     private function setTokensFromResult($result)
     {
@@ -139,14 +139,17 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected function getToken() : string
     {
-//        return $this->fields['oauth_access_token'];//TODO
-//    //REVER
-
-        if (!$this->token || $this->token_until->lessThan(now())) {
-            $this->generateToken();
+        if (!isset($this->config['oauth_access_token'])) {
+            throw new \Exception('Erro interno, o driver Eduzz precisa ser instanciado com o oauth token no array config');
         }
 
-        return $this->token;
+        return $this->config['oauth_access_token'];
+
+//        if (!$this->token || $this->token_until->lessThan(now())) {
+//            $this->generateToken();
+//        }
+//
+//        return $this->token;
 
     }
 
