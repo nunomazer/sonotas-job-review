@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientesController;
 use App\Http\Controllers\Api\CidadesController;
+use App\Http\Controllers\Api\EmpresasController as ApiEmpresasController;
 use App\Http\Controllers\Api\EstadosController;
 use App\Http\Controllers\Api\TiposLogradouroController;
 use App\Http\Controllers\EmpresasController;
@@ -37,6 +38,8 @@ Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name
 Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
+
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
     Route::get('/tipos-logradouro', [TiposLogradouroController::class, 'index'])->name('api.tipos-logradouro.index');
 });

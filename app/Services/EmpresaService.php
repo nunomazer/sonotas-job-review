@@ -6,8 +6,8 @@ use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
 use App\Models\CartaoCredito;
-use App\Models\Empresa; 
-use App\Models\Webhook; 
+use App\Models\Empresa;
+use App\Models\Webhook;
 use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\NFSe;
@@ -50,7 +50,7 @@ class EmpresaService
                 'empresa_id' => $empresa->id,
             ]);
 
-            $role = Role::findByName(Role::OWNER);
+            $role = Role::findByName(Role::OWNER, 'web');
             $empresa->owner->assignRole($role);
 
         DB::commit();
@@ -328,9 +328,9 @@ class EmpresaService
                 $nfseDriver = $spedService->nfseDriver($doc);
 
                 $docDriver = $nfseDriver->consultarStatusCancelamento();
-                
+
                 if($docDriver->code == 200){
-                    $doc->status = SpedStatus::CANCELADO; 
+                    $doc->status = SpedStatus::CANCELADO;
                     $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver->data);
                     $doc->save();
                 }
@@ -340,7 +340,7 @@ class EmpresaService
             }
         });
     }
-    
+
     /**
      * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída, porém não foi baixado pdf ou xml.
      * Orquestra esta atualização chamando corretamente os drivers de cada documento fiscal emitido,
@@ -392,8 +392,8 @@ class EmpresaService
         });
 
     }
-    
-    
+
+
     /**
      * Altera a empresa nos serviços Sped para cada tipo de documento e cidade
      *
@@ -405,7 +405,7 @@ class EmpresaService
         Log::info("CHEGOU AQUI CARAI");
         //Log::info($webhook);
         Log::info($webhook['edz_cli_email']);
-        
+
         $fields = [
             'edz_fat_cod' => $webhook['edz_fat_cod'],
             'edz_cnt_cod' => $webhook['edz_cnt_cod'],
@@ -428,23 +428,23 @@ class EmpresaService
         $stringSid = "";
         //ordenando os campos para poder gerar o sid
         ksort($fields);
-        
+
         //concatenando os valores em um string para geração do sid
         foreach ($fields as $key => $value) {
             $stringSid .= $value;
         }
-        
-        
+
+
         //caso queira usar o nsid faça assim
         $nsid = sha1($webhook['edz_fat_cod'] . $webhook['edz_cnt_cod'] . $webhook['edz_cli_cod']);
-          
+
         if($nsid != $webhook['nsid']){
             throw new \Exception("NSID inválido");
         }
         //agora voce ja tem todos os dados enviados pela eduzz na entrega customizada
-        
-        //voce pode vailidar a requisição com o $webhook['sid'] ou $webhook['nsid'] que é enviado pela eduzz, é só comparar com o $sid ou $nsid feito por voce. 
-        
+
+        //voce pode vailidar a requisição com o $webhook['sid'] ou $webhook['nsid'] que é enviado pela eduzz, é só comparar com o $sid ou $nsid feito por voce.
+
         //depois de validar pode entregar o conteúdo
 
         $empresa = Empresa::where('documento', $webhook['edz_cli_taxnumber'])->first();
@@ -458,6 +458,6 @@ class EmpresaService
         }
 
 
-        
+
     }
 }
