@@ -55,5 +55,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/regimes-tributarios-especiais', [RegimesTributariosEspeciaisController::class, 'index'])->name('api.regimes-tributarios-especiais.index');
     Route::get('/tipos-logradouro', [TiposLogradouroController::class, 'index'])->name('api.tipos-logradouro.index');
     Route::get('/tipos-servicos', [TiposServicosController::class, 'index'])->name('api.tipos-servicos.index');
+    Route::get('/tipos-servicos/search', [TiposServicosController::class, 'search'])->name('api.tipos-servicos.search');
 });
 
