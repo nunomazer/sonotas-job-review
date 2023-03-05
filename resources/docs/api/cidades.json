@@ -4,18 +4,252 @@
             "id": 1,
             "state_id": 1,
             "ibge_id": 1200013,
-            "name": "Acrelândia"
+            "name": "Acrelândia",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 2,
+            "state_id": 1,
+            "ibge_id": 1200054,
+            "name": "Assis Brasil",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 3,
+            "state_id": 1,
+            "ibge_id": 1200104,
+            "name": "Brasiléia",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 4,
+            "state_id": 1,
+            "ibge_id": 1200138,
+            "name": "Bujari",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 5,
+            "state_id": 1,
+            "ibge_id": 1200179,
+            "name": "Capixaba",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 6,
+            "state_id": 1,
+            "ibge_id": 1200203,
+            "name": "Cruzeiro do Sul",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 7,
+            "state_id": 1,
+            "ibge_id": 1200252,
+            "name": "Epitaciolândia",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 8,
+            "state_id": 1,
+            "ibge_id": 1200302,
+            "name": "Feijó",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 9,
+            "state_id": 1,
+            "ibge_id": 1200328,
+            "name": "Jordão",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 10,
+            "state_id": 1,
+            "ibge_id": 1200336,
+            "name": "Mâncio Lima",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 11,
+            "state_id": 1,
+            "ibge_id": 1200344,
+            "name": "Manoel Urbano",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 12,
+            "state_id": 1,
+            "ibge_id": 1200351,
+            "name": "Marechal Thaumaturgo",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 13,
+            "state_id": 1,
+            "ibge_id": 1200385,
+            "name": "Plácido de Castro",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 14,
+            "state_id": 1,
+            "ibge_id": 1200807,
+            "name": "Porto Acre",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 15,
+            "state_id": 1,
+            "ibge_id": 1200393,
+            "name": "Porto Walter",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 16,
+            "state_id": 1,
+            "ibge_id": 1200401,
+            "name": "Rio Branco",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 17,
+            "state_id": 1,
+            "ibge_id": 1200427,
+            "name": "Rodrigues Alves",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 18,
+            "state_id": 1,
+            "ibge_id": 1200435,
+            "name": "Santa Rosa do Purus",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 19,
+            "state_id": 1,
+            "ibge_id": 1200500,
+            "name": "Sena Madureira",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 20,
+            "state_id": 1,
+            "ibge_id": 1200450,
+            "name": "Senador Guiomard",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 21,
+            "state_id": 1,
+            "ibge_id": 1200609,
+            "name": "Tarauacá",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 22,
+            "state_id": 1,
+            "ibge_id": 1200708,
+            "name": "Xapuri",
+            "created_at": "2022-10-06T18:14:05.000000Z",
+            "updated_at": "2022-10-06T18:14:05.000000Z"
+        },
+        {
+            "id": 23,
+            "state_id": 2,
+            "ibge_id": 2700102,
+            "name": "Água Branca",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 24,
+            "state_id": 2,
+            "ibge_id": 2700201,
+            "name": "Anadia",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 25,
+            "state_id": 2,
+            "ibge_id": 2700300,
+            "name": "Arapiraca",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 26,
+            "state_id": 2,
+            "ibge_id": 2700409,
+            "name": "Atalaia",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 27,
+            "state_id": 2,
+            "ibge_id": 2700508,
+            "name": "Barra de Santo Antônio",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 28,
+            "state_id": 2,
+            "ibge_id": 2700607,
+            "name": "Barra de São Miguel",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 29,
+            "state_id": 2,
+            "ibge_id": 2700706,
+            "name": "Batalha",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
+        },
+        {
+            "id": 30,
+            "state_id": 2,
+            "ibge_id": 2700805,
+            "name": "Belém",
+            "created_at": "2022-10-06T18:14:06.000000Z",
+            "updated_at": "2022-10-06T18:14:06.000000Z"
         }
     ],
     "meta": {
         "pagination": {
-            "total": 1,
+            "total": 5570,
             "per_page": 30,
             "from": 1,
-            "to": 1,
+            "to": 30,
             "current_page": 1,
-            "last_page": 1
+            "last_page": 186
         },
-        "count": 1
+        "count": 30
     }
 }

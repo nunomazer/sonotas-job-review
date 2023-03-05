@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Cidade;
+use App\Models\Cliente;
 use League\Fractal\TransformerAbstract;
 
 class CidadeTransformer extends TransformerAbstract
@@ -12,31 +13,27 @@ class CidadeTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected array $defaultIncludes = [
+    protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
      * @var array
      */
-    protected array $availableIncludes = [
+    protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
+     * @param Cidade $cidade
      * @return array
      */
-    public function transform(Cidade $model)
+    public function transform(Cidade $cidade)
     {
-        return [
-            'id' => $model->id,
-            'state_id' => $model->state_id,
-            'ibge_id' => $model->ibge_id,
-            'nome' => $model->name,
-        ];
+        return $cidade->toArray();
     }
 }

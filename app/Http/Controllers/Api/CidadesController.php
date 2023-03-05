@@ -26,7 +26,7 @@ class CidadesController extends Controller
         $cidades = QueryBuilder::for(Cidade::query())
             ->paginate($this->api->getPerPage())
             ->appends(request()->query());
-            
+        
         return $this->api->collectionResponse($cidades, CidadeTransformer::class);
     }
 
