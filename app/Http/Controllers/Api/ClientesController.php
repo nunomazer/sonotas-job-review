@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\ClienteRequest;
+use App\Http\Requests\Api\ClienteRequest;
 use App\Models\Cliente;
 use App\Services\ClienteService;
 use App\Transformers\ClienteTransformer;
@@ -64,6 +64,7 @@ class ClientesController extends Controller
      * Retorna array com uma coleção de objetos de clientes de acordo com os filtros utilizados para pesquisa
      *
      * @queryParam filter[nome] string Critério de pesquisa parcial pelo nome do Cliente. Example: Molas
+     * @queryParam filter[empresa_id] int Critério de pesquisa Clientes associados a empresa com o id fornecido. Example: 5
      * @queryParam filter[updated_after] string Critério de pesquisa que retorna os clientes alterados a partir da data do filtro.
      *
      * @responseFile resources/docs/api/clientes.json
@@ -73,21 +74,28 @@ class ClientesController extends Controller
      */
     public function search(Request $request)
     {
-        // $clientes = QueryBuilder::for(Cliente::query())
-        // ->allowedFilters([
-        //     AllowedFilter::partial('nome'),
-        //     AllowedFilter::callback('updated_after', function (Builder $query, $value, string $property)
-        //     {
-        //         $d = \Carbon\Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
-        //         $query->where('updated_at', '>=', $d);
-        //         $query->orWhere('deleted_at', '>=', $d);
-        //     }),
-        // ])
-        // ->paginate($this->api->getPerPage())
-        // ->appends(request()->query());
+         $clientes = QueryBuilder::for(Cliente::query())
+         ->allowedFilters([
+             AllowedFilter::partial('nome'),
+             AllowedFilter::exact('empresa_id'),
+             AllowedFilter::callback('updated_after', function (Builder $query, $value, string $property)
+             {
+                 $d = \Carbon\Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
+                 $query->where('updated_at', '>=', $d);
+                 $query->orWhere('deleted_at', '>=', $d);
+             }),
+         ])
+         ->paginate($this->api->getPerPage())
+         ->appends(request()->query());
 
-        // return $this->api->collectionResponse($clientes, ClienteTransformer::class);
+         return $this->api->collectionResponse($clientes, ClienteTransformer::class);
+    }
 
+    /**
+     * Pesquisar privado para front
+     */
+    public function searchPrivado(Request $request)
+    {
         $term = $request->get('term', '');
         // TODO refatorar para Full Text Search
         $clientes = Cliente::where('nome', 'ilike', '%'.$term.'%')

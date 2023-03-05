@@ -31,7 +31,7 @@ Route::get('/', [\App\Http\Controllers\Api\Controller::class, 'index']);
 Route::post('/auth', [AuthController::class, 'login'])->name('api.auth.login');
 
 Route::prefix('privado')->group(function(){
-    Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+    Route::get('/clientes/search', [ClientesController::class, 'searchPrivado'])->name('api.privado.clientes.search');
     Route::get('/cidades/search', [CidadesController::class, 'searchPrivado'])->name('api.privado.cidades.search');
     Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
 
