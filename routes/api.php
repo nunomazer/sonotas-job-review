@@ -32,7 +32,7 @@ Route::post('/auth', [AuthController::class, 'login'])->name('api.auth.login');
 
 Route::prefix('privado')->group(function(){
     Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
-    Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
+    Route::get('/cidades/search', [CidadesController::class, 'searchPrivado'])->name('api.privado.cidades.search');
     Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
 
     Route::get('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'apiGetConfiguracaoNFSe'])->name('api.empresas.configuracao-nfse.get');
@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
+    Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
     Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
     Route::get('/regimes-tributarios', [RegimesTributariosController::class, 'index'])->name('api.regimes-tributarios.index');
