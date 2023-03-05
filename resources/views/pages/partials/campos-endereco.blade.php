@@ -88,7 +88,7 @@
             }
         });
     }
-    
+
     $(function() {
         $('#city_id').select2({
             theme: 'bootstrap4',
@@ -97,7 +97,7 @@
             // width: '350px',
             allowClear: true,
             ajax: {
-                url: "{{route('api.cidades.search')}}",
+                url: "{{route('api.privado.cidades.search')}}",
                 dataType: 'json',
                 delay: 500,
                 data: function (params) {
@@ -115,7 +115,7 @@
             },
             minimumInputLength: 2,
             templateResult: formatCidade,
-                
+
             <?php
             if ($model != null && !empty($model->city_id)) {
             ?>
@@ -124,7 +124,7 @@
         });
 
     });
-    
+
     $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
     });
