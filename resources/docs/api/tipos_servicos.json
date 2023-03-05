@@ -1,0 +1,255 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "codigo": "01.01",
+            "descricao": "Análise e desenvolvimento de sistemas.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 2,
+            "codigo": "01.02",
+            "descricao": "Programação.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 3,
+            "codigo": "01.03",
+            "descricao": "Processamento de dados e congêneres.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "codigo": "01.04",
+            "descricao": "Elaboração de programas de computadores, inclusive de jogos eletrônicos.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "codigo": "01.05",
+            "descricao": "Licenciamento ou cessão de direito de uso de programas de computação.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 6,
+            "codigo": "01.06",
+            "descricao": "Assessoria e consultoria em informática.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 7,
+            "codigo": "01.07",
+            "descricao": "Suporte técnico em informática, inclusive instalação, configuração e manutenção de programas de computação e bancos de dados.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 8,
+            "codigo": "01.08",
+            "descricao": "Planejamento, confecção, manutenção e atualização de páginas eletrônicas.",
+            "created_at": "2022-10-06T18:14:43.000000Z",
+            "updated_at": "2022-10-06T18:14:43.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 9,
+            "codigo": "02.01",
+            "descricao": "Serviços de pesquisas e desenvolvimento de qualquer natureza.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 10,
+            "codigo": "03.02",
+            "descricao": "Cessão de direito de uso de marcas e de sinais de propaganda.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 11,
+            "codigo": "03.03",
+            "descricao": "Exploração de salões de festas, centro de convenções, escritórios virtuais, stands, quadras esportivas, estádios, ginásios, auditórios, casas de espetáculos, parques de diversões, canchas e congêneres, para realização de eventos ou negócios de qualquer natureza.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 12,
+            "codigo": "03.04",
+            "descricao": "Locação, sublocação, arrendamento, direito de passagem ou permissão de uso, compartilhado ou não, de ferrovia, rodovia, postes, cabos, dutos e condutos de qualquer natureza.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 13,
+            "codigo": "03.05",
+            "descricao": "Cessão de andaimes, palcos, coberturas e outras estruturas de uso temporário.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 14,
+            "codigo": "04.01",
+            "descricao": "Medicina e biomedicina.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 15,
+            "codigo": "04.02",
+            "descricao": "Análises clínicas, patologia, eletricidade médica, radioterapia, quimioterapia, ultra-sonografia, ressonância magnética, radiologia, tomografia e congêneres.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 16,
+            "codigo": "04.03",
+            "descricao": "Hospitais, clínicas, laboratórios, sanatórios, manicômios, casas de saúde, prontos-socorros, ambulatórios e congêneres.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 17,
+            "codigo": "04.04",
+            "descricao": "Instrumentação cirúrgica.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 18,
+            "codigo": "04.05",
+            "descricao": "Acupuntura.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 19,
+            "codigo": "04.06",
+            "descricao": "Enfermagem, inclusive serviços auxiliares.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 20,
+            "codigo": "04.07",
+            "descricao": "Serviços farmacêuticos.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 21,
+            "codigo": "04.08",
+            "descricao": "Terapia ocupacional, fisioterapia e fonoaudiologia.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 22,
+            "codigo": "04.09",
+            "descricao": "Terapias de qualquer espécie destinadas ao tratamento físico, orgânico e mental.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 23,
+            "codigo": "04.10",
+            "descricao": "Nutrição.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 24,
+            "codigo": "04.11",
+            "descricao": "Obstetrícia.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 25,
+            "codigo": "04.12",
+            "descricao": "Odontologia.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 26,
+            "codigo": "04.13",
+            "descricao": "Ortóptica.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 27,
+            "codigo": "04.14",
+            "descricao": "Próteses sob encomenda.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 28,
+            "codigo": "04.15",
+            "descricao": "Psicanálise.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 29,
+            "codigo": "04.16",
+            "descricao": "Psicologia.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 30,
+            "codigo": "04.17",
+            "descricao": "Casas de repouso e de recuperação, creches, asilos e congêneres.",
+            "created_at": "2022-10-06T18:14:44.000000Z",
+            "updated_at": "2022-10-06T18:14:44.000000Z",
+            "deleted_at": null
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 193,
+            "per_page": 30,
+            "from": 1,
+            "to": 30,
+            "current_page": 1,
+            "last_page": 7
+        },
+        "count": 30
+    }
+}
