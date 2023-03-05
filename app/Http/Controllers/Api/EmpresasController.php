@@ -15,6 +15,13 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class EmpresasController extends Controller
 {
+    private function findEmpresa($id)
+    {
+        return Empresa::where('id', $id)
+            ->where('owner_user_id', auth()->user()->id)
+            ->first();
+    }
+
    /**
      * Get by Id
      *
@@ -26,9 +33,7 @@ class EmpresasController extends Controller
      */
     public function getById(int $id)
     {
-        $empresa = Empresa::where('id', $id)
-            ->where('owner_user_id', auth()->user()->id)
-            ->first();
+        $empresa = $this->findEmpresa($id);
 
         if ($empresa == null) {
             return $this->api->statusResponse(404, 'Empresa não encontrada ou não pertencente ao afiliado');
@@ -54,6 +59,33 @@ class EmpresasController extends Controller
 
         return $this->api->itemResponse(
             (new EmpresaService())->create($empresaArray), EmpresaTransformer::class);
+    }
+
+    /**
+     * Atualizar
+     *
+     * Atualiza o registro de uma empresa associada ao Afiliado autenticado pela API.
+     *
+     * @responseFile resources/docs/api/empresa.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(EmpresaRequest $request, $id)
+    {
+        $empresa = $this->findEmpresa($id);
+
+        if ($empresa == null) {
+            return $this->api->statusResponse(404, 'Empresa não encontrada ou não pertencente ao afiliado');
+        }
+
+        $empresaArray = $request->toArray();
+        $empresaArray['owner_user_id'] = auth()->user()->id;
+
+        Empresa::unguard();
+        $empresa->fill($empresaArray);
+
+        return $this->api->itemResponse(
+            (new EmpresaService())->update($empresa), EmpresaTransformer::class);
     }
 
     /**
