@@ -40,6 +40,7 @@ Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name
 Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/empresas/search', [ApiEmpresasController::class, 'search'])->name('api.empresas.search');
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
