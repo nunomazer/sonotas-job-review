@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Domain\Api;
 use App\Http\Controllers\Controller as BaseController;
+use App\Services\ApiService;
+
 /**
  * @group Ajuda geral
  */
 class Controller extends BaseController
 {
     /**
-     * @var Api
+     * @var ApiService
      */
     protected $api;
 
     public function __construct()
     {
-        $this->api = new Api();
+        $this->api = new ApiService();
     }
 
     /**

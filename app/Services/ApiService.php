@@ -1,18 +1,15 @@
 <?php
 
 
-namespace App\Domain;
+namespace App\Services;
 
 use App\Transformers\StatusCodeTransformer;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use League\Fractal\TransformerAbstract;
 use Spatie\Fractal\Fractal;
 
-class Api
+class ApiService
 {
 
     /**
