@@ -1,0 +1,21 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "state_id": 1,
+            "ibge_id": 1200013,
+            "name": "Acrelândia"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "per_page": 30,
+            "from": 1,
+            "to": 1,
+            "current_page": 1,
+            "last_page": 1
+        },
+        "count": 1
+    }
+}
