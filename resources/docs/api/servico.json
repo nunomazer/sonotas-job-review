@@ -1,0 +1,31 @@
+{
+    "data": {
+        "id": 7,
+        "empresa_id": 8,
+        "tipo_servico_codigo": "01.01",
+        "ativo": true,
+        "nome": "teste",
+        "valor": "123.00",
+        "descricao": "123",
+        "obs": "1",
+        "cofins": "0.00",
+        "csll": "0.00",
+        "inss": "0.00",
+        "ir": "0.00",
+        "pis": "0.00",
+        "iss": "0.00",
+        "iss_retido_fonte": false,
+        "municipio_servico_codigo": "1",
+        "municipio_servico_descricao": "1",
+        "enviar_nota_email_cliente": true,
+        "ultimo_rps_liberado": "1",
+        "created_at": "2022-10-28T17:56:11.000000Z",
+        "updated_at": "2022-10-28T17:57:03.000000Z",
+        "deleted_at": null,
+        "planejamento_especifico_ativo": true,
+        "transmissao_automatica": true,
+        "transmissao_periodo": "year",
+        "transmissao_apenas_dias_uteis": true,
+        "transmissao_frequencia": 3
+    }
+}

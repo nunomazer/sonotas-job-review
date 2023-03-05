@@ -46,6 +46,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
+    Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+    Route::get('/servicos/{id}', [ServicosController::class, 'getById'])->name('api.servicos.get-by-id');
+    Route::post('/servicos', [ServicosController::class, 'store'])->name('api.servicos.store');
+
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
