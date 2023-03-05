@@ -1,0 +1,19 @@
+{
+    "data": {
+        "id": 7,
+        "driver": null,
+        "driver_id": null,
+        "driver_dados": null,
+        "data_transacao": "2022-10-26T03:00:00.000000Z",
+        "empresa_id": 2,
+        "cliente_id": 11,
+        "valor": "0.68",
+        "tipo_documento": "nfse",
+        "data_emissao_planejada": null,
+        "documento_id": 2,
+        "created_at": "2022-10-26T13:17:18.000000Z",
+        "updated_at": "2022-10-26T13:20:49.000000Z",
+        "deleted_at": null,
+        "info_adicional": "teste"
+    }
+}

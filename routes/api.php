@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\TiposLogradouroController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\Api\ServicosController;
 use App\Http\Controllers\Api\TiposServicosController;
+use App\Http\Controllers\Api\VendasController;
 use App\Http\Controllers\Api\WebhooksController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/search', [ApiEmpresasController::class, 'search'])->name('api.empresas.search');
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
+
+    Route::get('/vendas/search', [VendasController::class, 'search'])->name('api.vendas.search');
+    Route::get('/vendas/{id}', [VendasController::class, 'getById'])->name('api.vendas.get-by-id');
+    Route::post('/vendas', [VendasController::class, 'store'])->name('api.vendas.store');
 
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
