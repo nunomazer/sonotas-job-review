@@ -1,0 +1,53 @@
+{
+    "0": {
+        "tipo": "Alameda"
+    },
+    "1": {
+        "tipo": "Avenida"
+    },
+    "2": {
+        "tipo": "Chácara"
+    },
+    "3": {
+        "tipo": "Colônia"
+    },
+    "4": {
+        "tipo": "Condomínio"
+    },
+    "5": {
+        "tipo": "Eqnp"
+    },
+    "6": {
+        "tipo": "Estância"
+    },
+    "7": {
+        "tipo": "Estrada"
+    },
+    "8": {
+        "tipo": "Fazenda"
+    },
+    "9": {
+        "tipo": "Praça"
+    },
+    "10": {
+        "tipo": "Prolongamento"
+    },
+    "11": {
+        "tipo": "Rodovia"
+    },
+    "12": {
+        "tipo": "Rua"
+    },
+    "13": {
+        "tipo": "Sítio"
+    },
+    "14": {
+        "tipo": "Travessa"
+    },
+    "15": {
+        "tipo": "Vicinal"
+    },
+    "meta": {
+        "count": 16
+    }
+}
