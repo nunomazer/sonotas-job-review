@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientesController;
 use App\Http\Controllers\Api\CidadesController;
+use App\Http\Controllers\Api\CnaesController;
 use App\Http\Controllers\Api\EmpresasController as ApiEmpresasController;
 use App\Http\Controllers\Api\EstadosController;
 use App\Http\Controllers\Api\RegimesTributariosController;
@@ -44,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
+    Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
     Route::get('/regimes-tributarios', [RegimesTributariosController::class, 'index'])->name('api.regimes-tributarios.index');
     Route::get('/regimes-tributarios-especiais', [RegimesTributariosEspeciaisController::class, 'index'])->name('api.regimes-tributarios-especiais.index');
