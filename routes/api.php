@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
+    Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
     Route::get('/regimes-tributarios', [RegimesTributariosController::class, 'index'])->name('api.regimes-tributarios.index');
