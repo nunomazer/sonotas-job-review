@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\RegimesTributariosEspeciaisController;
 use App\Http\Controllers\Api\TiposLogradouroController;
 use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\Api\ServicosController;
+use App\Http\Controllers\Api\TiposServicosController;
 use App\Http\Controllers\Api\WebhooksController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,5 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/regimes-tributarios', [RegimesTributariosController::class, 'index'])->name('api.regimes-tributarios.index');
     Route::get('/regimes-tributarios-especiais', [RegimesTributariosEspeciaisController::class, 'index'])->name('api.regimes-tributarios-especiais.index');
     Route::get('/tipos-logradouro', [TiposLogradouroController::class, 'index'])->name('api.tipos-logradouro.index');
+    Route::get('/tipos-servicos', [TiposServicosController::class, 'index'])->name('api.tipos-servicos.index');
 });
 
