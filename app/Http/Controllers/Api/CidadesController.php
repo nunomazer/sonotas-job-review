@@ -32,7 +32,7 @@ class CidadesController extends Controller
     }
 
     /**
-     * Pesquisar
+     * Cidades - Pesquisar
      *
      * Retorna array com uma coleção de objetos de cidades de acordo com os filtros utilizados para pesquisa
      *

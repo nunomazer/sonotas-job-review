@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');
     Route::get('/cnaes', [CnaesController::class, 'index'])->name('api.cnaes.index');
+    Route::get('/cnaes/search', [CnaesController::class, 'search'])->name('api.cnaes.search');
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');
     Route::get('/regimes-tributarios', [RegimesTributariosController::class, 'index'])->name('api.regimes-tributarios.index');
     Route::get('/regimes-tributarios-especiais', [RegimesTributariosEspeciaisController::class, 'index'])->name('api.regimes-tributarios-especiais.index');
