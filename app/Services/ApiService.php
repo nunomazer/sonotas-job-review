@@ -7,6 +7,7 @@ use App\Transformers\StatusCodeTransformer;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use League\Fractal\Serializer\DataArraySerializer;
 use Spatie\Fractal\Fractal;
 
 class ApiService
