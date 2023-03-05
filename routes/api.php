@@ -38,6 +38,7 @@ Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name
 Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
 
     Route::get('/estados', [EstadosController::class, 'index'])->name('api.estados.index');

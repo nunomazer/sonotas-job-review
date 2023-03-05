@@ -15,6 +15,21 @@ use Spatie\Fractal\Fractal;
 class Api
 {
 
+    /**
+     * Padroniza a resposta, útil para erros 404 ou outros códigos customizados
+     *
+     * @param int $code
+     * @param string|null $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statusResponse(int $code, string $message = null) {
+        return \fractal([[
+            'code' => $code,
+            'message' => $message,
+        ]])
+            ->transformWith(StatusCodeTransformer::class)
+            ->respond($code);
+    }
     public function itemResponse($item, $transformer, $nullNotFound = true)
     {
         if ($item == null && $nullNotFound) {
