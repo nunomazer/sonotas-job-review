@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Models\Estado;
 use League\Fractal\TransformerAbstract;
 
 class EstadoTransformer extends TransformerAbstract
@@ -11,28 +12,26 @@ class EstadoTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected array $defaultIncludes = [
+    protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
      * @var array
      */
-    protected array $availableIncludes = [
+    protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
      * @return array
      */
-    public function transform()
+    public function transform(Estado $estado)
     {
-        return [
-            //
-        ];
+        return $estado->toArray();
     }
 }

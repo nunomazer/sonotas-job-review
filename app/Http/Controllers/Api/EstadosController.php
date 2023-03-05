@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Estado;
+use App\Transformers\EstadoTransformer;
 use Illuminate\Http\Request;
 
+/**
+ * @group Tabelas auxiliares
+ */
 class EstadosController extends Controller
 {
    /**
@@ -18,6 +22,6 @@ class EstadosController extends Controller
      */
     public function index()
     {
-        return response()->json(Estado::query()->get());
+        return $this->api->collectionResponse(Estado::all(), EstadoTransformer::class);
     }
 }
