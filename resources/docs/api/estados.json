@@ -1,0 +1,302 @@
+{
+    "0": {
+        "id": 1,
+        "ibge_id": 12,
+        "ibge_region_id": 1,
+        "name": "Acre",
+        "acronym": "AC",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "1": {
+        "id": 2,
+        "ibge_id": 27,
+        "ibge_region_id": 2,
+        "name": "Alagoas",
+        "acronym": "AL",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "2": {
+        "id": 3,
+        "ibge_id": 16,
+        "ibge_region_id": 1,
+        "name": "Amapá",
+        "acronym": "AP",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "3": {
+        "id": 4,
+        "ibge_id": 13,
+        "ibge_region_id": 1,
+        "name": "Amazonas",
+        "acronym": "AM",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "4": {
+        "id": 5,
+        "ibge_id": 29,
+        "ibge_region_id": 2,
+        "name": "Bahia",
+        "acronym": "BA",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "5": {
+        "id": 6,
+        "ibge_id": 23,
+        "ibge_region_id": 2,
+        "name": "Ceará",
+        "acronym": "CE",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "6": {
+        "id": 7,
+        "ibge_id": 53,
+        "ibge_region_id": 5,
+        "name": "Distrito Federal",
+        "acronym": "DF",
+        "region_name": "Centro-Oeste",
+        "region_acronym": "CO",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "7": {
+        "id": 8,
+        "ibge_id": 32,
+        "ibge_region_id": 3,
+        "name": "Espírito Santo",
+        "acronym": "ES",
+        "region_name": "Sudeste",
+        "region_acronym": "SE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "8": {
+        "id": 9,
+        "ibge_id": 52,
+        "ibge_region_id": 5,
+        "name": "Goiás",
+        "acronym": "GO",
+        "region_name": "Centro-Oeste",
+        "region_acronym": "CO",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "9": {
+        "id": 10,
+        "ibge_id": 21,
+        "ibge_region_id": 2,
+        "name": "Maranhão",
+        "acronym": "MA",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "10": {
+        "id": 11,
+        "ibge_id": 51,
+        "ibge_region_id": 5,
+        "name": "Mato Grosso",
+        "acronym": "MT",
+        "region_name": "Centro-Oeste",
+        "region_acronym": "CO",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "11": {
+        "id": 12,
+        "ibge_id": 50,
+        "ibge_region_id": 5,
+        "name": "Mato Grosso do Sul",
+        "acronym": "MS",
+        "region_name": "Centro-Oeste",
+        "region_acronym": "CO",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "12": {
+        "id": 13,
+        "ibge_id": 31,
+        "ibge_region_id": 3,
+        "name": "Minas Gerais",
+        "acronym": "MG",
+        "region_name": "Sudeste",
+        "region_acronym": "SE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "13": {
+        "id": 14,
+        "ibge_id": 15,
+        "ibge_region_id": 1,
+        "name": "Pará",
+        "acronym": "PA",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "14": {
+        "id": 15,
+        "ibge_id": 25,
+        "ibge_region_id": 2,
+        "name": "Paraíba",
+        "acronym": "PB",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "15": {
+        "id": 16,
+        "ibge_id": 41,
+        "ibge_region_id": 4,
+        "name": "Paraná",
+        "acronym": "PR",
+        "region_name": "Sul",
+        "region_acronym": "S",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "16": {
+        "id": 17,
+        "ibge_id": 26,
+        "ibge_region_id": 2,
+        "name": "Pernambuco",
+        "acronym": "PE",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "17": {
+        "id": 18,
+        "ibge_id": 22,
+        "ibge_region_id": 2,
+        "name": "Piauí",
+        "acronym": "PI",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "18": {
+        "id": 19,
+        "ibge_id": 33,
+        "ibge_region_id": 3,
+        "name": "Rio de Janeiro",
+        "acronym": "RJ",
+        "region_name": "Sudeste",
+        "region_acronym": "SE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "19": {
+        "id": 20,
+        "ibge_id": 24,
+        "ibge_region_id": 2,
+        "name": "Rio Grande do Norte",
+        "acronym": "RN",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "20": {
+        "id": 21,
+        "ibge_id": 43,
+        "ibge_region_id": 4,
+        "name": "Rio Grande do Sul",
+        "acronym": "RS",
+        "region_name": "Sul",
+        "region_acronym": "S",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "21": {
+        "id": 22,
+        "ibge_id": 11,
+        "ibge_region_id": 1,
+        "name": "Rondônia",
+        "acronym": "RO",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "22": {
+        "id": 23,
+        "ibge_id": 14,
+        "ibge_region_id": 1,
+        "name": "Roraima",
+        "acronym": "RR",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "23": {
+        "id": 24,
+        "ibge_id": 42,
+        "ibge_region_id": 4,
+        "name": "Santa Catarina",
+        "acronym": "SC",
+        "region_name": "Sul",
+        "region_acronym": "S",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "24": {
+        "id": 25,
+        "ibge_id": 35,
+        "ibge_region_id": 3,
+        "name": "São Paulo",
+        "acronym": "SP",
+        "region_name": "Sudeste",
+        "region_acronym": "SE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "25": {
+        "id": 26,
+        "ibge_id": 28,
+        "ibge_region_id": 2,
+        "name": "Sergipe",
+        "acronym": "SE",
+        "region_name": "Nordeste",
+        "region_acronym": "NE",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "26": {
+        "id": 27,
+        "ibge_id": 17,
+        "ibge_region_id": 1,
+        "name": "Tocantins",
+        "acronym": "TO",
+        "region_name": "Norte",
+        "region_acronym": "N",
+        "created_at": "2023-01-16T00:16:58.000000Z",
+        "updated_at": "2023-01-16T00:16:58.000000Z"
+    },
+    "meta": {
+        "count": 27
+    }
+}
