@@ -32,6 +32,8 @@ class EmpresaRequest extends FormRequest
         return [
             'nome'              => ['required'],
             'documento'         => ['required', 'cpf_cnpj'],
+            'inscricao_estadual'=> [],
+            'inscricao_municipal'=> [],
             'tipo_logradouro'   => ['required', Rule::in(TipoLogradouro::tipos)],
             'logradouro'        => ['required'],
             'numero'            => ['required'],
@@ -41,6 +43,9 @@ class EmpresaRequest extends FormRequest
             'telefone_num'      => ['required'],
             'telefone_ddd'      => ['required', 'ddd'],
             'email'             => ['required', 'email'],
+            'regime_tributario' => ['required', 'int', Rule::in(SpedRegimesTributarios::toArrayValores())],
+            'regime_tributario_especial'
+            => ['required', 'int', Rule::in(SpedRegimesTributariosEspeciais::toArrayValores())],
         ];
     }
 
@@ -94,6 +99,23 @@ class EmpresaRequest extends FormRequest
             'email'             => [
                 'description'   => 'Endereço de email, corretamente formatado',
                 'example'       => 'financeiro@molasmolejo.com.br'
+            ],
+            'regime_tributario' => [
+                'description'   => 'Código do regime tributário da empresa, lista disponível no endpoint Regimes Tributários',
+                'example'       => 1,
+            ],
+            'regime_tributario_especial'
+                                => [
+                'description'   => 'Código do regime tributário especial da empresa, lista disponível no endpoint Regimes Tributários Especiais',
+                'example'       => 0,
+            ],
+            'inscricao_estadual'=> [
+                'description'   => 'Código da inscrição estadual',
+                'example'       => '34934872',
+            ],
+            'inscricao_municipal'=> [
+                'description'   => 'Código da inscrição municipal',
+                'example'       => '3932222',
             ],
         ];
     }
