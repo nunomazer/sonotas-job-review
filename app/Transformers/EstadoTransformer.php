@@ -30,8 +30,8 @@ class EstadoTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Estado $estado)
+    public function transform(Estado $model)
     {
-        return $estado->toArray();
+        return $model->toArray();
     }
 }
