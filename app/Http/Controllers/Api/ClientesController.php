@@ -14,6 +14,16 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class ClientesController extends Controller
 {
+    private function findCliente($id)
+    {
+        return Cliente::where('id', $id)
+            ->with('empresa')
+            ->whereHas('empresa', function ($query) {
+                $query->where('owner_user_id', auth()->user()->id);
+            })
+            ->first();
+    }
+
     /**
      * Get by Id
      *
@@ -25,12 +35,7 @@ class ClientesController extends Controller
      */
     public function getById(int $id)
     {
-        $cliente = Cliente::where('id', $id)
-            ->with('empresa')
-            ->whereHas('empresa', function ($query) {
-                $query->where('owner_user_id', auth()->user()->id);
-            })
-            ->first();
+        $cliente = $this->findCliente($id);
 
         if ($cliente == null) {
             return $this->api->statusResponse(404, 'Cliente não encontrado ou não pertencente ao afiliado');
@@ -56,6 +61,32 @@ class ClientesController extends Controller
 
         return $this->api->itemResponse(
             (new ClienteService())->create($clienteArray), ClienteTransformer::class);
+    }
+
+    /**
+     * Atualizar
+     *
+     * Atualiza o registro de uma Cliente associada ao Afiliado autenticado pela API.
+     *
+     * @responseFile resources/docs/api/cliente.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(ClienteRequest $request, $id)
+    {
+        $cliente = $this->findCliente($id);
+
+        if ($cliente == null) {
+            return $this->api->statusResponse(404, 'Cliente não encontrado ou não pertencente ao afiliado');
+        }
+
+        $clienteArray = $request->toArray();
+
+        Cliente::unguard();
+        $cliente->fill($clienteArray);
+
+        return $this->api->itemResponse(
+            (new ClienteService())->update($cliente), ClienteTransformer::class);
     }
 
     /**

@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
     Route::get('/clientes/{id}', [ClientesController::class, 'getById'])->name('api.clientes.get-by-id');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('api.clientes.store');
+    Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('api.clientes.update');
 
     Route::get('/empresas/search', [ApiEmpresasController::class, 'search'])->name('api.empresas.search');
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
