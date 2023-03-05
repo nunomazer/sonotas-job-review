@@ -1,0 +1,31 @@
+{
+    "data": [
+        {
+            "nome": "Isento",
+            "valor": 0
+        },
+        {
+            "nome": "Simples Nacional",
+            "valor": 1
+        },
+        {
+            "nome": "Simples Nacional Excesso",
+            "valor": 2
+        },
+        {
+            "nome": "Lucro Presumido",
+            "valor": 3
+        },
+        {
+            "nome": "Lucro Real",
+            "valor": 4
+        },
+        {
+            "nome": "MEI",
+            "valor": 5
+        }
+    ],
+    "meta": {
+        "count": 6
+    }
+}

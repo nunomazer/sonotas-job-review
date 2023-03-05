@@ -326,6 +326,8 @@ INTRO
          * Note: you must include the initial '/' when writing an endpoint.
          */
         'order' => [
+            'Segurança',
+            'Tabelas auxiliares',
             // 'This group will come first',
             // 'This group will come next' => [
             //     'POST /this-endpoint-will-comes-first',

@@ -2,10 +2,9 @@
 
 namespace App\Transformers;
 
-use App\Models\Estado;
 use League\Fractal\TransformerAbstract;
 
-class EstadoTransformer extends TransformerAbstract
+class RegimeTributarioTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -30,8 +29,8 @@ class EstadoTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Estado $model)
+    public function transform(array $model)
     {
-        return $model->toArray();
+        return $model;
     }
 }
