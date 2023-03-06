@@ -72,4 +72,14 @@ class Empresa extends Model
     {
         return $this->hasMany(Venda::class);
     }
+
+    /**
+     * Query que testa se o owner_user_id é igual ao id do usuário autenticado
+     * @param $query
+     * @return mixed
+     */
+    public function scopeUserIsOwner($query)
+    {
+        return $query->where('owner_user_id', auth()->user()->id);
+    }
 }
