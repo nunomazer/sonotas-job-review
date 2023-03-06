@@ -14,6 +14,7 @@ class StatusCodeTransformer extends TransformerAbstract
     const STATUS_401_UNAUTHORIZED = 401;
     const STATUS_403_FORBIDDEN = 403;
     const STATUS_404_NOT_FOUND = 404;
+    const STATUS_422_UNPROCESSABLE_CONTENT = 422;
     const STATUS_500_INTERNAL_SERVER_ERROR = 500;
 
     const STATUS_CODES = [
@@ -23,6 +24,7 @@ class StatusCodeTransformer extends TransformerAbstract
         self::STATUS_401_UNAUTHORIZED => 'Unauthorized',
         self::STATUS_403_FORBIDDEN => 'Forbidden',
         self::STATUS_404_NOT_FOUND => 'Not Found',
+        self::STATUS_422_UNPROCESSABLE_CONTENT => 'Unprocessable Content',
         self::STATUS_500_INTERNAL_SERVER_ERROR => 'Internal Server Error',
     ];
 

@@ -100,7 +100,7 @@
                     <div class=" col-3">Descrição</div>
                     <div class="col-2">Qtde</div>
                     <div class="col-2 col-md-2">Valor un</div>
-                    <div class="col-2 col-md-2">Desconto</div>                    
+                    <div class="col-2 col-md-2">Desconto</div>
                     <div class=" col-2 col-md-2">Valor total</div>
                     <div class="col-1"></div>
                 </div>
@@ -223,7 +223,7 @@
                 // width: '350px',
                 allowClear: true,
                 ajax: {
-                    url: "{{route('api.servicos.search')}}",
+                    url: "{{route('api.privado.servicos.search')}}",
                     dataType: 'json',
                     delay: 500,
                     data: function(params) {
@@ -312,33 +312,33 @@
         function addServicoRow() {
             servicoIdx++;
 
-            var html = `<div class="row linhaItem"> 
+            var html = `<div class="row linhaItem">
                     <div class="input-group mb-3">
                         <div class="col-3">
-                            <select class="form-select servico_select2" required  
+                            <select class="form-select servico_select2" required
                                 name="servico[${servicoIdx}][id]"
                                 data-idx="${servicoIdx}"></select>
                         </div>
                         <div class="col-2">
-                            <input type="number" step="0.01" class="form-control ms-1 servico-qtde" 
-                                name="servico[${servicoIdx}][qtde]" 
+                            <input type="number" step="0.01" class="form-control ms-1 servico-qtde"
+                                name="servico[${servicoIdx}][qtde]"
                                 id="servico_qtde_${servicoIdx}"
                                 data-idx="${servicoIdx}" placeholder="Quantidade" required />
                         </div>
                         <div class="col-2">
-                            <input type="number" step="0.01" class="form-control ms-1 servico-valor" 
-                                name="servico[${servicoIdx}][valor]" 
+                            <input type="number" step="0.01" class="form-control ms-1 servico-valor"
+                                name="servico[${servicoIdx}][valor]"
                                 id="servico_valor_${servicoIdx}"
                                 data-idx="${servicoIdx}" placeholder="Valor" required />
                         </div>
                         <div class="col-2">
-                            <input type="number" step="0.01" class="form-control ms-1 servico-desconto" 
-                                name="servico[${servicoIdx}][desconto]" 
+                            <input type="number" step="0.01" class="form-control ms-1 servico-desconto"
+                                name="servico[${servicoIdx}][desconto]"
                                 id="servico_desconto_${servicoIdx}"
                                 data-idx="${servicoIdx}" placeholder="Desconto" required />
                         </div>
                         <div class="col-2">
-                            <input type="number" step="0.01" class="form-control ms-1 servico-valor-total" 
+                            <input type="number" step="0.01" class="form-control ms-1 servico-valor-total"
                                 id="servico_valor_total_${servicoIdx}"
                                 data-idx="${servicoIdx}" placeholder="Total" readonly="readonly" required />
                         </div>
@@ -366,7 +366,7 @@
         }
 
         function calculaValorTotal() {
-            var valorTotal = 0; 
+            var valorTotal = 0;
             $('.servico-valor').each(function() {
                 var quantidade = parseFloat($(`#servico_qtde_${$(this).data('idx')}`).val());
                 var valor_unitario =  parseFloat($(this).val());
@@ -381,7 +381,7 @@
         function initEventValor() {
             $('.servico-qtde').on('change', calculaValorTotal);
             $('.servico-valor').on('change', calculaValorTotal);
-            $('.servico-desconto').on('change', calculaValorTotal); 
+            $('.servico-desconto').on('change', calculaValorTotal);
         }
 
         // carrega a primeira linha do form de serviços

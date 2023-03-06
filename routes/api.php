@@ -33,7 +33,7 @@ Route::post('/auth', [AuthController::class, 'login'])->name('api.auth.login');
 Route::prefix('privado')->group(function(){
     Route::get('/clientes/search', [ClientesController::class, 'searchPrivado'])->name('api.privado.clientes.search');
     Route::get('/cidades/search', [CidadesController::class, 'searchPrivado'])->name('api.privado.cidades.search');
-    Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+    Route::get('/servicos/search', [ServicosController::class, 'searchPrivado'])->name('api.privado.servicos.search');
 
     Route::get('/empresas/{empresa}/configuracao-nfse', [EmpresasController::class, 'apiGetConfiguracaoNFSe'])->name('api.empresas.configuracao-nfse.get');
 });
@@ -52,6 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
     Route::put('/empresas/{id}', [ApiEmpresasController::class, 'update'])->name('api.empresas.update');
+
+    Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
+    Route::get('/servicos/{id}', [ServicosController::class, 'getById'])->name('api.servicos.get-by-id');
+    Route::post('/servicos', [ServicosController::class, 'store'])->name('api.servicos.store');
+    Route::post('/servicos/{ìd}', [ServicosController::class, 'update'])->name('api.servicos.update');
 
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');

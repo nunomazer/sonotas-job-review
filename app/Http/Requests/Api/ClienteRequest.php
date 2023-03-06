@@ -36,7 +36,7 @@ class ClienteRequest extends FormRequest
     public function rules()
     {
         return [
-            'empresa_id'        => ['required', 'int'],
+            'empresa_id'        => ['required', 'int', 'exists:empresas,id'],
             'nome'              => ['required'],
             'documento'         => ['required', 'cpf_cnpj'],
             'inscricao_estadual'=> [],
