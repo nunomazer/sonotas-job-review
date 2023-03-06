@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\ClienteRequest;
 use App\Models\Cliente;
+use App\Models\Empresa;
 use App\Services\ClienteService;
 use App\Transformers\ClienteTransformer;
 use Illuminate\Http\Request;
@@ -56,6 +57,10 @@ class ClientesController extends Controller
      */
     public function store(ClienteRequest $request)
     {
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
+        }
+
         $clienteArray = $request->toArray();
         $clienteArray['owner_user_id'] = auth()->user()->id;
 
@@ -78,6 +83,10 @@ class ClientesController extends Controller
 
         if ($cliente == null) {
             return $this->api->statusResponse(404, 'Cliente não encontrado ou não pertencente ao afiliado');
+        }
+
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
         }
 
         $clienteArray = $request->toArray();
