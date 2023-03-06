@@ -1,0 +1,66 @@
+{
+    "data": [
+        {
+            "id": 5,
+            "driver": null,
+            "driver_id": null,
+            "driver_dados": null,
+            "data_transacao": "2022-10-15T01:29:54.000000Z",
+            "empresa_id": 1,
+            "cliente_id": 3,
+            "valor": "1.00",
+            "tipo_documento": "nfse",
+            "data_emissao_planejada": "2022-10-15T01:30:14.000000Z",
+            "documento_id": 1,
+            "created_at": "2022-10-15T01:30:20.000000Z",
+            "updated_at": "2022-10-15T02:15:03.000000Z",
+            "deleted_at": null,
+            "info_adicional": null
+        },
+        {
+            "id": 7,
+            "driver": null,
+            "driver_id": null,
+            "driver_dados": null,
+            "data_transacao": "2022-10-26T03:00:00.000000Z",
+            "empresa_id": 2,
+            "cliente_id": 11,
+            "valor": "0.68",
+            "tipo_documento": "nfse",
+            "data_emissao_planejada": null,
+            "documento_id": 2,
+            "created_at": "2022-10-26T13:17:18.000000Z",
+            "updated_at": "2022-10-26T13:20:49.000000Z",
+            "deleted_at": null,
+            "info_adicional": "teste"
+        },
+        {
+            "id": 8,
+            "driver": null,
+            "driver_id": null,
+            "driver_dados": null,
+            "data_transacao": "2022-10-26T03:00:00.000000Z",
+            "empresa_id": 8,
+            "cliente_id": 11,
+            "valor": "0.71",
+            "tipo_documento": "nfse",
+            "data_emissao_planejada": null,
+            "documento_id": null,
+            "created_at": "2022-10-26T13:19:52.000000Z",
+            "updated_at": "2022-10-26T13:20:20.000000Z",
+            "deleted_at": null,
+            "info_adicional": "X"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "per_page": 30,
+            "from": 1,
+            "to": 3,
+            "current_page": 1,
+            "last_page": 1
+        },
+        "count": 3
+    }
+}
