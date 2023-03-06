@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\ServicoRequest;
+use App\Http\Requests\Api\ServicoRequest;
+use App\Models\Empresa;
 use App\Models\Servico;
 use App\Services\ServicoService;
 use App\Transformers\ServicoTransformer;
@@ -15,7 +16,16 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class ServicosController extends Controller
 {
-/**
+    private function findServico($id)
+    {
+        return Servico::where('id', $id)
+            ->with('empresa')
+            ->whereHas('empresa', function ($query) {
+                $query->where('owner_user_id', auth()->user()->id);
+            })
+            ->first();
+    }
+    /**
      * Get by Id
      *
      * Retorna um serviço pelo Id se ela for associada ao afiliado.
@@ -26,12 +36,7 @@ class ServicosController extends Controller
      */
     public function getById(int $id)
     {
-        $servico = Servico::where('id', $id)
-            ->with('empresa')
-            ->whereHas('empresa', function ($query) {
-                $query->where('owner_user_id', auth()->user()->id);
-            })
-            ->first();
+        $servico = $this->findServico($id);
 
         if ($servico == null) {
             return $this->api->statusResponse(404, 'Serviço não encontrado ou não pertencente ao afiliado');
@@ -52,11 +57,44 @@ class ServicosController extends Controller
      */
     public function store(ServicoRequest $request)
     {
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
+        }
+
         $servicoArray = $request->toArray();
-        $servicoArray['owner_user_id'] = auth()->user()->id;
 
         return $this->api->itemResponse(
             (new ServicoService())->create($servicoArray), ServicoTransformer::class);
+    }
+
+    /**
+     * Atualizar
+     *
+     * Atualiza o registro de um Serviço associada ao Afiliado autenticado pela API.
+     *
+     * @responseFile resources/docs/api/servico.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(ServicoRequest $request, $id)
+    {
+        $servico = $this->findServico($id);
+
+        if ($servico == null) {
+            return $this->api->statusResponse(404, 'Serviço não encontrado ou não pertencente ao afiliado');
+        }
+
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
+        }
+
+        $servicoArray = $request->toArray();
+
+        Servico::unguard();
+        $servico->fill($servicoArray);
+
+        return $this->api->itemResponse(
+            (new ServicoService())->update($servico), ServicoTransformer::class);
     }
 
     /**
