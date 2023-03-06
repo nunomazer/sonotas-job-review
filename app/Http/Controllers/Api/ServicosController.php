@@ -2,14 +2,138 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Cliente;
+use App\Http\Requests\Api\ServicoRequest;
+use App\Models\Empresa;
 use App\Models\Servico;
-use App\Models\Venda;
+use App\Services\ServicoService;
+use App\Transformers\ServicoTransformer;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * @group Serviços
+ */
 class ServicosController extends Controller
 {
+    private function findServico($id)
+    {
+        return Servico::where('id', $id)
+            ->with('empresa')
+            ->whereHas('empresa', function ($query) {
+                $query->where('owner_user_id', auth()->user()->id);
+            })
+            ->first();
+    }
+    /**
+     * Get by Id
+     *
+     * Retorna um serviço pelo Id se ela for associada ao afiliado.
+     *
+     * @responseFile resources/docs/api/servico.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getById(int $id)
+    {
+        $servico = $this->findServico($id);
+
+        if ($servico == null) {
+            return $this->api->statusResponse(404, 'Serviço não encontrado ou não pertencente ao afiliado');
+        }
+
+        return $this->api->itemResponse(
+            $servico, ServicoTransformer::class);
+    }
+
+    /**
+     * Criar
+     *
+     * Cria um novo serviço associado ao Afiliado autenticado pela API.
+     *
+     * @responseFile resources/docs/api/servico.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(ServicoRequest $request)
+    {
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
+        }
+
+        $servicoArray = $request->toArray();
+
+        return $this->api->itemResponse(
+            (new ServicoService())->create($servicoArray), ServicoTransformer::class);
+    }
+
+    /**
+     * Atualizar
+     *
+     * Atualiza o registro de um Serviço associada ao Afiliado autenticado pela API.
+     *
+     * @responseFile resources/docs/api/servico.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(ServicoRequest $request, $id)
+    {
+        $servico = $this->findServico($id);
+
+        if ($servico == null) {
+            return $this->api->statusResponse(404, 'Serviço não encontrado ou não pertencente ao afiliado');
+        }
+
+        if (Empresa::userIsOwner()->where('id', $request->empresa_id)->first() == null) {
+            return $this->api->statusResponse(422, 'Empresa informada não está associada ao afiliado');
+        }
+
+        $servicoArray = $request->toArray();
+
+        Servico::unguard();
+        $servico->fill($servicoArray);
+
+        return $this->api->itemResponse(
+            (new ServicoService())->update($servico), ServicoTransformer::class);
+    }
+
+    /**
+     * Pesquisar
+     *
+     * Retorna array com uma coleção de objetos de serviços de acordo com os filtros utilizados para pesquisa
+     *
+     * @queryParam filter[nome] string Critério de pesquisa parcial pelo nome do serviço. Example: Ebook
+     * @queryParam filter[empresa_id] string Critério de pesquisa exata pelo id da empresa que os serviços estão associados. Example: 2
+     * @queryParam filter[updated_after] string Critério de pesquisa que retorna os serviços alterados a partir da data do filtro.
+     *
+     * @responseFile resources/docs/api/empresas.json
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function search(Request $request)
+    {
+         $servicos = QueryBuilder::for(Servico::query())
+             ->allowedFilters([
+                 AllowedFilter::partial('nome'),
+                 AllowedFilter::exact('empresa_id'),
+                 AllowedFilter::callback('updated_after', function (Builder $query, $value, string $property)
+                 {
+                     $d = \Carbon\Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
+                     $query->where('updated_at', '>=', $d);
+                     $query->orWhere('deleted_at', '>=', $d);
+                 }),
+             ])
+             ->paginate($this->api->getPerPage())
+             ->appends(request()->query());
+
+         return $this->api->collectionResponse($servicos, ServicoTransformer::class);
+    }
+
+    /**
+     * Pesquisar privado para front
+     */
+    public function searchPrivado(Request $request)
     {
         $term = $request->get('term', '');
         // TODO refatorar para Full Text Search

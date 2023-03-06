@@ -1,0 +1,24 @@
+{
+    "data": {
+        "id": 3,
+        "empresa_id": 8,
+        "documento": "99999999000199",
+        "nome": "Cliente Teste",
+        "alias": "Teste",
+        "inscricao_estadual": null,
+        "inscricao_municipal": null,
+        "inscricao_suframa": null,
+        "orgao_publico": false,
+        "tipo_logradouro": "1",
+        "logradouro": "João Negrão",
+        "complemento": null,
+        "numero": "731",
+        "bairro": "Centro",
+        "cep": "80010200",
+        "city_id": 3955,
+        "telefone_num": "32032417",
+        "telefone_ddd": "41",
+        "email": "contato@teste.com",
+        "regime_tributario": 1
+    }
+}
