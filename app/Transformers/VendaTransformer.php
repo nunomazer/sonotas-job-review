@@ -22,7 +22,7 @@ class VendaTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        //
+        'itens'
     ];
     
     /**

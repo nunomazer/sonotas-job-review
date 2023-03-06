@@ -57,11 +57,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
     Route::get('/servicos/{id}', [ServicosController::class, 'getById'])->name('api.servicos.get-by-id');
     Route::post('/servicos', [ServicosController::class, 'store'])->name('api.servicos.store');
-    Route::post('/servicos/{ìd}', [ServicosController::class, 'update'])->name('api.servicos.update');
+    Route::put('/servicos/{id}', [ServicosController::class, 'update'])->name('api.servicos.update');
 
     Route::get('/vendas/search', [VendasController::class, 'search'])->name('api.vendas.search');
     Route::get('/vendas/{id}', [VendasController::class, 'getById'])->name('api.vendas.get-by-id');
     Route::post('/vendas', [VendasController::class, 'store'])->name('api.vendas.store');
+    Route::put('/vendas/{id}', [VendasController::class, 'update'])->name('api.vendas.update');
 
     Route::get('/cidades', [CidadesController::class, 'index'])->name('api.cidades.index');
     Route::get('/cidades/search', [CidadesController::class, 'search'])->name('api.cidades.search');

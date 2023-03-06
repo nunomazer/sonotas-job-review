@@ -18,23 +18,6 @@
             "info_adicional": null
         },
         {
-            "id": 8,
-            "driver": null,
-            "driver_id": null,
-            "driver_dados": null,
-            "data_transacao": "2022-10-26T03:00:00.000000Z",
-            "empresa_id": 2,
-            "cliente_id": 11,
-            "valor": "0.71",
-            "tipo_documento": "nfse",
-            "data_emissao_planejada": null,
-            "documento_id": null,
-            "created_at": "2022-10-26T13:19:52.000000Z",
-            "updated_at": "2022-10-26T13:20:20.000000Z",
-            "deleted_at": null,
-            "info_adicional": "X"
-        },
-        {
             "id": 7,
             "driver": null,
             "driver_id": null,
@@ -50,6 +33,23 @@
             "updated_at": "2022-10-26T13:20:49.000000Z",
             "deleted_at": null,
             "info_adicional": "teste"
+        },
+        {
+            "id": 8,
+            "driver": null,
+            "driver_id": null,
+            "driver_dados": null,
+            "data_transacao": "2022-10-26T03:00:00.000000Z",
+            "empresa_id": 8,
+            "cliente_id": 11,
+            "valor": "0.71",
+            "tipo_documento": "nfse",
+            "data_emissao_planejada": null,
+            "documento_id": null,
+            "created_at": "2022-10-26T13:19:52.000000Z",
+            "updated_at": "2022-10-26T13:20:20.000000Z",
+            "deleted_at": null,
+            "info_adicional": "X"
         }
     ],
     "meta": {

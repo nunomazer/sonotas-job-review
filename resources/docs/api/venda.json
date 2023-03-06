@@ -1,19 +1,33 @@
 {
     "data": {
-        "id": 7,
+        "id": 8,
         "driver": null,
         "driver_id": null,
         "driver_dados": null,
         "data_transacao": "2022-10-26T03:00:00.000000Z",
-        "empresa_id": 2,
+        "empresa_id": 8,
         "cliente_id": 11,
-        "valor": "0.68",
+        "valor": "0.71",
         "tipo_documento": "nfse",
         "data_emissao_planejada": null,
-        "documento_id": 2,
-        "created_at": "2022-10-26T13:17:18.000000Z",
-        "updated_at": "2022-10-26T13:20:49.000000Z",
+        "documento_id": null,
+        "created_at": "2022-10-26T13:19:52.000000Z",
+        "updated_at": "2022-10-26T13:20:20.000000Z",
         "deleted_at": null,
-        "info_adicional": "teste"
+        "info_adicional": "X",
+        "itens": [
+            {
+                "id": 13,
+                "venda_id": 8,
+                "item_id": 1,
+                "tipo_documento": "nfse",
+                "qtde": "1.00",
+                "valor": "1.00",
+                "created_at": "2022-10-26T13:20:21.000000Z",
+                "updated_at": "2022-10-26T13:20:21.000000Z",
+                "deleted_at": null,
+                "desconto": "0.29"
+            }
+        ]
     }
 }

@@ -19,7 +19,7 @@ class NFSeController extends Controller
 
     public function index(NFSeDataTable $dataTable)
     {
-        return $dataTable->render('pages.nfse.list');        
+        return $dataTable->render('pages.nfse.list');
     }
 
     public function store(NFSeRequest $request)
