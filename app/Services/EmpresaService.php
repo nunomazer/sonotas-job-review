@@ -98,6 +98,13 @@ class EmpresaService
      */
     public function createConfigNFSe(Empresa $empresa, array $nfseConfig, Certificado $certificado = null) : Empresa
     {
+        // se já existe configuração de nfse para empresa, envia para o update
+        // @TODO dá para refatorar o create e update ConfigNfse somente em setConfigNFSe e trata o upsert em um método
+        if ($empresa->configuracao_nfse) {
+            $modelConfigNfse = new EmpresaNFSConfig($nfseConfig);
+            return $this->updateConfigNFSe($empresa, $modelConfigNfse, $certificado);
+        }
+
         if($certificado != null){
             $nfseConfig['certificado_id'] = $this->handleUploadCertificate($certificado, $empresa->id);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\ConfiguracaoNfseEmpresaRequest;
 use App\Http\Requests\Api\EmpresaRequest;
 use App\Models\Empresa;
 use App\Services\EmpresaService;
@@ -117,5 +118,30 @@ class EmpresasController extends Controller
             ->appends(request()->query());
 
         return $this->api->collectionResponse($empresas, EmpresaTransformer::class);
+    }
+
+    /**
+     * Configuração da NFSe
+     *
+     * Cria ou atualiza a configuração padrão de uma NFSe para empresa. Esta configuração é utilizada como valores
+     * padrão para os serviços criados para a empresa. Desta maneira, se o serviço não receber um dos campos existentes
+     * na configuração da nfse, o sistema busca o padrão para o serviço.
+     *
+     * @responseFile resources/docs/api/empresa.json
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateConfiguracaoNfse(ConfiguracaoNfseEmpresaRequest $request, $id)
+    {
+        $empresa = $this->findEmpresa($id);
+
+        if ($empresa == null) {
+            return $this->api->statusResponse(404, 'Empresa não encontrada ou não pertencente ao afiliado');
+        }
+
+        $configArray = $request->toArray();
+
+        return $this->api->itemResponse(
+            (new EmpresaService())->createConfigNFSe($empresa, $configArray), ConfiguracaoNFSeEmpresaTransformer::class);
     }
 }
