@@ -34,6 +34,8 @@ class AuthTest extends TestCase
             ->assertJson(fn (AssertableJson $json) =>
                 $json->hasAll(['access_token', 'token_type'])
             );
+
+        $user->delete();
     }
 
     public function test_auth_retorna_credenciais_invalidas()
