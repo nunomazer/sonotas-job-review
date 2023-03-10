@@ -77,7 +77,7 @@ class ServicoRequest extends FormRequest
                 'description'   => 'Descrição detalhada do serviço, até 4000 caracteres',
                 'example'       => 'Lorem ipsum'
             ],
-            'descricao'         => [
+            'obs'               => [
                 'description'   => 'Outras observações do serviço, até 4000 caracteres',
                 'example'       => 'Lorem ipsum'
             ],
