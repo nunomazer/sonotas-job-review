@@ -27,7 +27,7 @@ class EmpresaFactory extends Factory
             "bairro" => $this->faker->cityPrefix(),
             "cep" => $this->faker->postcode(),
             "city_id" => 1565,
-            "telefone_num" => $this->faker->phoneNumber(),
+            "telefone_num" => $this->faker->phone(),
             "telefone_ddd" => $this->faker->areaCode(),
             "email" => $this->faker->email(),
             "regime_tributario" => $this->faker->randomElement(SpedRegimesTributarios::toArrayValores()),
