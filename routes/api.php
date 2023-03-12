@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/empresas/{id}', [ApiEmpresasController::class, 'getById'])->name('api.empresas.get-by-id');
     Route::post('/empresas', [ApiEmpresasController::class, 'store'])->name('api.empresas.store');
     Route::put('/empresas/{id}', [ApiEmpresasController::class, 'update'])->name('api.empresas.update');
-    Route::put('/empresas/{id}/config-nfse', [ApiEmpresasController::class, 'updateConfigNfse'])->name('api.empresas.config-nfse.update');
+    Route::put('/empresas/{id}/configuracao-nfse', [ApiEmpresasController::class, 'updateConfiguracaoNfse'])->name('api.empresas.config-nfse.update');
 
     Route::get('/servicos/search', [ServicosController::class, 'search'])->name('api.servicos.search');
     Route::get('/servicos/{id}', [ServicosController::class, 'getById'])->name('api.servicos.get-by-id');
