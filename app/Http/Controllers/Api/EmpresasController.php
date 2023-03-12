@@ -8,6 +8,7 @@ use App\Models\Empresa;
 use App\Services\EmpresaService;
 use App\Transformers\EmpresaTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -58,8 +59,9 @@ class EmpresasController extends Controller
         $empresaArray = $request->toArray();
         $empresaArray['owner_user_id'] = auth()->user()->id;
 
-        return $this->api->itemResponse(
-            (new EmpresaService())->create($empresaArray), EmpresaTransformer::class);
+        return response($this->api->itemResponse(
+            (new EmpresaService())->create($empresaArray), EmpresaTransformer::class),
+            Response::HTTP_CREATED);
     }
 
     /**
