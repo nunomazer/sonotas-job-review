@@ -110,6 +110,7 @@ class EmpresaService
         }
 
         $empresa->configuracao_nfse()->create($nfseConfig);
+        $empresa->refresh();
 
         EmpresaAlteradaEvent::dispatch($empresa);
 
