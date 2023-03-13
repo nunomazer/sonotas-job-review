@@ -144,7 +144,6 @@ class EmpresasController extends Controller
 
         $configArray = $request->toArray();
         $configuraccaoNfse = (new EmpresaService())->createConfigNFSe($empresa, $configArray)->configuracao_nfse;
-        return response($this->api->itemResponse($configuraccaoNfse, ConfiguracaoNFSeEmpresaTransformer::class)
-            , Response::HTTP_CREATED);
+        return $this->api->itemResponse($configuraccaoNfse, ConfiguracaoNFSeEmpresaTransformer::class);
     }
 }
