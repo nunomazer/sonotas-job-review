@@ -6,6 +6,7 @@ use App\Http\Requests\Api\ConfiguracaoNfseEmpresaRequest;
 use App\Http\Requests\Api\EmpresaRequest;
 use App\Models\Empresa;
 use App\Services\EmpresaService;
+use App\Transformers\ConfiguracaoNFSeEmpresaTransformer;
 use App\Transformers\EmpresaTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -142,8 +143,8 @@ class EmpresasController extends Controller
         }
 
         $configArray = $request->toArray();
-
-        return $this->api->itemResponse(
-            (new EmpresaService())->createConfigNFSe($empresa, $configArray), ConfiguracaoNFSeEmpresaTransformer::class);
+        $configuraccaoNfse = (new EmpresaService())->createConfigNFSe($empresa, $configArray)->configuracao_nfse;
+        return response($this->api->itemResponse($configuraccaoNfse, ConfiguracaoNFSeEmpresaTransformer::class)
+            , Response::HTTP_CREATED);
     }
 }
