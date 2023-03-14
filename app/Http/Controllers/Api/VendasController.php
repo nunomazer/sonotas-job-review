@@ -9,6 +9,7 @@ use App\Services\Sped\SpedService;
 use App\Services\VendasService;
 use App\Transformers\VendaTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -77,10 +78,16 @@ class VendasController extends Controller
                 ]);
             });
 
-        return $this->api->itemResponse(
-            (new VendasService())->create($vendaArray, $itens->all()),
-            VendaTransformer::class
-        );
+        $vendasService = new VendasService();
+        $venda = $vendasService->create($vendaArray, $itens->all());
+
+        // se a data de emissão planejada foi definida como anterior a data atual, já grava e retorna
+        if (now()->greaterThanOrEqualTo($venda->data_emissao_planejada ?? now()->addDay())) {
+            $vendasService->gerarEmitirNFSe($venda);
+        }
+
+        $venda->load('cliente', 'documento_fiscal', 'itens');
+        return response($this->api->itemResponse($venda,VendaTransformer::class),Response::HTTP_CREATED);
     }
 
     /**
