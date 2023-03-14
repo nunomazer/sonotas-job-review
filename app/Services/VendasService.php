@@ -54,8 +54,8 @@ class VendasService
                     $venda->data_emissao_planejada = now();
                     if ($venda->driver) {
                         $venda->data_emissao_planejada = $this->calculoDataPlanejadaEmissaoNF($venda);
-                        $venda->save();
                     }
+                    $venda->save();
                 }
 
                 $venda->itens()->saveMany($itens);
