@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
-use App\Events\NFSeSolicitadoCancelamentoEvent; 
+use App\Events\NFSeSolicitadoCancelamentoEvent;
 use App\Listeners\EnviaFilesNFSe;
 use App\Mail\NfPdfXmlClienteMail;
 use App\Models\Cliente;
@@ -33,6 +33,17 @@ class NFSeService
      */
     public function create(array $nfse, array $itensServico) : ? NFSe
     {
+        // não cria nova NFSe para uma venda que possui NFSe em um status diferente de cancelado
+        $qtdeNfsesVenda = NFSe::where('venda_id', $nfse->venda_id)
+            ->whereIn('status', [
+                SpedStatus::PENDENTE, SpedStatus::CONCLUIDO,
+                SpedStatus::PROCESSAMENTO, SpedStatus::ENVIADO
+            ])->count();
+
+        if ($qtdeNfsesVenda > 0) {
+            return null;
+        }
+
         try {
             DB::beginTransaction();
 
@@ -107,11 +118,11 @@ class NFSeService
             Mail::send(new NfPdfXmlClienteMail($nfse->venda));
         }
     }
-    
+
     /**
      * Método responsável por disparar serviço que realiza cancelamento da NFSe
      *
-     * @param NFSe $nfse 
+     * @param NFSe $nfse
      * @return NFSe|null
      */
     public function cancel(NFSe $nfse) : ? NFSe
@@ -137,11 +148,11 @@ class NFSeService
             return null;
         }
     }
-    
+
     /**
      * Método responsável por disparar serviço que realiza cancelamento da NFSe
      *
-     * @param NFSe $nfse 
+     * @param NFSe $nfse
      * @return NFSe|null
      */
     public function cancelarSped(NFSe $nfse) : ? NFSe
@@ -154,12 +165,12 @@ class NFSeService
             $nfse->driver = $sped->driver()->nome();
 
             throw_if($result->code > 200, 'Erro no retorno da API Plugnotas: ' . $result->message);
-            
+
 
         } catch (\Exception $exception) {
             $nfse->status = SpedStatus::ERRO;
             $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
-            $nfse->save(); 
+            $nfse->save();
             $nfse->venda->empresa->owner->notify(new ErroAoCancelarNFSe($nfse->venda->empresa, $sped->driver()->nome(), 'Problemas ao realizar cancelamento de NFSe: para venda ' . $nfse->id));
 
             Log::error($exception);
