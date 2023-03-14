@@ -8,6 +8,7 @@ use App\Models\Empresa;
 use App\Services\ClienteService;
 use App\Transformers\ClienteTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 /**
@@ -64,8 +65,9 @@ class ClientesController extends Controller
         $clienteArray = $request->toArray();
         $clienteArray['owner_user_id'] = auth()->user()->id;
 
-        return $this->api->itemResponse(
-            (new ClienteService())->create($clienteArray), ClienteTransformer::class);
+        return response($this->api->itemResponse(
+            (new ClienteService())->create($clienteArray), ClienteTransformer::class),
+            Response::HTTP_CREATED);
     }
 
     /**
