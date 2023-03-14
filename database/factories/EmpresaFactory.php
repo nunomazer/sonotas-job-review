@@ -34,4 +34,13 @@ class EmpresaFactory extends Factory
             "regime_tributario_especial" => $this->faker->randomElement(SpedRegimesTributariosEspeciais::toArrayValores()),
         ];
     }
+
+    public function owner_id($id)
+    {
+        return $this->state(function ($attributes) use ($id) {
+            return [
+                'owner_user_id' => $id,
+            ];
+        });
+    }
 }
