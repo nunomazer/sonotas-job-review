@@ -52,10 +52,10 @@ class NFSe extends Model
     public function getCanCancelAttribute()
     {
         return true;
-        return $this->attributes['status'] == SpedStatus::CONCLUIDO && 
-            empty($this->attributes['cancelamento_protocolo']) /*&& 
+        return $this->attributes['status'] == SpedStatus::CONCLUIDO &&
+            empty($this->attributes['cancelamento_protocolo']) /*&&
             Carbon::parse($this->attributes['emitido_em'])->gt(now() - 2)*/;
         //validar quantos dias permite cancelar
         //
-    }    
+    }
 }

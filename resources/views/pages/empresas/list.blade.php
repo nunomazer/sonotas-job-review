@@ -94,10 +94,14 @@
                             </div>
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
 {{--                                @include('pages.empresas.partials.assinatura-status')--}}
-                                @if ($empresa->assinatura)
-                                    Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                @if ($empresa->assinatura == null)
+                                    <div class="alert alert-danger">
+                                        Nenhuma assinatura em plano identificada, é necessário para emitir NF pela empresa
+                                    </div>
                                 @else
-                                    <div class="alert alert-danger"><strong>Atenção</strong>: nenhuma assinatura foi adquirida. Clique aqui para adquirir uma assinatura e começar a emitir seus documentos fiscais</div>
+                                    Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                    <br/>
+                                    Docs: {{$empresa->assinatura->featureSaldo(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}} / {{$empresa->assinatura->featureBase(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}}
                                 @endif
                             </div>
                         </div>
@@ -163,23 +167,10 @@
 
                                         </tr>
                                         @empty
-                                            <tr><td colspan="4">
-                                                <span class="mx-1 status-warning">
-                                                    <span class="status-dot"></span>
-                                                </span>
-                                                Nenhuma integração configurada, clique em
-                                                        <a href="{{route('empresas.integracoes.create.choose-platform', $empresa)}}" class="btn btn-sm ">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <circle cx="12" cy="12" r="9"></circle>
-                                                                <line x1="9" y1="12" x2="15" y2="12"></line>
-                                                                <line x1="12" y1="9" x2="12" y2="15"></line>
-                                                            </svg>
-
-                                                            Nova integração
-                                                        </a>
-                                                para criar a primeira
-                                            </td></tr>
+                                        <span class="mx-1 status-warning">
+                                            <span class="status-dot"></span>
+                                        </span>
+                                        Nenhuma integração
                                         @endforelse
                                     </tbody>
                                 </table>

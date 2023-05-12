@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
-use App\Events\NFSeSolicitadoCancelamentoEvent; 
+use App\Events\NFSeSolicitadoCancelamentoEvent;
 use App\Listeners\EnviaFilesNFSe;
 use App\Mail\NfPdfXmlClienteMail;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\NFSe;
 use App\Models\NFSeItemServico;
+use App\Models\PlanFeature;
 use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Notifications\ErroAoCancelarNFSe;
@@ -60,6 +61,28 @@ class NFSeService
 
     public function emitirSped(NFSe $nfse) : NFSe
     {
+        // se o status não é pendente então já foi emitido em algum ponto da aplicação, ou
+        // por job ou por comando
+        if ($nfse->status != SpedStatus::PENDENTE) return $nfse;
+
+        if ($nfse->venda->empresa->assinatura == null) {
+            $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::PENDENTE, ['message' => 'É necessário assinar um plano para a empresa emitir documentos fiscais.']);
+            $nfse->save();
+            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'É necessário assinar um plano para a empresa emitir documentos fiscais, NF ' . $nfse->id . ' será emitida após assinatura'));
+            return $nfse;
+        }
+
+        // se não tiver saldo de bilhetagem mantem o status pendente e atualiza o histórico
+        if ($nfse->venda->empresa->assinatura->featureSaldo(PlanFeature::FEATURE_QTDE_NOTAS) == 0) {
+            $nfse->status = SpedStatus::PENDENTE;
+            $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::PENDENTE, ['message' => 'Saldo de documentos fiscais insuficiente no período, será emitida na renovação do saldo']);
+            $nfse->save();
+            $nfse->venda->empresa->owner->notify(new ErroAoGerarEmitirNF($nfse->venda->empresa, $nfse->venda, 'Saldo de documentos fiscais insuficiente no período, NF ' . $nfse->id . ' será emitida na renovação do saldo'));
+            return $nfse;
+        }
+
+        // emite NF
+        // TODO: refatorar para qualquer doc fiscal
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $nfse->venda->empresa->cidade->name);
         try {
             $driverNFSe = $sped->nfseDriver($nfse);
@@ -73,6 +96,7 @@ class NFSeService
             $nfse->driver_id = $result->objects[0]['idApi'];
             $nfse->status_historico = $this->addStatusDados($nfse, $nfse->status, $result->toArray());
             $nfse->save();
+            $nfse->venda->empresa->assinatura->featureSaldoDecrement(PlanFeature::FEATURE_QTDE_NOTAS);
 
         } catch (\Exception $exception) {
             $nfse->status = SpedStatus::ERRO;
@@ -107,11 +131,11 @@ class NFSeService
             Mail::send(new NfPdfXmlClienteMail($nfse->venda));
         }
     }
-    
+
     /**
      * Método responsável por disparar serviço que realiza cancelamento da NFSe
      *
-     * @param NFSe $nfse 
+     * @param NFSe $nfse
      * @return NFSe|null
      */
     public function cancel(NFSe $nfse) : ? NFSe
@@ -137,11 +161,11 @@ class NFSeService
             return null;
         }
     }
-    
+
     /**
      * Método responsável por disparar serviço que realiza cancelamento da NFSe
      *
-     * @param NFSe $nfse 
+     * @param NFSe $nfse
      * @return NFSe|null
      */
     public function cancelarSped(NFSe $nfse) : ? NFSe
@@ -154,17 +178,49 @@ class NFSeService
             $nfse->driver = $sped->driver()->nome();
 
             throw_if($result->code > 200, 'Erro no retorno da API Plugnotas: ' . $result->message);
-            
+
 
         } catch (\Exception $exception) {
             $nfse->status = SpedStatus::ERRO;
             $nfse->status_historico = $this->addStatusDados($nfse, SpedStatus::ERRO, ['message' => 'Exception: ' . $exception->getMessage()]);
-            $nfse->save(); 
+            $nfse->save();
             $nfse->venda->empresa->owner->notify(new ErroAoCancelarNFSe($nfse->venda->empresa, $sped->driver()->nome(), 'Problemas ao realizar cancelamento de NFSe: para venda ' . $nfse->id));
 
             Log::error($exception);
         }
 
         return $nfse;
+    }
+
+    public function emitirNFsPendentes(Empresa $empresa)
+    {
+        // TODO adicionar outros docs fiscais
+
+        $nfs = NFSe::with('venda')
+            ->where('status', SpedStatus::PENDENTE)
+            ->whereHas('venda', function ($query) use($empresa) {
+                $query->where('empresa_id', $empresa->id);
+            })
+            ->get();
+
+        $nfs->each(function ($nfse) {
+            if ($nfse->venda->tipo_documento == SpedService::DOCTYPE_NFSE) {
+                $this->emitirSped($nfse);
+            }
+        });
+    }
+
+    /**
+     * Percorre cada empresa ativa, as NF que estão pendentes para emitir
+     *
+     * @return void
+     */
+    public function emitirAllCompaniesNFPendentes()
+    {
+        $empresas = Empresa::isAtivo()->get();
+
+        $empresas->each(function($empresa) {
+            $this->emitirNFsPendentes($empresa);
+        });
     }
 }

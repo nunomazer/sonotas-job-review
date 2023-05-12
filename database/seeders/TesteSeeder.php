@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\AfiliadoService;
 use App\Services\EmpresaService;
 use App\Services\Integra\IntegraService;
+use App\Services\MoneyFlow\MoneyFlowAssinaturaStatus;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedRegimesTributariosEspeciais;
 use App\Services\Sped\SpedService;
@@ -217,6 +218,9 @@ class TesteSeeder extends Seeder
             'publickey' => env('MAZER_EDUZZ_PUBLIC_KEY'),
             'apikey' => env('MAZER_EDUZZ_API_KEY'),
             'email' => env('MAZER_EDUZZ_EMAIL'),
+            'orbita_id' => env('MAZER_EDUZZ_ORBITA_ID'),
+            'oauth_user_id' => env('MAZER_EDUZZ_OAUTH_USER_ID'),
+            'oauth_access_token' => env('MAZER_EDUZZ_OAUTH_ACCESS_TOKEN'),
         ];
 
         $integracao = Integracao::where('empresa_id', $empresa->id)->first() ?? new Integracao();
@@ -287,9 +291,16 @@ class TesteSeeder extends Seeder
 
         $plan = Plan::first();
 
+        $features = collect($plan->features)->map(function($feature) {
+            $feature['balance'] = $feature['value'];
+            return $feature;
+        });
         EmpresaAssinatura::updateOrCreate([
             'empresa_id' => $empresa->id,
             'plan_id' => $plan->id,
+        ],[
+            'features' => $features,
+            'status' => MoneyFlowAssinaturaStatus::ATIVA,
         ]);
 
         /**
@@ -390,4 +401,5 @@ class TesteSeeder extends Seeder
         $integracao->transmissao_apenas_dias_uteis = false;
         $integracao->save();
     }
+
 }

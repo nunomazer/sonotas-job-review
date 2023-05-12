@@ -45,7 +45,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
     {
         $nfse = $this->nfse;
         return [
-            "idIntegracao" => $nfse->id,
+            "idIntegracao" => (string)$nfse->id,
             "prestador" => [
                 "cpfCnpj" => $nfse->venda->empresa->documento,
             ],
@@ -84,7 +84,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
             return $this->toApiReturn($result);
 
         } catch (\Exception $exception) {
-            Log::error('Erro ao chamar Plugnotas Emmitir NFSe');
+            Log::error('Erro ao chamar Plugnotas Emitir NFSe');
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
@@ -117,7 +117,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         return $docDriver;
     }
-    
+
     public function cancelar() : SpedApiReturn
     {
         try {
@@ -150,5 +150,5 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
             return $this->toApiReturn($exception);
         }
     }
-    
+
 }
