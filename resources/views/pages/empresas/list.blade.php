@@ -23,7 +23,7 @@
 
 
         @foreach($empresas as $empresa)
-        <div class="card d-flex flex-column">
+        <div class="card d-flex flex-column {{$loop->first == false ? 'mt-5' : ''}}">
             <div class="row row-0 flex-fill  ">
                 <div class="col-3 col-md-2">
                     <a href="{{route('empresas.edit', $empresa)}}">
@@ -163,10 +163,23 @@
 
                                         </tr>
                                         @empty
-                                        <span class="mx-1 status-warning">
-                                            <span class="status-dot"></span>
-                                        </span>
-                                        Nenhuma integração
+                                            <tr><td colspan="4">
+                                                <span class="mx-1 status-warning">
+                                                    <span class="status-dot"></span>
+                                                </span>
+                                                Nenhuma integração configurada, clique em
+                                                        <a href="{{route('empresas.integracoes.create.choose-platform', $empresa)}}" class="btn btn-sm ">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                <circle cx="12" cy="12" r="9"></circle>
+                                                                <line x1="9" y1="12" x2="15" y2="12"></line>
+                                                                <line x1="12" y1="9" x2="12" y2="15"></line>
+                                                            </svg>
+
+                                                            Nova integração
+                                                        </a>
+                                                para criar a primeira
+                                            </td></tr>
                                         @endforelse
                                     </tbody>
                                 </table>
