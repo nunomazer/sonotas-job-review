@@ -94,7 +94,11 @@
                             </div>
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
 {{--                                @include('pages.empresas.partials.assinatura-status')--}}
-                                Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                @if ($empresa->assinatura)
+                                    Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                @else
+                                    <div class="alert alert-danger"><strong>Atenção</strong>: nenhuma assinatura foi adquirida. Clique aqui para adquirir uma assinatura e começar a emitir seus documentos fiscais</div>
+                                @endif
                             </div>
                         </div>
                         <br />
