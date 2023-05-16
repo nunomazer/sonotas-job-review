@@ -339,30 +339,32 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'defaults'  => ['verify' => false],
         ]);
         $orbitaID = $integracaoOauth->fields['orbita_id'] ?? 0;
-        $subscriptionRequest = $client->get("/api/subscription-status/v1/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
+        $subscriptionRequest = $client->get("/api/subscription-status/v2/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
 
-        $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
-        $features = $plan->features;
-        $features = $features->map(function($feature) {
-            $feature['balance'] = $feature['value'];
-            return $feature;
-        });
-        EmpresaAssinatura::updateOrCreate(
-            [
-                'empresa_id' => $integracaoOauth->empresa->id,
-                'driver' => 'Eduzz',
-            ],
-            [
-                'empresa_id' => $integracaoOauth->empresa->id,
-                'driver' => 'Eduzz',
-                'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
-                'driver_id' => $resultSubscription['plan'],
-                'plan_id' => $plan->id,
-                'status_historico' => '',
-                'features' => $features,
-            ]
-        );
+        if ($resultSubscription['appSubscribed']) {
+            $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+            $features = $plan->features;
+            $features = $features->map(function ($feature) {
+                $feature['balance'] = $feature['value'];
+                return $feature;
+            });
+            EmpresaAssinatura::updateOrCreate(
+                [
+                    'empresa_id' => $integracaoOauth->empresa->id,
+                    'driver' => 'Eduzz',
+                ],
+                [
+                    'empresa_id' => $integracaoOauth->empresa->id,
+                    'driver' => 'Eduzz',
+                    'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
+                    'driver_id' => $resultSubscription['plan'],
+                    'plan_id' => $plan->id,
+                    'status_historico' => '',
+                    'features' => $features,
+                ]
+            );
+        }
 
         return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
     }
