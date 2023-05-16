@@ -80,7 +80,8 @@
         <div class="card-body">
             <h2 class="fs-2 card-title text-center mb-4">Login</h2>
             <div class="mb-3 text-center">
-                <a href="{{config('integra.drivers.eduzz.oauth_url')}}/oauth/scopes?client_id={{config('integra.drivers.eduzz.app_id')}}&redirect_uri={{config('integra.drivers.eduzz.redirect_url')}}" target="_self" class="btn btn-block">
+{{--                <a href="{{config('integra.drivers.eduzz.oauth_url')}}/oauth/scopes?client_id={{config('integra.drivers.eduzz.app_id')}}&redirect_uri={{config('integra.drivers.eduzz.redirect_url')}}" target="_self" class="btn btn-block">--}}
+                <a href="{{config('integra.drivers.eduzz.oauth_url')}}/oauth/authorize?client_id={{config('integra.drivers.eduzz.app_id')}}&redirect_uri={{config('integra.drivers.eduzz.redirect_url')}}" target="_self" class="btn btn-block">
                     <div class="clearfix">
                         <p>Acessar com</p>
                         <p><img src="https://devhub.eduzz.com/api-portal/sites/default/files/logo-eduzz.png" height="34" /></p>
