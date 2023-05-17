@@ -20,4 +20,3 @@
 
     @include('layouts.partials.footer')
 </div>
-
