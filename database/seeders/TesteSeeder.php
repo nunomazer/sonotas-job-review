@@ -14,6 +14,7 @@ use App\Models\Servico;
 use App\Models\User;
 use App\Services\AfiliadoService;
 use App\Services\EmpresaService;
+use App\Services\Integra\Drivers\Eduzz\EduzzPlatform;
 use App\Services\Integra\IntegraService;
 use App\Services\MoneyFlow\MoneyFlowAssinaturaStatus;
 use App\Services\Sped\SpedRegimesTributarios;
@@ -381,7 +382,7 @@ class TesteSeeder extends Seeder
 
     public function empresaMktDigitalBrIntegraEduzz($empresa)
     {
-        $eduzzDriver = (new IntegraService())->driver('eduzz', []);
+        $eduzzDriver = (new IntegraService())->driver(EduzzPlatform::$name, []);
 
         $fields = [
             'publickey' => env('DIGIBR_EDUZZ_PUBLIC_KEY'),
