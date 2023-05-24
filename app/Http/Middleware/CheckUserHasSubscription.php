@@ -19,13 +19,16 @@ class CheckUserHasSubscription
     public function handle(Request $request, Closure $next)
     {
         // @TODO refatorar para um serviço
-        $assinaturasAtivas = cache()->remember(CacheSoNotas::idxIntegracoesUsuarioStatus(auth()->user()), CacheSoNotas::ttlIntegracoesUsuarioStatus(),
-            fn() => auth()->user()->empresas->map(function($empresa) {
-                        return $empresa->assinatura?->status == MoneyFlowAssinaturaStatus::ATIVA ? $empresa->assinatura : null;
-                    })->filter(fn($assinatura) => $assinatura != null)
-        );
+        $cacheId = CacheSoNotas::idxIntegracoesUsuarioStatus(auth()->user()); // para evitar não estar logado e dar pau com user null
+        if ($cacheId) {
+            $assinaturasAtivas = cache()->remember($cacheId, CacheSoNotas::ttlIntegracoesUsuarioStatus(),
+                fn() => auth()->user()->empresas->map(function ($empresa) {
+                    return $empresa->assinatura?->status == MoneyFlowAssinaturaStatus::ATIVA ? $empresa->assinatura : null;
+                })->filter(fn($assinatura) => $assinatura != null)
+            );
 
-        view()->share('assinaturasAtivas', $assinaturasAtivas);
+            view()->share('assinaturasAtivas', $assinaturasAtivas);
+        }
 
         return $next($request);
     }
