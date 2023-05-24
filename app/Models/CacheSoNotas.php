@@ -13,13 +13,13 @@ class CacheSoNotas
     private const IDX_INTEGRACOES_USUARIO_STATUS = 'integracao_status';
     private const TTL_INTEGRACOES_USUARIO_STATUS = 2592000;
 
-    public function idxIntegracoesUsuarioStatus(User $user = null) : string
+    public function idxIntegracoesUsuarioStatus(User $user = null) : ?string
     {
         if ($user == null) {
             $user = auth()->user();
         }
 
-        return self::IDX_INTEGRACOES_USUARIO_STATUS . '_' . $user->id;
+        return $user ? self::IDX_INTEGRACOES_USUARIO_STATUS . '_' . $user->id : null;
     }
 
     /**
