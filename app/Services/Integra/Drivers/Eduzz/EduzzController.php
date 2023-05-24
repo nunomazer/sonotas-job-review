@@ -210,7 +210,8 @@ class EduzzController extends Controller
             $eduzzDriver = new EduzzPlatform($integracaoOauth->fields);
 //            if($eduzzDriver->isValidSignatureStatus($integracaoOauth)){
                 Auth::loginUsingId($integracaoOauth->empresa->owner->id);
-                return view('pages.login.oauth-success');
+
+                return redirect('/');
 //            }
 //
 //            return redirect('login')
