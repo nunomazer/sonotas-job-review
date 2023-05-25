@@ -6,6 +6,7 @@ use App\Models\EmpresaAssinatura;
 use App\Models\Integracao;
 use App\Models\Plan;
 use App\Models\Servico;
+use App\Services\ApiService;
 use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
@@ -13,6 +14,7 @@ use App\Services\Sped\SpedService;
 use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -161,7 +163,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     protected function httpClient(): Client
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => config('integra.drivers.eduzz.base_url'),
+            'base_uri' => config('integra.drivers.eduzz.api_url'),
             'headers' => [
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
@@ -178,6 +180,9 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     private function callContentList($page = null) : array
     {
+
+        (new ApiService())->controlThrottleServerRequest('eduzz_throttle', 60);
+
         $http = $this->httpClient();
 
         $query = [];
@@ -196,10 +201,10 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $result = $this->callContentList();
 
-        $paginator = $result['paginator'];
+        $paginator = $result['pagination'];
         $page = 1;
         $servicos = [];
-        while ($page <= $paginator['totalPages']) {
+        while ($page <= $paginator['total_pages']) {
             $servicosApi = $result['data'];
 
             foreach ($servicosApi as $servicoApi) {
@@ -214,7 +219,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
             $page++;
 
-            if ($page <= $paginator['totalPages']) {
+            if ($page <= $paginator['total_pages']) {
                 $result = $this->callContentList($page);
             }
         }
