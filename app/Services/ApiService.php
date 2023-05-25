@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Transformers\StatusCodeTransformer;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use League\Fractal\Serializer\DataArraySerializer;
@@ -165,5 +166,25 @@ class ApiService
             }
         }
         return request()->ip(); // it will return server ip when no client ip found
+    }
+
+    /**
+     * Controla limites de chamada em APIs com throttle. Controla o máximo de requisições possíveis no minuto cheio,
+     * baseado em um cache com chave composta pelo keyName passado e o minuto atual do relógio (Y-m-d H:i).
+     *
+     * Não é a melhor estratégia pois pode levar 1 minuto cheio para reiniciar as requisições, pode ser refatorado para
+     * controlar um array com os horários em segundos de requisições e realizar novaa chamadas quando o pool de requisições
+     * baixa dentro do último minuto decorrido desde a "primeira" requisição.
+     *
+     * @todo Refatorar de acordco com a explicação do método acima
+     * @param $keyName
+     * @return void
+     */
+    public function controlThrottleServerRequest(string $keyName, $maxRequests) : void
+    {
+        while(($count = Cache::get($keyName.'_'.now()->format('Y-m-d H:i'),0)) >= $maxRequests){ // Max request
+            sleep(1);
+        }
+        Cache::put($keyName.'_'.now()->format('Y-m-d H:i'), ++$count, 120);
     }
 }
