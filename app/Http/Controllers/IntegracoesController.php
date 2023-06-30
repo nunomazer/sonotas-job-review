@@ -68,6 +68,10 @@ class IntegracoesController extends Controller
 
     public function importFromPlatform(Request $request, Empresa $empresa, Integracao $integracao)
     {
+        if ($empresa->configuracao_nfse == null) {
+            return redirect()->back()->with('error', 'Não é possível importar serviços de integrações antes de Configurar a NFSe da Empresa');
+        }
+
         $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
 
         return redirect()->back()->with('success', 'Importação de serviços para empresa "'.$empresa->nome.'", da integração "'.$integracao->driver.'" está em execução, ao finalizar o resultado é informado na área de notificações');
