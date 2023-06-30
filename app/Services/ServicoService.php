@@ -83,15 +83,16 @@ class ServicoService
                 $servico->valor = $servicoApi['valor'];
 
                 // dados base da configuração da NFSe da empresa
-                $servico->tipo_servico_codigo = $empresa->configuracao_nfse->tipo_servico_codigo;
-                $servico->cofins = $empresa->configuracao_nfse->cofins;
-                $servico->csll = $empresa->configuracao_nfse->csll;
-                $servico->inss = $empresa->configuracao_nfse->inss;
-                $servico->ir = $empresa->configuracao_nfse->ir;
-                $servico->pis = $empresa->configuracao_nfse->pis;
-                $servico->iss = $empresa->configuracao_nfse->iss;
-                $servico->iss_retido_fonte = $empresa->configuracao_nfse->iss_retido_fonte;
-                $servico->enviar_nota_email_cliente = $empresa->configuracao_nfse->enviar_nota_email_cliente;
+                $configuracao_nfse = $empresa->configuracao_nfse;
+                $servico->tipo_servico_codigo = $configuracao_nfse->tipo_servico_codigo;
+                $servico->cofins = $configuracao_nfse->cofins;
+                $servico->csll = $configuracao_nfse->csll;
+                $servico->inss = $configuracao_nfse->inss;
+                $servico->ir = $configuracao_nfse->ir;
+                $servico->pis = $configuracao_nfse->pis;
+                $servico->iss = $configuracao_nfse->iss;
+                $servico->iss_retido_fonte = $configuracao_nfse->iss_retido_fonte;
+                $servico->enviar_nota_email_cliente = $configuracao_nfse->enviar_nota_email_cliente;
 
                 $servico->save();
 
