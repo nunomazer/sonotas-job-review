@@ -93,6 +93,8 @@ class ServicoService
                 $servico->iss = $configuracao_nfse->iss;
                 $servico->iss_retido_fonte = $configuracao_nfse->iss_retido_fonte;
                 $servico->enviar_nota_email_cliente = $configuracao_nfse->enviar_nota_email_cliente;
+                $servico->municipio_servico_codigo = $configuracao_nfse->municipio_servico_codigo;
+                $servico->municipio_servico_descricao = $configuracao_nfse->municipio_servico_descricao;
 
                 $servico->save();
 
