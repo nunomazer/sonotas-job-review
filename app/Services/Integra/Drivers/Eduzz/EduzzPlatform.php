@@ -36,20 +36,20 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     protected $token_until = null;
 
     public static array $fields = [
-        [
-            'name' => 'publickey',
-            'label' => 'Public Key',
-            'required' => true,
-            'visible' => true,
-            'helptext' => 'Chave pública de vínculo da plataforma',
-        ],
-        [
-            'name' => 'apikey',
-            'label' => 'Api Key',
-            'required' => true,
-            'visible' => true,
-            'helptext' => 'Chave da API de vínculo da plataforma',
-        ],
+//        [
+//            'name' => 'publickey',
+//            'label' => 'Public Key',
+//            'required' => true,
+//            'visible' => true,
+//            'helptext' => 'Chave pública de vínculo da plataforma',
+//        ],
+//        [
+//            'name' => 'apikey',
+//            'label' => 'Api Key',
+//            'required' => true,
+//            'visible' => true,
+//            'helptext' => 'Chave da API de vínculo da plataforma',
+//        ],
         [
             'name' => 'email',
             'label' => 'E-mail',
