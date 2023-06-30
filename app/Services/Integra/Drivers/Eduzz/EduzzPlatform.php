@@ -300,6 +300,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                             'driver_id' => $vendaApi['main_content']['id'],
                             'valor' => $vendaApi['total_value'],
                             'qtde' => 1,
+                            'desconto' => $vendaApi['discount_amount'],
                         ]
                     ],
                     'driver_dados' => $vendaApi,
