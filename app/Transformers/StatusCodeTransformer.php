@@ -7,7 +7,6 @@ use League\Fractal\TransformerAbstract;
 
 class StatusCodeTransformer extends TransformerAbstract
 {
-
     const STATUS_200_OK = 200;
     const STATUS_201_CREATED = 201;
     const STATUS_400_BAD_REQUEST = 400;
