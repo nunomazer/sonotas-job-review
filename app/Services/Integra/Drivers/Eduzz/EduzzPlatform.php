@@ -240,9 +240,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
         $query = [];
         $query['start_date'] = $from;
+        $query['end_date'] = now()->format('Y-m-d H:i:s');
+        $query['status'] = 'paid';
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/myeduzz-financial/v1/sales', [
+        $result = $http->get('/myeduzz-sales/v1/sales', [
             'query' => $query,
         ]);
 
@@ -262,7 +264,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
         $paginator = $result['paginator'];
         while ($page <= $paginator['totalPages']) {
-            $vendasApi = $result['items'];
+            $vendasApi = $result['data'];
 
             foreach ($vendasApi as $vendaApi) {
                 $vendas[] = [
@@ -277,21 +279,21 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                         'data_processamento' => $vendaApi['paid_at'],
                     ],
                     'cliente' => [
-                        'nome' => $vendaApi['custom']['name'],
-                        'tipo_pessoa' => $vendaApi['custom']['name'],
-                        'documento' => $vendaApi['custom']['document'],
-                        'email' => $vendaApi['custom']['email'],
+                        'nome' => $vendaApi['customer']['name'],
+                        'tipo_pessoa' => $vendaApi['customer']['name'],
+                        'documento' => $vendaApi['customer']['document'],
+                        'email' => $vendaApi['customer']['email'],
                         'tipo_logradouro' => $this->resolveTipoLogradouro($vendaApi),
-                        'logradouro' => $vendaApi['custom']['street'],
-                        'numero' => $vendaApi['custom']['addr_number'],
-                        'complemento' => $vendaApi['custom']['addr_complement'],
-                        'bairro' => $vendaApi['custom']['neighborhood'],
-                        'cep' => $vendaApi['custom']['zipcode'],
-                        'cidade' => $vendaApi['custom']['city'],
+                        'logradouro' => $vendaApi['customer']['street'],
+                        'numero' => $vendaApi['customer']['addr_number'],
+                        'complemento' => $vendaApi['customer']['addr_complement'],
+                        'bairro' => $vendaApi['customer']['neighborhood'],
+                        'cep' => $vendaApi['customer']['zipcode'],
+                        'cidade' => $vendaApi['customer']['city'],
                         'city_id' => $this->resolveCidadeId($vendaApi),
-                        'estado' => $vendaApi['custom']['state'] ?? '',
-                        'telefone_ddd' => Str::substr($vendaApi['custom']['cellphone'], 0, 2),
-                        'telefone_num' => Str::substr($vendaApi['custom']['cellphone'], 2),
+                        'estado' => $vendaApi['customer']['state'] ?? '',
+                        'telefone_ddd' => Str::substr($vendaApi['customer']['cellphone'], 0, 2),
+                        'telefone_num' => Str::substr($vendaApi['customer']['cellphone'], 2),
                     ],
                     'servicos' => [
                         [
@@ -318,14 +320,14 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $tipoLogService = new TipoLogradouroService();
 
-        return $tipoLogService->resolvePeloLogradouro($venda['custom']['street']);
+        return $tipoLogService->resolvePeloLogradouro($venda['customer']['street']);
     }
 
     protected function resolveCidadeId(array $venda) : int
     {
         $cidadeService = new CidadeService();
 
-        return $cidadeService->resolveIdPeloNome($venda['custom']['city'], 'São Paulo');
+        return $cidadeService->resolveIdPeloNome($venda['customer']['city'], 'São Paulo');
     }
 
     public function isValidSignatureStatus(Integracao $integracaoOauth)
