@@ -14,7 +14,7 @@
 
 {{--        @if(app()->environment('local'))--}}
         <div class="row">
-            <div class="col-8">
+            <div class="col-md-8 col-12">
             <div class="card">
             <form action="{{ route('login') }}" class="card shadow card-md" method="POST" autocomplete="off">
                 @csrf
@@ -82,7 +82,7 @@
             </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-md-4 col">
             <div class="card">
                 <div class="card-body">
                     <h2 class="fs-2 card-title text-center mb-4 pt-4">Acessar com</h2>
