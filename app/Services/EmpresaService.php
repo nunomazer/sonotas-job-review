@@ -189,7 +189,14 @@ class EmpresaService
     {
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
         $driverNFSe = $sped->empresaDriver($empresa);
-        $driverNFSe->cadastrar();
+        $result = $driverNFSe->cadastrar();
+        if ($result->error) {
+            logger()->error('Não conseguiu gravar empresa no PlugNotas',
+            [
+                'Mensagem' => $result->message,
+                'Empresa' => (array)$empresa,
+            ]);
+        }
     }
 
     /**
