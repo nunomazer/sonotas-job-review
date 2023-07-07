@@ -46,7 +46,7 @@ class IntegraService
      */
     public function routes()
     {
-        foreach ($this->platforms as $p) {
+        foreach ($this->platforms as $p) { // TODO cache, cuidar da implantação de novos drivers para limpar cache
             if (method_exists($p, 'routes')) {
                 $driver = new $p([]);
                 $driver->routes();
