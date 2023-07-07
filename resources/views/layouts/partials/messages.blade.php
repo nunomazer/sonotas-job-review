@@ -2,18 +2,18 @@
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li>{!! $error !!}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
 @if(session('success'))
-    <div class="alert alert-success">{{session('success')}}</div>
+    <div class="alert alert-success">{!! session('success') !!}</div>
 @endif
 
 @if(session('info'))
-    <div class="alert alert-info">{{session('info')}}</div>
+    <div class="alert alert-info">{!! session('info') !!}</div>
 @endif
 
 @if(session('error'))
@@ -21,5 +21,5 @@
 @endif
 
 @if(session('warning'))
-    <div class="alert alert-warning">{{session('warning')}}</div>
+    <div class="alert alert-warning">{!! session('warning') !!}</div>
 @endif
