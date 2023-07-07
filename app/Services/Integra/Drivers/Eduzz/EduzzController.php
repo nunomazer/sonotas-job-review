@@ -233,7 +233,10 @@ class EduzzController extends Controller
             //return view('pages.login.oauth-error', ['message' => $exception->getMessage()]);
 
             return redirect('login')
-                ->withErrors('Um erro inesperado aconteceu no serviço Eduzz, por favor tente novamente ou entre em contato com nosso suporte informando a data e hora do erro.');
+                ->withErrors([
+                    'Aconteceu um problema no serviço Eduzz, por favor tente novamente ou entre em contato com nosso suporte.',
+                    '<b>Atenção</b> Se você comprou o plano pela Eduzz e este é o primeiro acesso, utilize a opção "Acessar com Eduzz" para sua conta ser criada.'
+                ]);
         }
     }
 
