@@ -44,7 +44,7 @@ class EduzzController extends Controller
 
         try {
             if(empty($code)){
-                throw new Exception("Não foi possível realizar a autenticação");
+                throw new \Exception("Não foi possível realizar a autenticação");
             }
 
             $clientOauth = new \GuzzleHttp\Client([
