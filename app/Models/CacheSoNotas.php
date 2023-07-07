@@ -11,7 +11,7 @@ class CacheSoNotas
      * Constante acessada apenas por método pois será composta com o usuário logado
      */
     private const IDX_INTEGRACOES_USUARIO_STATUS = 'integracao_status';
-    private const TTL_INTEGRACOES_USUARIO_STATUS = 2592000;
+    private const TTL_INTEGRACOES_USUARIO_STATUS = 60*60*24; // 1 dia
 
     public function idxIntegracoesUsuarioStatus(User $user = null) : ?string
     {
