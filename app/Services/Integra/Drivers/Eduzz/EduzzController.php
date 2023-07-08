@@ -47,6 +47,9 @@ class EduzzController extends Controller
                 throw new \Exception("Não foi possível realizar a autenticação");
             }
 
+            /**
+             * Oauth para pegar token
+             */
             $clientOauth = new \GuzzleHttp\Client([
 //                'base_uri'  => $this->eduzzOAUTHApiUrl,
                 'headers'   => [
@@ -63,6 +66,7 @@ class EduzzController extends Controller
                 "grant_type"    => "authorization_code"
             ];
 
+            // Request para o token
             $requestOauth = $clientOauth->post($this->eduzzOAUTHApiUrl.'/oauth/token', [
                 'json' => $playload,
             ]);
@@ -77,6 +81,9 @@ class EduzzController extends Controller
                 throw new Exception("Não foi possível obter as informações da EDUZZ :(");
             }
 
+            /**
+             * Prepara para pegar integrações do user logado
+             */
             $producerID = $resultOauth['user']['id'];
             $client = new \GuzzleHttp\Client([
                 'base_uri'  => $this->eduzzApiUrl,
@@ -204,9 +211,14 @@ class EduzzController extends Controller
                 }
 
                 EmpresaCriadaEvent::dispatch($empresa);
-                    $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
+                
+                // força a sincronização dos serviços com a integração Eduzz
+                $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
             }
 
+            /**
+             * Faz o login usando os dados da Eduzz
+             */
             $eduzzDriver = new EduzzPlatform($integracaoOauth->fields);
 //            if($eduzzDriver->isValidSignatureStatus($integracaoOauth)){
                 Auth::loginUsingId($integracaoOauth->empresa->owner->id);
