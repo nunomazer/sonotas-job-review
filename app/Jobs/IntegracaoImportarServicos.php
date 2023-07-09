@@ -39,6 +39,11 @@ class IntegracaoImportarServicos implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->empresa->configuracao_nfse == null) {
+            $this->empresa->owner->notify(new ServicosImportados($this->empresa, $this->integracao, 'error', 0, 'Não é possível importar serviços de integrações antes de Configurar a NFSe da Empresa'));
+            return 0;
+        }
+
         $servicoService = new ServicoService();
         try {
             $result = $servicoService->syncFromPlatform($this->empresa, $this->integracao->driver);
