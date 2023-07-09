@@ -180,6 +180,7 @@ class EduzzController extends Controller
                             'city_id' => $city->id,
                         ];
 
+                        // usa service de Empresa corretamente
                         $empresa = (new EmpresaService())->create($novaEmpresa);
                     }
 
