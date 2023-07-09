@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MensagemSimples extends Notification implements ShouldQueue
+class Notificacao extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -20,7 +20,7 @@ class MensagemSimples extends Notification implements ShouldQueue
      * @param Empresa $empresa
      * @param Integracao $integracao
      * @param string $status
-     * @param int $qtde Quantidade de serviços importados ou atualizados
+     * @param string $mensagem
      */
     public function __construct(Empresa $empresa, string $status, string $mensagem)
     {
