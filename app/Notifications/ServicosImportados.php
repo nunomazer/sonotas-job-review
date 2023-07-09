@@ -17,6 +17,7 @@ class ServicosImportados extends Notification implements ShouldQueue
     public Integracao $integracao;
     public string $status;
     public int $qtde;
+    public string $mensagem;
 
     /**
      * @param Empresa $empresa
@@ -24,12 +25,13 @@ class ServicosImportados extends Notification implements ShouldQueue
      * @param string $status
      * @param int $qtde Quantidade de serviços importados ou atualizados
      */
-    public function __construct(Empresa $empresa, Integracao $integracao, string $status, int $qtde)
+    public function __construct(Empresa $empresa, Integracao $integracao, string $status, int $qtde, string $mensagem = '')
     {
         $this->empresa = $empresa;
         $this->integracao = $integracao;
         $this->status = $status;
         $this->qtde = $qtde;
+        $this->mensagem = $mensagem;
     }
 
     /**
@@ -69,7 +71,7 @@ class ServicosImportados extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'mensagem' => $this->qtde . ' serviço(s) atualizados ou criados na sincronização com ' . $this->integracao->driver,
+            'mensagem' => $this->mensagem . ' - ' . $this->qtde . ' serviço(s) atualizados ou criados na sincronização com ' . $this->integracao->driver,
             'empresa_id' => $this->empresa->id,
             'empresa_nome' => $this->empresa->nome,
             'driver' => $this->integracao->driver,
