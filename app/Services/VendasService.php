@@ -120,7 +120,7 @@ class VendasService
 
         } catch (\Exception $exception) {
             DB::rollBack();
-            dd($exception);
+            //dd($exception);
             Log::error('Erros ao atualizar a Venda');
             Log::error($exception);
 
