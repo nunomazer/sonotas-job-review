@@ -14,6 +14,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Services\EmpresaService;
+use App\Services\IntegracaoService;
 use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -191,9 +192,7 @@ class EduzzController extends Controller
                         'ativo' => true
                     ]);
 
-                    // TODO refatorar o service criar empresa para que seja inteligente em receber integração e já criar
-                    // junto com o plano que retorna da integração
-                    $integracao = Integracao::create([
+                    $integracao = (new IntegracaoService())->create([
                         'empresa_id' => $empresa->id,
                         'name' => 'Integração com Eduzz',
                         'driver' => 'Eduzz',
