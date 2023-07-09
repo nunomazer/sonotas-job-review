@@ -6,6 +6,8 @@ use App\Http\Requests\IntegracaoRequest;
 use App\Jobs\IntegracaoImportarServicos;
 use App\Models\Empresa;
 use App\Models\Integracao;
+use App\Notifications\Notificacao;
+use App\Notifications\ServicosImportados;
 use App\Services\Integra\IntegraService;
 use App\Services\IntegracaoService;
 use App\Services\ServicoService;
@@ -81,6 +83,10 @@ class IntegracoesController extends Controller
         if ($empresa->configuracao_nfse == null) {
             return redirect()->back()->with('error', 'Não é possível importar serviços de integrações antes de Configurar a NFSe da Empresa');
         }
+
+        $empresa->owner->notify(new Notificacao($empresa,'success',
+            'Iniciada nova importação de serviços da empresa ' . $empresa->nome . ' para integração ' . $integracao->driver
+        ));
 
         $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
 
