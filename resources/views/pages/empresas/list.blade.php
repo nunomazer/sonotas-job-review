@@ -94,12 +94,13 @@
                             </div>
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
 {{--                                @include('pages.empresas.partials.assinatura-status')--}}
+                                <p>Assinatura</p>
                                 @if ($empresa->assinatura == null)
                                     <div class="alert alert-danger">
                                         Nenhuma assinatura em plano identificada, é necessário para emitir NF pela empresa
                                     </div>
                                 @else
-                                    Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                    {{ucwords($empresa->assinatura->plano->driver)}}: Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
                                     <br/>
                                     Docs: {{$empresa->assinatura->featureSaldo(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}} / {{$empresa->assinatura->featureBase(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}}
                                 @endif
