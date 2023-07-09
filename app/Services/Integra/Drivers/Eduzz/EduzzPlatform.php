@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 
 class EduzzPlatform extends Platform implements IIntegraDriver
 {
-    public static $name = 'Eduzz';
+    public static $name = 'eduzz';
 
     protected $eduzzAppSlug;
     protected $eduzzApiUrl;
