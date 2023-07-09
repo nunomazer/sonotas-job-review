@@ -66,6 +66,14 @@ class IntegracoesController extends Controller
     }
 
 
+    /**
+     * Coloca na fila a sincronização de serviços para um integração com uma empresa
+     *
+     * @param Request $request
+     * @param Empresa $empresa
+     * @param Integracao $integracao
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function importFromPlatform(Request $request, Empresa $empresa, Integracao $integracao)
     {
         if ($empresa->configuracao_nfse == null) {
