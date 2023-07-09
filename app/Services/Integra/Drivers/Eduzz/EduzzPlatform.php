@@ -381,7 +381,6 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             $features = $plan->features;
             $features = collect($features)->map(function ($feature) use($resultSubscription) {
                 $feature['balance'] = $feature['value'];
-                $feature['expires_at'] = $resultSubscription['expiresAt'];
                 return $feature;
             });
 
@@ -399,6 +398,8 @@ class EduzzPlatform extends Platform implements IIntegraDriver
                     'driver_id' => $resultSubscription['plan'],
                     'plan_id' => $plan->id,
                     'status_historico' => '',
+                    'subscribed_at' => $resultSubscription['subscribedAt'],
+                    'expires_at' => $resultSubscription['expiresAt'],
                     'features' => $features->toArray(),
                 ]
             );
