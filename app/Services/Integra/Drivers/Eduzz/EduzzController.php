@@ -13,6 +13,8 @@ use App\Models\Plan;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
+use App\Services\EmpresaService;
+use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -146,15 +148,27 @@ class EduzzController extends Controller
                         $city = Cidade::where('ibge_id', 3550308)->first();
                     }
 
+                    // devido a um problema em alguns Sandbox, como da Eduzz, que entregam valores errados de
+                    // cnpj, se NÃO estamos em ambiente de produção, geramos um CNPJ válido para poder passar
+                    // pelo fluxo completo, além de não trazer dados completos necessários para o Plugnotas
+                    if (app()->environment('production') == false) {
+                        $faker = Factory::create('pt_BR');
+                        $eduzzProdutor['document_number'] = $faker->cnpj(false);
+                        $eduzzProdutor['municipal_registration'] = $eduzzProdutor['municipal_registration'] ?? '909090';
+                        logger()->debug($eduzzProdutor);
+                    }
+
                     $empresa = Empresa::where('documento', $eduzzProdutor['document_number'])->first();
 
                     if (empty($empresa)) {
-                        $empresa = Empresa::create([
+                        $novaEmpresa = [
                             'owner_user_id' => $user->id,
                             'nome' => $eduzzProdutor['name'],
                             'alias' => $eduzzProdutor['business_name'],
                             'email' => $eduzzProdutor['email'],
                             'documento' => $eduzzProdutor['document_number'],
+                            'inscricao_municipal' => $eduzzProdutor['municipal_registration'],
+                            'inscricao_estadual' => $eduzzProdutor['state_registration'],
                             'telefone_num' => $eduzzProdutor['cellphone'],
 
                             'tipo_logradouro' => $tipoLogradouro ?? 'Rua',
@@ -164,7 +178,9 @@ class EduzzController extends Controller
                             'bairro' => $eduzzProdutor['address_neighborhood'] ?? 'Desconhecido',
                             'cep' => $eduzzProdutor['address_zip_code'] ?? '00000000',
                             'city_id' => $city->id,
-                        ]);
+                        ];
+
+                        $empresa = (new EmpresaService())->create($novaEmpresa);
                     }
 
                     UserEmpresa::updateOrCreate([
@@ -210,8 +226,6 @@ class EduzzController extends Controller
                     throw($e);
                 }
 
-                EmpresaCriadaEvent::dispatch($empresa);
-                
                 // força a sincronização dos serviços com a integração Eduzz
                 $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
             }

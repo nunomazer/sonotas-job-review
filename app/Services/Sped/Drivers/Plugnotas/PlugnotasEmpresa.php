@@ -81,8 +81,10 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
     public function cadastrar(): SpedApiReturn
     {
         try {
+            $empresa = $this->toArray();
+
             $result = $this->httpClient()->request('POST', 'empresa', [
-                'json' => $this->toArray()
+                'json' => $empresa
             ]);
 
             return $this->toApiReturn($result);
