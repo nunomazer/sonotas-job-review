@@ -35,7 +35,7 @@ class PlanosSeeder extends Seeder
             'features' => $features,
             'active' => true,
             'driver' => 'Eduzz',
-            'driver_id' => "so-notas_basic_monthly",
+            'driver_id' => 'so-notas_basic_monthly',
             'frequence' => 'month'
         ]);
 
@@ -50,7 +50,7 @@ class PlanosSeeder extends Seeder
             'features' => $features,
             'active' => true,
             'driver' => 'Eduzz',
-            'driver_id' => "so-notas_basic_yearly",
+            'driver_id' => 'so-notas_basic_yearly',
             'frequence' => 'year'
         ]);
     }
