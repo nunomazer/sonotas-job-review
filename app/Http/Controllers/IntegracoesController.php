@@ -7,6 +7,7 @@ use App\Jobs\IntegracaoImportarServicos;
 use App\Models\Empresa;
 use App\Models\Integracao;
 use App\Services\Integra\IntegraService;
+use App\Services\IntegracaoService;
 use App\Services\ServicoService;
 use Illuminate\Http\Request;
 
@@ -45,21 +46,22 @@ class IntegracoesController extends Controller
         return view('pages.empresas.integracoes.edit', compact('empresa', 'integracao', 'driver'));
     }
 
-    public function update(IntegracaoRequest $request, Empresa $empresa, Integracao $integracao)
+    public function update(IntegracaoRequest $request, Empresa $empresa, IntegracaoService $integracaoService)
     {
-        $integracao->update($request->toArray());
+        $integracaoService->update($request->toArray());
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Integração atualizada com successo !']);
     }
 
-    public function store(IntegracaoRequest $request, Empresa $empresa)
+    public function store(IntegracaoRequest $request, Empresa $empresa, IntegracaoService $integracaoService)
     {
         // TODO refatorar para o service
         $request->merge([
             'empresa_id' => $empresa->id,
         ]);
-        Integracao::create($request->toArray());
+
+        $integracaoService->create($request->toArray());
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Integração criada com successo !']);
