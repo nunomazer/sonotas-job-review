@@ -6,10 +6,12 @@ use App\Models\EmpresaAssinatura;
 use App\Models\Integracao;
 use App\Models\Plan;
 use App\Models\Servico;
+use App\Notifications\ErroAoVerificarAssinatura;
 use App\Services\ApiService;
 use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
+use App\Services\MoneyFlow\Drivers\Eduzz\EduzzDriver;
 use App\Services\Sped\SpedService;
 use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
@@ -331,6 +333,14 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         return $cidadeService->resolveIdPeloNome($venda['customer']['city'], 'São Paulo');
     }
 
+    /**
+     * Verifica se existe uma assinatura válida na Eduzz, se existir, cria e ou atualiza
+     * o plano correspondente à integração da empresa existente na Eduzz
+     *
+     * @param Integracao $integracaoOauth
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function isValidSignatureStatus(Integracao $integracaoOauth)
     {
         // TODO refatorar para um service e driver corretos
@@ -350,26 +360,46 @@ class EduzzPlatform extends Platform implements IIntegraDriver
         $subscriptionRequest = $client->get("/api/subscription-status/v2/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
         $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
 
+        if (app()->environment('production') == false) {
+            logger()->debug($resultSubscription);
+        }
+
         if ($resultSubscription['appSubscribed']) {
             $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+
+            if ($plan == null) {
+                $mensagem = 'Não foi possível encontrar um plano de assinatura para integração Eduzz com o nome "'.$resultSubscription['plan'].'"'
+                    . ' Sua assinatura ainda não está ativa, por favor, entre em contato com o suporte informando o problema.';
+
+                $integracaoOauth->empresa->owner->notify(new ErroAoVerificarAssinatura(
+                    $integracaoOauth->empresa, (new EduzzDriver())->nome(),
+                    $mensagem
+                ));
+                return false;
+            }
+
             $features = $plan->features;
-            $features = $features->map(function ($feature) {
+            $features = collect($features)->map(function ($feature) use($resultSubscription) {
                 $feature['balance'] = $feature['value'];
+                $feature['expires_at'] = $resultSubscription['expiresAt'];
                 return $feature;
             });
+
+            $driverNome = (new EduzzDriver())->nome();
+
             EmpresaAssinatura::updateOrCreate(
                 [
                     'empresa_id' => $integracaoOauth->empresa->id,
-                    'driver' => 'Eduzz',
+                    'driver' => $driverNome,
                 ],
                 [
                     'empresa_id' => $integracaoOauth->empresa->id,
-                    'driver' => 'Eduzz',
+                    'driver' => $driverNome,
                     'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
                     'driver_id' => $resultSubscription['plan'],
                     'plan_id' => $plan->id,
                     'status_historico' => '',
-                    'features' => $features,
+                    'features' => $features->toArray(),
                 ]
             );
         }

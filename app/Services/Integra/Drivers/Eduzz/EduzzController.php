@@ -161,6 +161,7 @@ class EduzzController extends Controller
 
                     $empresa = Empresa::where('documento', $eduzzProdutor['document_number'])->first();
 
+                    // Se ainda não existe essa empresa, cria para posteriormente associar a uma integração
                     if (empty($empresa)) {
                         $novaEmpresa = [
                             'owner_user_id' => $user->id,
@@ -192,6 +193,10 @@ class EduzzController extends Controller
                         'ativo' => true
                     ]);
 
+                    // cria uma integração Eduzz com a empresa, pq esse dado de oauth
+                    // somente existe na integração, então ela deve ser criada para permitir o
+                    // login em novas tentativas de oauth com Eduzz
+                    // mesmo que não utilize a integração
                     $integracao = (new IntegracaoService())->create([
                         'empresa_id' => $empresa->id,
                         'name' => 'Integração com Eduzz',
@@ -230,18 +235,18 @@ class EduzzController extends Controller
                 $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
             }
 
+            $eduzzDriver = new EduzzPlatform($integracaoOauth->fields);
+
+            // se possui uma assinatura vávlida precisa verificar como está o plano
+            // e se for a primeira entrada, gravar os dados do plano
+            $eduzzDriver->isValidSignatureStatus($integracaoOauth);
+
             /**
              * Faz o login usando os dados da Eduzz
              */
-            $eduzzDriver = new EduzzPlatform($integracaoOauth->fields);
-//            if($eduzzDriver->isValidSignatureStatus($integracaoOauth)){
-                Auth::loginUsingId($integracaoOauth->empresa->owner->id);
+            Auth::loginUsingId($integracaoOauth->empresa->owner->id);
 
-                return redirect('/');
-//            }
-//
-//            return redirect('login')
-//                ->withErrors("Nenhuma assinatura ativa :(");
+            return redirect('/');
 
         } catch (\Exception $exception) {
             Log::error($exception);
