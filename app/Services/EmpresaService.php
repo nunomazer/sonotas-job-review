@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\CertificadoAtualizadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
@@ -106,13 +107,17 @@ class EmpresaService
         }
 
         if($certificado != null){
-            $nfseConfig['certificado_id'] = $this->handleUploadCertificate($certificado, $empresa->id);
+            $certificado = $this->handleUploadCertificate($certificado, $empresa);
+            $nfseConfig['certificado_id'] = $certificado->id;
         }
 
         $empresa->configuracao_nfse()->create($nfseConfig);
         $empresa->refresh();
 
         EmpresaAlteradaEvent::dispatch($empresa);
+        if($certificado != null) {
+            CertificadoAtualizadoEvent::dispatch($empresa, $certificado);
+        }
 
         return $empresa;
     }
@@ -122,12 +127,13 @@ class EmpresaService
      *
      * @param Certificado $certificado
      * @param int $empresaID
-     * @return int
+     * @return Certificado
      */
-    public function handleUploadCertificate(Certificado $certificado, $empresaID){
+    public function handleUploadCertificate(Certificado $certificado, Empresa $empresa): Certificado{
         $name = uniqid(date('HisYmd'));
         $extension = $certificado->file->extension();
-        $nameFile = "{$empresaID}-{$name}.{$extension}";
+//        $nameFile = "{$empresa->id}-{$name}.{$extension}";
+        $nameFile = "{$empresa->id}-{$name}.pfx";
         $uploaded = $certificado->file->storeAs("certificados", $nameFile);
 
         $pfxContent = Storage::get($uploaded);
@@ -155,7 +161,31 @@ class EmpresaService
             'password'      => $certificado->password
         ]);
 
-        return $certificadoPersistido->id;
+        // não chama evento de certificado atualizado aqui pq ainda não tem o vínculo com a empresa
+        // que será gravado na função que chamou esta
+
+        return $certificadoPersistido;
+    }
+
+    /**
+     * Cadastra o certificado da empresa nos serviços Sped (driver)
+     *
+     * @param Empresa $empresa
+     * @param Certificado $certificado
+     * @return void
+     */
+    public function cadastrarCertificadoSped(Empresa $empresa, Certificado $certificado)
+    {
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
+        $driverNFSe = $sped->empresaDriver($empresa);
+        $result = $driverNFSe->cadastrarCertificado($certificado);
+        if ($result->error) {
+            logger()->error('Não conseguiu gravar certificado da empresa no PlugNotas',
+                [
+                    'Mensagem' => $result->message,
+                    'Empresa' => (array)$empresa,
+                ]);
+        }
     }
 
     /**
@@ -169,12 +199,16 @@ class EmpresaService
     public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig, Certificado $certificado = null) : Empresa
     {
         if($certificado != null){
-            $nfseConfig->certificado_id = $this->handleUploadCertificate($certificado, $empresa->id);
+            $certificado = $this->handleUploadCertificate($certificado, $empresa);
+            $nfseConfig['certificado_id'] = $certificado->id;
         }
 
         $empresa->configuracao_nfse->update($nfseConfig->toArray());
 
         EmpresaAlteradaEvent::dispatch($empresa);
+        if($certificado != null) {
+            CertificadoAtualizadoEvent::dispatch($empresa, $certificado);
+        }
 
         return $empresa;
     }

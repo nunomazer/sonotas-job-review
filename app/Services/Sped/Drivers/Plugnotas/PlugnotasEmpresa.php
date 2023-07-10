@@ -2,6 +2,7 @@
 
 namespace App\Services\Sped\Drivers\Plugnotas;
 
+use App\Models\Certificado;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\NFSe;
@@ -10,7 +11,9 @@ use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedStatus;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 {
@@ -133,5 +136,37 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 return $this->toApiReturn($exception);
             }
         });
+    }
+
+    public function cadastrarCertificado(Certificado $certificado): SpedApiReturn
+    {
+        Log::debug(Storage::path($certificado->file));
+        try {
+            $payload = [
+                [
+                    'name' => 'senha',
+                    'contents' => $certificado->password,
+                ],
+                [
+                    'name' => 'arquivo',
+                    'contents' => Utils::tryFopen(Storage::path($certificado->file), 'r'),
+                ],
+            ];
+
+            $result = $this->httpClient()->request('POST', 'certificado', [
+                'multipart' => $payload
+            ]);
+
+            $data = json_decode($result->getBody()->getContents())->data;
+            $certificado->sped_id = $data->id;
+            $certificado->save();
+
+            return $this->toApiReturn($result);
+
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Cadastrar Certificado');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\CertificadoAtualizadoEvent;
 use App\Events\ClienteAlteradoEvent;
 use App\Events\ClienteCriadoEvent;
 use App\Events\EmpresaAlteradaEvent;
@@ -12,6 +13,7 @@ use App\Events\NFSeSolicitadoCancelamentoEvent;
 use App\Events\VendaAtualizadaEvent;
 use App\Events\VendaCriadaEvent;
 use App\Listeners\AlteraEmpresaDriverSped;
+use App\Listeners\CadastraCertificadoDriverSped;
 use App\Listeners\CadastraEmpresaDriverSped;
 use App\Listeners\EmiteNFSeDriverSped;
 use App\Listeners\CancelarNFSeDriverSped;
@@ -34,12 +36,16 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class
         ],
 
+        CertificadoAtualizadoEvent::class => [
+            CadastraCertificadoDriverSped::class,
+        ],
+
         ClienteCriadoEvent::class => [
         ],
 
         ClienteAlteradoEvent::class => [
         ],
-        
+
         /*
         WebhookCheckoutEvent::class => [
             WebhookAssinaturaEmpresa::class
@@ -55,7 +61,7 @@ class EventServiceProvider extends ServiceProvider
 
         VendaCriadaEvent::class => [
         ],
-        
+
         VendaAtualizadaEvent::class => [
         ],
 
