@@ -151,7 +151,7 @@ class EmpresaService
         $certificadoPersistido = Certificado::create([
             'file'          => $uploaded,
             'expires_at'    => gmdate("Y-m-d\TH:i:s\Z", $CertPriv['validTo_time_t']),
-            'sped_id'       => "PADRÃO-A-DEFINIR",
+            'sped_id'       => null,
             'password'      => $certificado->password
         ]);
 
