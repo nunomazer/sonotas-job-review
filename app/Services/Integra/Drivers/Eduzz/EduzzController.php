@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Services\EmpresaService;
 use App\Services\IntegracaoService;
+use App\Services\MoneyFlow\Drivers\Eduzz\EduzzDriver;
 use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -200,7 +201,7 @@ class EduzzController extends Controller
                     $integracao = (new IntegracaoService())->create([
                         'empresa_id' => $empresa->id,
                         'name' => 'Integração com Eduzz',
-                        'driver' => 'Eduzz',
+                        'driver' => (new EduzzDriver())->nome(),
                         'fields' => [
                             "email"                         => $resultOauth['user']['email'],
                             "apikey"                        => null,
