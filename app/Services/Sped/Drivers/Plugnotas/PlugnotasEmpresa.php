@@ -161,6 +161,13 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             $certificado->sped_id = $data->id;
             $certificado->save();
 
+            // atualiza certificado na empresa plugnotas
+            $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
+                'json' => [
+                    'certificado' => $certificado->sped_id,
+                ]
+            ]);
+
             return $this->toApiReturn($result);
 
         } catch (\Exception $exception) {
