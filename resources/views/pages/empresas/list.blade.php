@@ -105,7 +105,7 @@
                                     <br/>
                                     Docs: {{$empresa->assinatura->featureSaldo(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}} / {{$empresa->assinatura->featureBase(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}}
                                     <br/>
-                                    Expira em: {{$empresa->assinatura->expires_at}}
+                                    Expira em: {{$empresa->assinatura->expires_at->format('d/m/Y')}}
                                 @endif
                             </div>
                         </div>
