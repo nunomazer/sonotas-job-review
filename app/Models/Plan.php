@@ -11,11 +11,6 @@ class Plan extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = [
-        'subscribed_at',
-        'expires_at',
-    ];
-
     protected $casts = [
         'features' => 'json',
         'driver_id' => 'json',

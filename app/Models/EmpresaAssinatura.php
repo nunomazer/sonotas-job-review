@@ -13,6 +13,11 @@ class EmpresaAssinatura extends Model
 
     protected $table = 'empresa_assinatura';
 
+    protected $dates = [
+        'subscribed_at',
+        'expires_at',
+    ];
+
     protected $casts = [
         'status_historico' => 'json',
         'features' => 'json',
