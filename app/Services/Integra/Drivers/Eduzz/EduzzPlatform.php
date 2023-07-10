@@ -144,7 +144,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     protected function getToken() : string
     {
         if (!isset($this->config['oauth_access_token'])) {
-            throw new \Exception('Erro interno, o driver Eduzz precisa ser instanciado com o oauth token no array config');
+            throw new \Exception('Erro interno de integração, o driver Eduzz precisa ser instanciado com o oauth token no array config. Email de integração: ' . $this->config['email'] ?? 'Null');
         }
 
         return $this->config['oauth_access_token'];
