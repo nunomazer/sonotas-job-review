@@ -17,6 +17,7 @@ use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -357,8 +358,15 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'defaults'  => ['verify' => false],
         ]);
         $orbitaID = $integracaoOauth->fields['orbita_id'] ?? 0;
-        $subscriptionRequest = $client->get("/api/subscription-status/v2/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
-        $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+
+        try {
+            $subscriptionRequest = $client->get("/api/subscription-status/v2/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
+            $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            Log::error('Erro ao testar endpoint de assinatura na Eduzz');
+            Log::error($e);
+            return false;
+        }
 
         if (app()->environment('production') == false) {
             logger()->debug($resultSubscription);
