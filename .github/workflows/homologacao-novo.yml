@@ -25,7 +25,7 @@ jobs:
             sudo supervisorctl stop sonotas-homologacao-worker:*
             #npm install
             #npm run dev
-            php artisan migrate --force
+            php artisan migrate
             sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
             sudo supervisorctl reread
             sudo supervisorctl update
