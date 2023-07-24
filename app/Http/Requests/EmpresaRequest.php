@@ -40,6 +40,7 @@ class EmpresaRequest extends FormRequest
             'owner_user_id'     => ['required'],
             'nome'              => ['required'],
             'documento'         => ['required', 'cpf_cnpj'],
+            'inscricao_estadual'=> ['required', 'regex:/^\b(ISENTO|[0-9]*)\b$/'],
             'tipo_logradouro'   => ['required', Rule::in(TipoLogradouro::tipos)],
             'logradouro'        => ['required'],
             'numero'            => ['required'],
@@ -53,6 +54,14 @@ class EmpresaRequest extends FormRequest
             'regime_tributario' => ['required', Rule::in(SpedRegimesTributarios::toArrayValores())],
             'regime_tributario_especial'
                                 => ['required', Rule::in(SpedRegimesTributariosEspeciais::toArrayValores())],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'inscricao_estadual.required' => 'A inscrição estadual é obrigatória. Em caso de isenção preencher com a palavra ISENTO',
+            'inscricao_estadual.regex' => 'A inscrição estadual é obrigatória. Em caso de isenção preencher com a palavra ISENTO (em maúsculas)',
         ];
     }
 
