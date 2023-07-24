@@ -6,6 +6,7 @@ use App\Events\CertificadoAtualizadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
+use App\Exceptions\EmpresaCadastroInvalidoParaEmitirNFException;
 use App\Models\CartaoCredito;
 use App\Models\Empresa;
 use App\Models\Webhook;
@@ -75,6 +76,15 @@ class EmpresaService
         return $empresa;
     }
 
+    /**
+     * Valida se o documento CPF ou CNPJ é o único em nossa base, lança exceção informando que o
+     * usuário não pode cadastrar nova empressa com mesmo doc, e orientando a solicitar acesso ao admin
+     * dela
+     *
+     * @param string $cnpj
+     * @return true
+     * @throws DocumentoDuplicadoCriarEmpresaException
+     */
     public function validaCnpjUnicoCriarEmpresa(string $cnpj)
     {
         $empresa = Empresa::where('documento', $cnpj)->first();
@@ -87,6 +97,19 @@ class EmpresaService
         }
 
         return true;
+    }
+
+    public function validaCadastroEmitirNF(Empresa $empresa)
+    {
+        if ($empresa->configuracao_nfse == null) {
+            throw new EmpresaCadastroInvalidoParaEmitirNFException('Antes de emitir documentos fiscais da empresa "'.
+                $empresa->nome . '", é necessário ir até o cadastro e Configurar a NFSe.' );
+        }
+
+        if ($empresa->certificado_id == null && ($empresa->prefeitura_usuario == null || $empresa->prefeitura_senha == null)) {
+            throw new EmpresaCadastroInvalidoParaEmitirNFException('Para emitir documentos fiscais da empresa "'.
+                $empresa->nome . '", é necessário na configuração de NFSe fazer o upload do Certificado Digital ou Configurar Usuário e Senha do portal da Prefeitura.' );
+        }
     }
 
     /**

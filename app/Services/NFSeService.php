@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\NFSeCriadaEvent;
 use App\Events\NFSeSolicitadoCancelamentoEvent;
+use App\Exceptions\EmpresaCadastroInvalidoParaEmitirNFException;
 use App\Listeners\EnviaFilesNFSe;
 use App\Mail\NfPdfXmlClienteMail;
 use App\Models\Cliente;
@@ -15,6 +16,7 @@ use App\Models\Servico;
 use App\Models\ServicoIntegracao;
 use App\Notifications\ErroAoCancelarNFSe;
 use App\Notifications\ErroAoGerarEmitirNF;
+use App\Notifications\ErroAoValidarCadastroEmpresaEmitirNF;
 use App\Services\Sped\SpedService;
 use App\Services\Sped\SpedStatus;
 use Illuminate\Support\Facades\DB;
@@ -195,6 +197,14 @@ class NFSeService
     public function emitirNFsPendentes(Empresa $empresa)
     {
         // TODO adicionar outros docs fiscais
+
+        $empresaService = new EmpresaService();
+        try {
+            $empresaService->validaCadastroEmitirNF($empresa);
+        } catch (EmpresaCadastroInvalidoParaEmitirNFException $exception) {
+            $empresa->owner->notify(new ErroAoValidarCadastroEmpresaEmitirNF($empresa, $exception->getMessage()));
+            return false;
+        }
 
         $nfs = NFSe::with('venda')
             ->where('status', SpedStatus::PENDENTE)
