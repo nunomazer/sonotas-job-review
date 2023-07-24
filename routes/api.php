@@ -42,9 +42,11 @@ Route::prefix('privado')->group(function(){
 Route::post('/sped/webhook/{driver}', [WebhooksController::class, 'sped'])->name('api.webhook.sped');
 Route::post('/checkout/webhook/{driver}', [WebhooksController::class, 'checkout'])->name('api.webhook.checkout');
 
+// TODO rever a segurança, esse endpoint é usado pelo front para pesquisar clientes e pelos clientes de API
+Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
+
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/clientes/search', [ClientesController::class, 'search'])->name('api.clientes.search');
     Route::get('/clientes/{id}', [ClientesController::class, 'getById'])->name('api.clientes.get-by-id');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('api.clientes.store');
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('api.clientes.update');
