@@ -102,6 +102,18 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
     public function alterar(): SpedApiReturn
     {
         try {
+            $result = $this->httpClient()->request('GET', 'empresa/'. $this->empresa->documento);
+        } catch (\Exception $exception) {
+            if ($exception->getCode() == 404) {
+                return $this->cadastrar();
+            }
+
+            Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+
+        try {
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
                 'json' => $this->toArray()
             ]);
