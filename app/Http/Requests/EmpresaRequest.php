@@ -37,23 +37,24 @@ class EmpresaRequest extends FormRequest
     public function rules()
     {
         return [
-            'owner_user_id'     => ['required'],
-            'nome'              => ['required'],
-            'documento'         => ['required', 'cpf_cnpj'],
-            'inscricao_estadual'=> ['required', 'regex:/^\b(ISENTO|[0-9]*)\b$/'],
-            'tipo_logradouro'   => ['required', Rule::in(TipoLogradouro::tipos)],
-            'logradouro'        => ['required'],
-            'numero'            => ['required'],
-            'bairro'            => ['required'],
-            'logo'              => [],
-            'cep'               => ['required'],
-            'city_id'           => ['required'],
-            'telefone_num'      => ['required'],
-            'telefone_ddd'      => ['required', 'ddd'],
-            'email'             => ['required', 'email'],
-            'regime_tributario' => ['required', Rule::in(SpedRegimesTributarios::toArrayValores())],
+            'owner_user_id'         => ['required'],
+            'nome'                  => ['required'],
+            'documento'             => ['required', 'cpf_cnpj'],
+            'inscricao_estadual'    => ['required', 'regex:/^\b(ISENTO|[0-9]*)\b$/'],
+            'inscricao_municipal'   => ['required', 'regex:/^\b([0-9]*)\b$/'],
+            'tipo_logradouro'       => ['required', Rule::in(TipoLogradouro::tipos)],
+            'logradouro'            => ['required'],
+            'numero'                => ['required'],
+            'bairro'                => ['required'],
+            'logo'                  => [],
+            'cep'                   => ['required'],
+            'city_id'               => ['required'],
+            'telefone_num'          => ['required'],
+            'telefone_ddd'          => ['required', 'ddd'],
+            'email'                 => ['required', 'email'],
+            'regime_tributario'     => ['required', Rule::in(SpedRegimesTributarios::toArrayValores())],
             'regime_tributario_especial'
-                                => ['required', Rule::in(SpedRegimesTributariosEspeciais::toArrayValores())],
+                                    => ['required', Rule::in(SpedRegimesTributariosEspeciais::toArrayValores())],
         ];
     }
 
@@ -61,7 +62,8 @@ class EmpresaRequest extends FormRequest
     {
         return [
             'inscricao_estadual.required' => 'A inscrição estadual é obrigatória. Em caso de isenção preencher com a palavra ISENTO',
-            'inscricao_estadual.regex' => 'A inscrição estadual é obrigatória. Em caso de isenção preencher com a palavra ISENTO (em maúsculas)',
+            'inscricao_estadual.regex' => 'A inscrição estadual é obrigatória e aceita apenas números. Em caso de isenção preencher com a palavra ISENTO (em maúsculas)',
+            'inscricao_municipal.regex' => 'A inscrição municipal é obrigatória e aceita apenas números',
         ];
     }
 
