@@ -64,20 +64,28 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 'tipoContrato' => 0, // pode pegar do config, mas por hora forçamos 0 bilhetagem para não correr o risco de sobrepor clientes de nossas empresas que podem ser nossos clientes e se ativar com 1 cobra por cnpj e não emissão
                 'config' => [
                     'producao' => config('sped.drivers.plugnotas.producao'),
-                    'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
-                    'prefeitura' => [] // TODO VALIDAR AQUI A NECESSIDADE DE DADOS NO CADASTRO
+                    //'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
+                    'prefeitura' => [
+                        'login' => null,
+                        'senha' => null,
+                    ] // TODO VALIDAR AQUI A NECESSIDADE DE DADOS NO CADASTRO
                 ]
             ],
             'nfe' => [
                 'ativo'=> false, // Primeira versão sem nfe
                 'tipoContrato'=> 0,
-                'config' => []
+//                'config' => []
             ],
             'nfce' => [
                 'ativo'=> false, // Primeira versão sem nfe
                 'tipoContrato'=> 0,
-                'config' => []
-            ]
+//                'config' => []
+            ],
+            'mdfe' => [
+                'ativo'=> false, // Primeira versão sem nfe
+                'tipoContrato'=> 0,
+//                'config' => []
+            ],
         ];
     }
 
@@ -85,6 +93,11 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
     {
         try {
             $empresa = $this->toArray();
+
+            // somente pode gravar empresa com certificado
+            if ($empresa['certificado'] == null) {
+                return false;
+            }
 
             $result = $this->httpClient()->request('POST', 'empresa', [
                 'json' => $empresa
@@ -94,6 +107,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
         } catch (\Exception $exception) {
             Log::error('Erro ao chamar Plugnotas Cadastrar Empresa');
+            Log::error(json_encode($empresa, JSON_PRETTY_PRINT));
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
@@ -108,7 +122,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 return $this->cadastrar();
             }
 
-            Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+            Log::error('Erro ao chamar Plugnotas Consultar Empresa na rotina de Alterar Empresa');
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
@@ -122,6 +136,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
         } catch (\Exception $exception) {
             Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+            Log::error('Empresa', $this->toArray());
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
