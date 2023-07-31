@@ -203,4 +203,21 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             return $this->toApiReturn($exception);
         }
     }
+
+    public function metadadosCidade(): SpedApiReturn
+    {
+        try {
+            $result = $this->httpClient()->request('GET', 'nfse/cidades/' . $this->empresa->cidade->ibge_id);
+
+            $data = json_decode($result->getBody()->getContents());
+
+            $result = $this->toApiReturn($result);
+            $result->data = (array)$data;
+            return $result;
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Consultar status cancelamento NFSe');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+    }
 }

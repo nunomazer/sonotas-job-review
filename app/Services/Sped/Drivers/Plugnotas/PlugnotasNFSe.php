@@ -2,8 +2,10 @@
 
 namespace App\Services\Sped\Drivers\Plugnotas;
 
+use App\Models\Empresa;
 use App\Models\NFSe;
 use App\Services\Sped\ISpedNFSe;
+use App\Services\Sped\MetadadosCIdade;
 use App\Services\Sped\SpedApiReturn;
 use App\Services\Sped\SpedNFSe;
 use Illuminate\Support\Facades\Log;
@@ -150,5 +152,4 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
             return $this->toApiReturn($exception);
         }
     }
-
 }

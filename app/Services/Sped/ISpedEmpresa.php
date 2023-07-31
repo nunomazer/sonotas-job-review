@@ -33,6 +33,16 @@ interface ISpedEmpresa
     public function cadastrarCertificado(Certificado $certificado): SpedApiReturn;
 
     /**
+     * Pesquisa no serviço SPED de NFSe os metadados da cidade que a empresa está registrada,
+     * e retorna o objeto populado, se é necessário
+     * certificado, senha, login, multiserviços entre outros
+     *
+     * @param Empresa $empresa
+     * @return SpedApiReturn
+     */
+    public function metadadosCidade() : SpedApiReturn;
+
+    /**
      * Monta o array para enviar a cadastros ou envio da NF, de acordo com o driver correto
      *
      * @param Empresa $empresa
