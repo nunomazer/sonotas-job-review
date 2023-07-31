@@ -96,7 +96,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
             // somente pode gravar empresa com certificado
             if ($empresa['certificado'] == null) {
-                return false;
+                return new \Exception('Certificado não existe para cadastrar empresa', 400);
             }
 
             $result = $this->httpClient()->request('POST', 'empresa', [
