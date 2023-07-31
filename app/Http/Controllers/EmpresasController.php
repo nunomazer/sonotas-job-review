@@ -13,6 +13,7 @@ use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\Plan;
 use App\Services\EmpresaService;
+use App\Services\Sped\SpedService;
 
 class EmpresasController extends Controller
 {
@@ -88,12 +89,36 @@ class EmpresasController extends Controller
 
     public function createConfigNFSe(Empresa $empresa)
     {
-        return view('pages.empresas.edit-nfse', compact('empresa'));
+        $metadados = (new SpedService(SpedService::DOCTYPE_NFSE))->empresaDriver($empresa)->metadadosCidade();
+
+        $metadados = $metadados->data;
+
+        $txt = "<strong>Atenção:</strong> para esta cidade é necessário preencher ";
+        $txt .= $metadados['certificado'] ? '<strong>certificado</strong>' : '';
+        $txt .= $metadados['login'] ? ', <strong>usuário da prefeitura</strong>' : '';
+        $txt .= $metadados['senha'] ? ', <strong>senha da prefeitura</strong>' : '';
+        $txt .= ' .. você poderá salvar as configurações porém as NFSe não serão emitidas sem estes dados.';
+
+        session()->flash('warning', $txt);
+
+        return view('pages.empresas.edit-nfse', compact('empresa', 'metadados'));
     }
 
     public function editConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig)
     {
-        return view('pages.empresas.edit-nfse', compact('empresa', 'nfseConfig'));
+        $metadados = (new SpedService(SpedService::DOCTYPE_NFSE))->empresaDriver($empresa)->metadadosCidade();
+
+        $metadados = $metadados->data;
+
+        $txt = "<strong>Atenção:</strong> para esta cidade é necessário preencher ";
+        $txt .= $metadados['certificado'] ? '<strong>certificado</strong>' : '';
+        $txt .= $metadados['login'] ? ', <strong>usuário da prefeitura</strong>' : '';
+        $txt .= $metadados['senha'] ? ', <strong>senha da prefeitura</strong>' : '';
+        $txt .= ' .. você poderá salvar as configurações porém as NFSe não serão emitidas sem estes dados.';
+
+        session()->flash('warning', $txt);
+
+        return view('pages.empresas.edit-nfse', compact('empresa', 'nfseConfig', 'metadados'));
     }
 
     public function storeConfigNFSe(EmpresaConfigNFSeRequest $request, Empresa $empresa)
