@@ -181,7 +181,7 @@ class EmpresaService
             'file'          => $uploaded,
             'expires_at'    => gmdate("Y-m-d\TH:i:s\Z", $CertPriv['validTo_time_t']),
             'sped_id'       => null,
-            'password'      => $certificado->password
+            'password'      => $certificado->password // TODO ao menos uma cripto de retorno aqui para não ficar plain
         ]);
 
         // não chama evento de certificado atualizado aqui pq ainda não tem o vínculo com a empresa
