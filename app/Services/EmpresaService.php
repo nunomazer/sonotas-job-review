@@ -106,7 +106,7 @@ class EmpresaService
                 $empresa->nome . '", é necessário ir até o cadastro e Configurar a NFSe.' );
         }
 
-        if ($empresa->certificado_id == null && ($empresa->prefeitura_usuario == null || $empresa->prefeitura_senha == null)) {
+        if ($empresa->configuracao_nfse->certificado_id == null && ($empresa->configuracao_nfse->prefeitura_usuario == null || $empresa->configuracao_nfse->prefeitura_senha == null)) {
             throw new EmpresaCadastroInvalidoParaEmitirNFException('Para emitir documentos fiscais da empresa "'.
                 $empresa->nome . '", é necessário na configuração de NFSe fazer o upload do Certificado Digital ou Configurar Usuário e Senha do portal da Prefeitura.' );
         }
