@@ -20,7 +20,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         foreach ($this->nfse->itens_servico as $item) {
             $servicos[] = [
-                "idIntegracao" => (string)$item->servico->id,
+                //"idIntegracao" => (string)$item->servico->id, -> Só usa quando cadastramos na API plugnotas, é o id desse cadastro e não de nossa tabela de serviços
                 "codigo" => $item->servico->tipo_servico_codigo,
                 //"codigoTributacao": "14.10",
                 "discriminacao" => $item->servico->nome . "|" . $item->servico->descricao,
@@ -33,7 +33,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                 ],
                 "valor" => [
                     "servico" => (float)$item->valor,
-                    "quantidade" => $item->qtde,
+                    "quantidade" => (int)$item->qtde,
                     //"descontoCondicionado" => $item->desconto,
                     "descontoIncondicionado" => (float)$item->desconto,
                 ],
