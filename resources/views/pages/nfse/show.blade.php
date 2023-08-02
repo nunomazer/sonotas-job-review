@@ -7,6 +7,9 @@
 
 <div class="card">
     <div class="card-header">
+        {{ $nfse->venda->empresa->nome }}
+    </div>
+    <div class="card-header">
         <h2>
             #{{ $nfse->id }} -
             <small class="badge {{$nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'bg-green-lt' : ''}}">
@@ -147,6 +150,23 @@
                     @endif
                 </span>
                 @endif
+            </div>
+        </div>
+
+        <h3 class="mt-3 border-top pt-2">Histórico</h3>
+        <div class="row mt-3">
+            <div class="col-3 col-md-1 ">
+                Em
+            </div>
+            <div class="col-md-3 col-1">
+                @foreach($nfse->status_historico as $hist)
+                    {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
+                @endforeach
+            </div>
+            <div class="col-8">
+                @foreach($nfse->status_historico as $hist)
+                    {{ $hist['message'] }}
+                @endforeach
             </div>
         </div>
     </div>
