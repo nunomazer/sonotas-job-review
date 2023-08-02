@@ -11,6 +11,8 @@ use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedStatus;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -74,8 +76,8 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                     'producao' => config('sped.drivers.plugnotas.producao'),
                     //'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
                     'prefeitura' => [
-                        'login' => null,
-                        'senha' => null,
+                        'login' => $empresa->configuracao_nfse?->prefeitura_usuario,
+                        'senha' => $empresa->configuracao_nfse?->prefeitura_senha,
                     ] // TODO VALIDAR AQUI A NECESSIDADE DE DADOS NO CADASTRO
                 ]
             ],
@@ -103,7 +105,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function isCadastrada() : bool
+    public function isCadastrada(): bool
     {
         try {
             $result = $this->httpClient()->request('GET', 'empresa/'. $this->empresa->documento);
@@ -130,8 +132,16 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 throw new \Exception('Certificado não existe para cadastrar empresa', 400);
             }
 
+            // para facilitar log de request, ligar somente em dev local quando necessário
+//            $handlerStack = \GuzzleHttp\HandlerStack::create();
+//            $handlerStack->push(
+//                Middleware::log(logger(), new MessageFormatter('{method} {uri} HTTP/{version} '.PHP_EOL .
+//                    '{req_headers}' . PHP_EOL . '{req_body}'))
+//            );
+
             $result = $this->httpClient()->request('POST', 'empresa', [
-                'json' => $empresa
+                'json' => $empresa,
+//                'handler' => $handlerStack
             ]);
 
             return $this->toApiReturn($result);
