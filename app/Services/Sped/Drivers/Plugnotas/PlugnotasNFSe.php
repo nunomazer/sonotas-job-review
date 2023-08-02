@@ -20,7 +20,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         foreach ($this->nfse->itens_servico as $item) {
             $servicos[] = [
-                "idIntegracao" => $item->servico->id,
+                "idIntegracao" => (string)$item->servico->id,
                 "codigo" => $item->servico->tipo_servico_codigo,
                 //"codigoTributacao": "14.10",
                 "discriminacao" => $item->servico->nome . "|" . $item->servico->descricao,
@@ -29,13 +29,13 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                     //"tipoTributacao": 7,
                     //"exigibilidade": 1,
                     "retido" => $item->servico->iss_retido_fonte,
-                    "aliquota" => $item->servico->iss,
+                    "aliquota" => (float)$item->servico->iss,
                 ],
                 "valor" => [
-                    "servico" => $item->valor,
-                    "quantidade" => $item->quantidade,
+                    "servico" => (float)$item->valor,
+                    "quantidade" => $item->qtde,
                     //"descontoCondicionado" => $item->desconto,
-                    "descontoIncondicionado" => $item->desconto,
+                    "descontoIncondicionado" => (float)$item->desconto,
                 ],
             ];
         }
@@ -62,7 +62,7 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                     "tipoLogradouro" => $nfse->venda->cliente->tipo_logradouro,
                     "logradouro" => $nfse->venda->cliente->logradouro,
                     //"tipoBairro": "Centro",
-                    "codigoCidade" => $nfse->venda->cliente->cidade->ibge_id,
+                    "codigoCidade" => (string)$nfse->venda->cliente->cidade->ibge_id,
                     "complemento" => $nfse->venda->cliente->complemento,
                     "estado" => $nfse->venda->cliente->cidade->estado->acronym,
                     "numero" => $nfse->venda->cliente->numero,
@@ -87,7 +87,8 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
 
         } catch (\Exception $exception) {
             Log::error('Erro ao chamar Plugnotas Emitir NFSe');
-            Log::error($exception);
+            Log::error($this->toArray());
+            Log::error($exception->getResponse()->getBody()->getContents());
             return $this->toApiReturn($exception);
         }
     }
