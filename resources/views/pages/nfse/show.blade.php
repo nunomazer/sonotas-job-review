@@ -154,21 +154,21 @@
         </div>
 
         <h3 class="mt-3 border-top pt-2">Histórico</h3>
-        <div class="row mt-3">
-            <div class="col-3 col-md-1 ">
-                Em
-            </div>
-            <div class="col-md-3 col-1">
-                @foreach($nfse->status_historico as $hist)
-                    {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
-                @endforeach
-            </div>
-            <div class="col-8">
-                @foreach($nfse->status_historico as $hist)
-                    {{ $hist['message'] }}
-                @endforeach
-            </div>
-        </div>
+        @foreach($nfse->status_historico as $type => $hist)
+            @if ($type != 'erro')
+                <div class="row mt-3">
+                    <div class="col-md-2 col-1">
+                        {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
+                    </div>
+                    <div class="col-1">
+                        {{ $type }}
+                    </div>
+                    <div class="col-9">
+                        {{$hist['message']}}
+                    </div>
+                </div>
+            @endif
+        @endforeach
     </div>
 </div>
 
