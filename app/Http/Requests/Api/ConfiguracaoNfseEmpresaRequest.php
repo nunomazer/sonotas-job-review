@@ -26,6 +26,7 @@ class ConfiguracaoNfseEmpresaRequest extends FormRequest
         $this->merge([
             'iss_retido_fonte' => filter_var($this->request->get('iss_retido_fonte'), FILTER_VALIDATE_BOOLEAN),
             'enviar_nota_email_cliente' => filter_var($this->request->get('enviar_nota_email_cliente'), FILTER_VALIDATE_BOOLEAN),
+            'producao' => filter_var($this->request->get('producao'), FILTER_VALIDATE_BOOLEAN),
         ]);
     }
 

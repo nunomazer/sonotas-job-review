@@ -19,11 +19,11 @@
         <div class="card-actions">
             <div class="row">
                 @if($nfse->canCancel)
-                <div class="col">
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
-                        Cancelar
-                    </button>
-                </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
+                            Cancelar
+                        </button>
+                    </div>
                 @endif
                 <div class="col">
                     <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
@@ -33,7 +33,15 @@
             </div>
         </div>
     </div>
-    <tr class="card-body">
+    <div class="card-body">
+        @unless($nfse->producao)
+            <div class="row">
+                <small class="col alert alert-muted">
+                    emitido em homologação - sem valor fiscal
+                </small>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-3 col-md-1">
                 Cliente

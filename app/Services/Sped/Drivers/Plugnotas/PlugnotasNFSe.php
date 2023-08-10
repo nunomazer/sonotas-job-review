@@ -89,6 +89,10 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                 ],
             ]);
 
+            // @TODO melhorar a responsabilidade, colocar isso de maneira que o service de nfse se responsabilize
+            // por atualizar o campo do registro
+            $this->nfse->producao = $this->nfse->venda->empresa->configuracao_nfse->producao;
+
             return $this->toApiReturn($result);
 
         } catch (\Exception $exception) {

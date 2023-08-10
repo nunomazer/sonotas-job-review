@@ -73,7 +73,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 'ativo' => true, // empresas são os nossos clientes que emitem NF, então cadastramos ativos para envio de nfse
                 'tipoContrato' => 0, // pode pegar do config, mas por hora forçamos 0 bilhetagem para não correr o risco de sobrepor clientes de nossas empresas que podem ser nossos clientes e se ativar com 1 cobra por cnpj e não emissão
                 'config' => [
-                    'producao' => config('sped.drivers.plugnotas.producao'),
+                    'producao' => $empresa->configuracao_nfse?->producao ?? false,
                     //'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
                     'prefeitura' => [
                         'login' => $empresa->configuracao_nfse?->prefeitura_usuario,
