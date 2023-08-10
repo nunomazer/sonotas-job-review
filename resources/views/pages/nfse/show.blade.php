@@ -176,7 +176,7 @@
                             @if ($type == 'rejeitado')
                                 {{ $hist['error']['mensagem']  }}
                             @else
-                                {{$hist['message']}}
+                                {{$hist['message'] ?? ''}}
                             @endif
                         </td>
                     </tr>
