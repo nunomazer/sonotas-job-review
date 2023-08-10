@@ -69,6 +69,12 @@ class PlugnotasNFSe extends SpedNFSe implements ISpedNFSe
                     "bairro" => $nfse->venda->cliente->bairro,
                 ],
             ],
+            "rps" => [
+                "competencia" => now()->format('Y-m-d'),
+                "dataEmissao" => now()->format('Y-m-d H:i:s'),
+                "serie"       => '1',
+                "numero"      => (string)$nfse->id,
+            ],
             "informacoesComplementares" => $nfse->info_adicional,
             "servico" => $this->toArrayServicos(),
         ];
