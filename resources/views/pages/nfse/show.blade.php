@@ -175,14 +175,18 @@
                 @if ($type != 'erro')
                     <tr class="small">
                         <td>
-                            {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
+                            {{ date('d/m/Y H:i:s', strtotime($hist['concludedAt'] ?? $hist['created_at'])) }}
                         </td>
                         <td>
                             {{ $type }}
                         </td>
                         <td>
                             @if ($type == 'rejeitado')
-                                {{ $hist['error']['mensagem']  }}
+                                @if ($hist['erro '] ?? false)
+                                    {{ $hist['error']['mensagem']  }}
+                                @else
+                                    {{ $hist['retorno']['mensagemRetorno'] }}
+                                @endif
                             @else
                                 {{$hist['message'] ?? ''}}
                             @endif
