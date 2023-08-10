@@ -26,6 +26,12 @@ class SpedStatus
     const PROCESSAMENTO = 'processamento';
 
     /**
+     * Documento enviado para api e está processando, se não for identificado por webhook deverá ser consultado quanto
+     * a finalização de seu processamento
+     */
+    const PROCESSANDO = 'processando';
+
+    /**
      * Documento fiscal emitido e finalizado (gerado) pela api
      */
     const CONCLUIDO = 'concluido';
@@ -44,12 +50,12 @@ class SpedStatus
      * Documento fiscal emitido e solicitação de cancelada finalizada na api
      */
     const CANCELADO = 'cancelado';
-    
+
     /**
      * Documento fiscal pendente de cancelamento
      */
     const PROCESSO_CANCELAMENTO = 'solicitado cancelamento';
-    
+
     /**
      * Erro no processo de envio e geração
      */

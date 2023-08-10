@@ -351,7 +351,7 @@ class EmpresaService
     {
         // TODO refatorar para os demais tipos fiscais quando implementados
 
-        $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
+        $nfses = NFSe::whereIn('status', [SpedStatus::PROCESSAMENTO, SpedStatus::PROCESSANDO])
             ->whereRelation('venda', 'empresa_id', $empresa->id)
             ->get();
 
