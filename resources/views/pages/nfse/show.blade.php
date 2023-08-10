@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="card">
+<td class="card">
     <div class="card-header">
         {{ $nfse->venda->empresa->nome }}
     </div>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <tr class="card-body">
         <div class="row">
             <div class="col-3 col-md-1">
                 Cliente
@@ -154,21 +154,35 @@
         </div>
 
         <h3 class="mt-3 border-top pt-2">Histórico</h3>
-        @foreach($nfse->status_historico as $type => $hist)
-            @if ($type != 'erro')
-                <div class="row mt-3">
-                    <div class="col-md-2 col-1">
-                        {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
-                    </div>
-                    <div class="col-1">
-                        {{ $type }}
-                    </div>
-                    <div class="col-9">
-                        {{$hist['message']}}
-                    </div>
-                </div>
-            @endif
-        @endforeach
+
+        <table class="table">
+            <thead>
+                <tr class="small">
+                    <td>Em</td>
+                    <td>Status</td>
+                    <td>Mensagem</td>
+                </tr>
+            </thead>
+            @foreach(collect($nfse->status_historico)->sortByDesc('created_at') as $type => $hist)
+                @if ($type != 'erro')
+                    <tr class="small">
+                        <td>
+                            {{ date('d/m/Y H:i:s', strtotime($hist['created_at'])) }}
+                        </td>
+                        <td>
+                            {{ $type }}
+                        </td>
+                        <td>
+                            @if ($type == 'rejeitado')
+                                {{ $hist['error']['mensagem']  }}
+                            @else
+                                {{$hist['message']}}
+                            @endif
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        </table>
     </div>
 </div>
 
