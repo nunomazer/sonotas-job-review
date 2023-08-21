@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +36,8 @@ class PlanFeature
      */
     public int $frequency;
 
+    public int $balance = 0;
+
     public function toArray()
     {
         return [
@@ -45,6 +48,7 @@ class PlanFeature
             'value' => $this->value,
             'period' => $this->period,
             'frequency' => $this->frequency,
+            'balance' => $this->balance,
         ];
     }
 }

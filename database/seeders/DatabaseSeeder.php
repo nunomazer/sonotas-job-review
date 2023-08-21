@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(IbgeSeeder::class);
         $this->call(TipoServicosSeeder::class);
-        $this->call(PlansSeeder::class);
+        $this->call(PlanosSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(UsersSeeder::class);
     }

@@ -5,19 +5,25 @@
 
 @section('content')
 
-<div class="card">
+<td class="card">
+    <div class="card-header">
+        {{ $nfse->venda->empresa->nome }}
+    </div>
     <div class="card-header">
         <h2>
-            #{{ $nfse->id }} - <small>{{ $nfse->status }}</small>
+            #{{ $nfse->id }} -
+            <small class="badge {{$nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO ? 'bg-green-lt' : ''}}">
+                {{ $nfse->status }}
+            </small>
         </h2>
         <div class="card-actions">
             <div class="row">
-                @if($nfse->canCancel) 
-                <div class="col">
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
-                        Cancelar
-                    </button>
-                </div>
+                @if($nfse->canCancel)
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalCancelamento">
+                            Cancelar
+                        </button>
+                    </div>
                 @endif
                 <div class="col">
                     <a href="{{ route('notas-servico.list') }}" class="btn btn-sm btn-secondary">
@@ -28,6 +34,14 @@
         </div>
     </div>
     <div class="card-body">
+        @unless($nfse->producao)
+            <div class="row">
+                <small class="col alert alert-muted">
+                    emitido em homologação - sem valor fiscal
+                </small>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-3 col-md-1">
                 Cliente
@@ -112,13 +126,17 @@
             </div>
             <div class="col-9 col-md-9 text-center border border-primary">
                 @if($nfse->arquivo_pdf_downloaded)
-                <a href="{{ route('notas-servico.download.xml', $nfse) }}">
-                    Baixar
-                </a>
+                    <a href="{{ route('notas-servico.download.xml', $nfse) }}">
+                        Baixar
+                    </a>
                 @else
-                <span class="text-muted">
-                    em processamento
-                </span>
+                    <span class="text-muted">
+                        @if ($nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO)
+                            em processamento
+                        @else
+                            disponível quando NF estiver concluída
+                        @endif
+                    </span>
                 @endif
             </div>
         </div>
@@ -133,11 +151,50 @@
                 </a>
                 @else
                 <span class="text-muted">
-                    em processamento
+                    @if ($nfse->status == \App\Services\Sped\SpedStatus::CONCLUIDO)
+                        em processamento
+                    @else
+                        disponível quando NF estiver concluída
+                    @endif
                 </span>
                 @endif
             </div>
         </div>
+
+        <h3 class="mt-3 border-top pt-2">Histórico</h3>
+
+        <table class="table">
+            <thead>
+                <tr class="small">
+                    <td>Em</td>
+                    <td>Status</td>
+                    <td>Mensagem</td>
+                </tr>
+            </thead>
+            @foreach(collect($nfse->status_historico)->sortByDesc('created_at') as $type => $hist)
+                @if ($type != 'erro')
+                    <tr class="small">
+                        <td>
+                            {{ date('d/m/Y H:i:s', strtotime($hist['concludedAt'] ?? $hist['created_at'])) }}
+                        </td>
+                        <td>
+                            {{ $type }}
+                        </td>
+                        <td>
+                            @if ($type == 'rejeitado')
+                                @if ($hist['erro '] ?? false)
+                                    {{ $hist['error']['mensagem']  }}
+                                @else
+                                    {{ $hist['retorno']['mensagemRetorno'] }}
+                                @endif
+                            @else
+                                {{$hist['message'] ?? ''}}
+                            @endif
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        </table>
     </div>
 </div>
 
@@ -163,6 +220,6 @@
         </div>
     </form>
 </div>
-    
+
 @endif
 @endsection

@@ -1,0 +1,35 @@
+{
+    "data": [
+        {
+            "nome": "Nenhum",
+            "valor": 0
+        },
+        {
+            "nome": "Micro Empresa Municipal",
+            "valor": 1
+        },
+        {
+            "nome": "Estimativa",
+            "valor": 2
+        },
+        {
+            "nome": "Sociedade de Profissionais",
+            "valor": 3
+        },
+        {
+            "nome": "Cooperativa",
+            "valor": 4
+        },
+        {
+            "nome": "MEI",
+            "valor": 5
+        },
+        {
+            "nome": "MEI MEPP",
+            "valor": 6
+        }
+    ],
+    "meta": {
+        "count": 7
+    }
+}

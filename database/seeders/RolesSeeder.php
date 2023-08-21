@@ -17,5 +17,6 @@ class RolesSeeder extends Seeder
         $roleSystemAdmin = Role::updateOrCreate(['name' => Role::SYSADMIN]);
         $roleOwner = Role::updateOrCreate(['name' => Role::OWNER]);
         $roleManager = Role::updateOrCreate(['name' => Role::MANAGER]);
+        $roleAffiliate = Role::updateOrCreate(['name' => Role::AFFILIATE]);
     }
 }

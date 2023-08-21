@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Events\CertificadoAtualizadoEvent;
 use App\Events\EmpresaAlteradaEvent;
 use App\Events\EmpresaCriadaEvent;
 use App\Exceptions\DocumentoDuplicadoCriarEmpresaException;
+use App\Exceptions\EmpresaCadastroInvalidoParaEmitirNFException;
 use App\Models\CartaoCredito;
-use App\Models\Empresa; 
-use App\Models\Webhook; 
+use App\Models\Empresa;
+use App\Models\Webhook;
 use App\Models\EmpresaAssinatura;
 use App\Models\EmpresaNFSConfig;
 use App\Models\NFSe;
@@ -50,7 +52,7 @@ class EmpresaService
                 'empresa_id' => $empresa->id,
             ]);
 
-            $role = Role::findByName(Role::OWNER);
+            $role = Role::findByName(Role::OWNER, 'web');
             $empresa->owner->assignRole($role);
 
         DB::commit();
@@ -74,6 +76,15 @@ class EmpresaService
         return $empresa;
     }
 
+    /**
+     * Valida se o documento CPF ou CNPJ é o único em nossa base, lança exceção informando que o
+     * usuário não pode cadastrar nova empressa com mesmo doc, e orientando a solicitar acesso ao admin
+     * dela
+     *
+     * @param string $cnpj
+     * @return true
+     * @throws DocumentoDuplicadoCriarEmpresaException
+     */
     public function validaCnpjUnicoCriarEmpresa(string $cnpj)
     {
         $empresa = Empresa::where('documento', $cnpj)->first();
@@ -88,6 +99,19 @@ class EmpresaService
         return true;
     }
 
+    public function validaCadastroEmitirNF(Empresa $empresa)
+    {
+        if ($empresa->configuracao_nfse == null) {
+            throw new EmpresaCadastroInvalidoParaEmitirNFException('Antes de emitir documentos fiscais da empresa "'.
+                $empresa->nome . '", é necessário ir até o cadastro e Configurar a NFSe.' );
+        }
+
+        if ($empresa->configuracao_nfse->certificado_id == null && ($empresa->configuracao_nfse->prefeitura_usuario == null || $empresa->configuracao_nfse->prefeitura_senha == null)) {
+            throw new EmpresaCadastroInvalidoParaEmitirNFException('Para emitir documentos fiscais da empresa "'.
+                $empresa->nome . '", é necessário na configuração de NFSe fazer o upload do Certificado Digital ou Configurar Usuário e Senha do portal da Prefeitura.' );
+        }
+    }
+
     /**
      * Cria o registro de configuração padrão para a NFSe da Empresa
      *
@@ -98,13 +122,25 @@ class EmpresaService
      */
     public function createConfigNFSe(Empresa $empresa, array $nfseConfig, Certificado $certificado = null) : Empresa
     {
+        // se já existe configuração de nfse para empresa, envia para o update
+        // @TODO dá para refatorar o create e update ConfigNfse somente em setConfigNFSe e trata o upsert em um método
+        if ($empresa->configuracao_nfse) {
+            $modelConfigNfse = new EmpresaNFSConfig($nfseConfig);
+            return $this->updateConfigNFSe($empresa, $modelConfigNfse, $certificado);
+        }
+
         if($certificado != null){
-            $nfseConfig['certificado_id'] = $this->handleUploadCertificate($certificado, $empresa->id);
+            $certificado = $this->handleUploadCertificate($certificado, $empresa);
+            $nfseConfig['certificado_id'] = $certificado->id;
         }
 
         $empresa->configuracao_nfse()->create($nfseConfig);
+        $empresa->refresh();
 
         EmpresaAlteradaEvent::dispatch($empresa);
+        if($certificado != null) {
+            CertificadoAtualizadoEvent::dispatch($empresa, $certificado);
+        }
 
         return $empresa;
     }
@@ -114,12 +150,13 @@ class EmpresaService
      *
      * @param Certificado $certificado
      * @param int $empresaID
-     * @return int
+     * @return Certificado
      */
-    public function handleUploadCertificate(Certificado $certificado, $empresaID){
+    public function handleUploadCertificate(Certificado $certificado, Empresa $empresa): Certificado{
         $name = uniqid(date('HisYmd'));
         $extension = $certificado->file->extension();
-        $nameFile = "{$empresaID}-{$name}.{$extension}";
+//        $nameFile = "{$empresa->id}-{$name}.{$extension}";
+        $nameFile = "{$empresa->id}-{$name}.pfx";
         $uploaded = $certificado->file->storeAs("certificados", $nameFile);
 
         $pfxContent = Storage::get($uploaded);
@@ -143,11 +180,35 @@ class EmpresaService
         $certificadoPersistido = Certificado::create([
             'file'          => $uploaded,
             'expires_at'    => gmdate("Y-m-d\TH:i:s\Z", $CertPriv['validTo_time_t']),
-            'sped_id'       => "PADRÃO-A-DEFINIR",
-            'password'      => $certificado->password
+            'sped_id'       => null,
+            'password'      => $certificado->password // TODO ao menos uma cripto de retorno aqui para não ficar plain
         ]);
 
-        return $certificadoPersistido->id;
+        // não chama evento de certificado atualizado aqui pq ainda não tem o vínculo com a empresa
+        // que será gravado na função que chamou esta
+
+        return $certificadoPersistido;
+    }
+
+    /**
+     * Cadastra o certificado da empresa nos serviços Sped (driver)
+     *
+     * @param Empresa $empresa
+     * @param Certificado $certificado
+     * @return void
+     */
+    public function cadastrarCertificadoSped(Empresa $empresa, Certificado $certificado)
+    {
+        $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
+        $driverNFSe = $sped->empresaDriver($empresa);
+        $result = $driverNFSe->cadastrarCertificado($certificado);
+        if ($result->error) {
+            logger()->error('Não conseguiu gravar certificado da empresa no PlugNotas',
+                [
+                    'Mensagem' => $result->message,
+                    'Empresa' => (array)$empresa,
+                ]);
+        }
     }
 
     /**
@@ -161,12 +222,16 @@ class EmpresaService
     public function updateConfigNFSe(Empresa $empresa, EmpresaNFSConfig $nfseConfig, Certificado $certificado = null) : Empresa
     {
         if($certificado != null){
-            $nfseConfig->certificado_id = $this->handleUploadCertificate($certificado, $empresa->id);
+            $certificado = $this->handleUploadCertificate($certificado, $empresa);
+            $nfseConfig['certificado_id'] = $certificado->id;
         }
 
         $empresa->configuracao_nfse->update($nfseConfig->toArray());
 
         EmpresaAlteradaEvent::dispatch($empresa);
+        if($certificado != null) {
+            CertificadoAtualizadoEvent::dispatch($empresa, $certificado);
+        }
 
         return $empresa;
     }
@@ -181,7 +246,14 @@ class EmpresaService
     {
         $sped = new SpedService(SpedService::DOCTYPE_NFSE, $empresa->cidade->name);
         $driverNFSe = $sped->empresaDriver($empresa);
-        $driverNFSe->cadastrar();
+        $result = $driverNFSe->cadastrar();
+        if ($result->error) {
+            logger()->error('Não conseguiu gravar empresa no PlugNotas',
+            [
+                'Mensagem' => $result->message,
+                'Empresa' => (array)$empresa,
+            ]);
+        }
     }
 
     /**
@@ -279,7 +351,7 @@ class EmpresaService
     {
         // TODO refatorar para os demais tipos fiscais quando implementados
 
-        $nfses = NFSe::where('status', SpedStatus::PROCESSAMENTO)
+        $nfses = NFSe::whereIn('status', [SpedStatus::PROCESSAMENTO, SpedStatus::PROCESSANDO])
             ->whereRelation('venda', 'empresa_id', $empresa->id)
             ->get();
 
@@ -294,9 +366,11 @@ class EmpresaService
                 // TODO mapear corretamente pq pode ter outros drivers com status diferentes, driver deve mandar mapeado
                 // TODO mover esta lógica para o NFSeService
                 $doc->status = Str::lower($docDriver['status']);
-                $doc->arquivo_xml = $doc->id . '_' . $docDriver['xml']['filename'];
-                $doc->arquivo_pdf = $doc->id . '_' . $docDriver['pdf']['filename'];
-                $doc->disk = $this->disk_docs_fiscais;
+                if (isset($docDriver['xml'])) {
+                    $doc->arquivo_xml = $doc->id . '_' . $docDriver['xml']['filename'];
+                    $doc->arquivo_pdf = $doc->id . '_' . $docDriver['pdf']['filename'];
+                    $doc->disk = $this->disk_docs_fiscais;
+                }
                 $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver);
                 $doc->save();
             } catch (\Exception $exception) {
@@ -328,9 +402,9 @@ class EmpresaService
                 $nfseDriver = $spedService->nfseDriver($doc);
 
                 $docDriver = $nfseDriver->consultarStatusCancelamento();
-                
+
                 if($docDriver->code == 200){
-                    $doc->status = SpedStatus::CANCELADO; 
+                    $doc->status = SpedStatus::CANCELADO;
                     $doc->status_historico = (new NFSeService())->addStatusDados($doc, $doc->status, $docDriver->data);
                     $doc->save();
                 }
@@ -340,7 +414,7 @@ class EmpresaService
             }
         });
     }
-    
+
     /**
      * Download os arquivos XML e PDF de todas as notas que estejam em uma sicuação concluída, porém não foi baixado pdf ou xml.
      * Orquestra esta atualização chamando corretamente os drivers de cada documento fiscal emitido,
@@ -392,8 +466,8 @@ class EmpresaService
         });
 
     }
-    
-    
+
+
     /**
      * Altera a empresa nos serviços Sped para cada tipo de documento e cidade
      *
@@ -405,7 +479,7 @@ class EmpresaService
         Log::info("CHEGOU AQUI CARAI");
         //Log::info($webhook);
         Log::info($webhook['edz_cli_email']);
-        
+
         $fields = [
             'edz_fat_cod' => $webhook['edz_fat_cod'],
             'edz_cnt_cod' => $webhook['edz_cnt_cod'],
@@ -428,23 +502,23 @@ class EmpresaService
         $stringSid = "";
         //ordenando os campos para poder gerar o sid
         ksort($fields);
-        
+
         //concatenando os valores em um string para geração do sid
         foreach ($fields as $key => $value) {
             $stringSid .= $value;
         }
-        
-        
+
+
         //caso queira usar o nsid faça assim
         $nsid = sha1($webhook['edz_fat_cod'] . $webhook['edz_cnt_cod'] . $webhook['edz_cli_cod']);
-          
+
         if($nsid != $webhook['nsid']){
             throw new \Exception("NSID inválido");
         }
         //agora voce ja tem todos os dados enviados pela eduzz na entrega customizada
-        
-        //voce pode vailidar a requisição com o $webhook['sid'] ou $webhook['nsid'] que é enviado pela eduzz, é só comparar com o $sid ou $nsid feito por voce. 
-        
+
+        //voce pode vailidar a requisição com o $webhook['sid'] ou $webhook['nsid'] que é enviado pela eduzz, é só comparar com o $sid ou $nsid feito por voce.
+
         //depois de validar pode entregar o conteúdo
 
         $empresa = Empresa::where('documento', $webhook['edz_cli_taxnumber'])->first();
@@ -458,6 +532,6 @@ class EmpresaService
         }
 
 
-        
+
     }
 }

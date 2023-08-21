@@ -28,7 +28,16 @@
                 <input type="hidden" name="empresa_id" value="{{$empresa->id}}">
 
                 <div class="row">
-                    <div class="mb-3 col-2">
+                    <div class="mb-3 col-3">
+                        <div class="form-label">Produção</div>
+                        <label class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" value="1" name="producao"
+                                {{ old('producao', $nfseConfig->producao ?? false) ? 'checked' : '' }}
+                            >
+                        </label>
+                    </div>
+
+                    <div class="mb-3 col-3">
                         <div class="form-label">Enviar NFSe email do cliente</div>
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" value="1" name="enviar_nota_email_cliente"
@@ -37,7 +46,7 @@
                         </label>
                     </div>
 
-                    <div class="mb-3 col-3 offset-4">
+                    <div class="mb-3 col-3">
                         <label for="name" class="form-label">Usuário no portal da Prefeitura</label>
                         <input type="text" class="form-control" name="prefeitura_usuario"
                                value="{{ old('prefeitura_usuario', $nfseConfig->prefeitura_usuario ?? '') }}"

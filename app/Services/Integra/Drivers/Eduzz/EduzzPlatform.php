@@ -2,35 +2,57 @@
 
 namespace App\Services\Integra\Drivers\Eduzz;
 
+use App\Models\EmpresaAssinatura;
+use App\Models\Integracao;
+use App\Models\Plan;
 use App\Models\Servico;
+use App\Notifications\ErroAoVerificarAssinatura;
+use App\Services\ApiService;
 use App\Services\CidadeService;
 use App\Services\Integra\IIntegraDriver;
 use App\Services\Integra\Platform;
+use App\Services\MoneyFlow\Drivers\Eduzz\EduzzDriver;
 use App\Services\Sped\SpedService;
 use App\Services\TipoLogradouroService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class EduzzPlatform extends Platform implements IIntegraDriver
 {
-    public static $name = 'Eduzz';
+    public static $name = 'eduzz';
+
+    protected $eduzzAppSlug;
+    protected $eduzzApiUrl;
+    protected $eduzzSignatureUrl;
+    protected $eduzzAppID;
+    protected $eduzzOAUTHUrl;
+    protected $eduzzAppSecret;
+
+    protected $token = null;
+    /**
+     * @var Carbon
+     */
+    protected $token_until = null;
 
     public static array $fields = [
-        [
-            'name' => 'publickey',
-            'label' => 'Public Key',
-            'required' => true,
-            'visible' => true,
-            'helptext' => 'Chave pública de vínculo da plataforma',
-        ],
-        [
-            'name' => 'apikey',
-            'label' => 'Api Key',
-            'required' => true,
-            'visible' => true,
-            'helptext' => 'Chave da API de vínculo da plataforma',
-        ],
+//        [
+//            'name' => 'publickey',
+//            'label' => 'Public Key',
+//            'required' => true,
+//            'visible' => true,
+//            'helptext' => 'Chave pública de vínculo da plataforma',
+//        ],
+//        [
+//            'name' => 'apikey',
+//            'label' => 'Api Key',
+//            'required' => true,
+//            'visible' => true,
+//            'helptext' => 'Chave da API de vínculo da plataforma',
+//        ],
         [
             'name' => 'email',
             'label' => 'E-mail',
@@ -38,7 +60,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'visible' => true,
             'helptext' => 'E-mail que recebera atualizações referentes a integração',
         ],
-        
+
         [
             'name' => 'oauth_access_token',
             'label' => 'OAUTH Access Token',
@@ -51,14 +73,32 @@ class EduzzPlatform extends Platform implements IIntegraDriver
             'visible' => false,
             'helptext' => '',
         ],
+        [
+            'name' => 'orbita_id',
+            'label' => 'Id Orbita Eduzz',
+            'visible' => false,
+            'helptext' => '',
+        ],
     ];
 
-    //protected $token = null;
+    public function __construct(array $config)
+    {
+        parent::__construct($config);
 
-    /**
-     * @var Carbon
-     */
-    //protected $token_until = null;
+        $this->eduzzApiUrl = config('integra.drivers.eduzz.api_url');
+        $this->eduzzAppSlug = config('integra.drivers.eduzz.app_slug');
+        $this->eduzzSignatureUrl = config('integra.drivers.eduzz.signature_url');
+        $this->eduzzAppID = config('integra.drivers.eduzz.app_id');
+        $this->eduzzOAUTHUrl = config('integra.drivers.eduzz.oauth_url');
+        $this->eduzzOAUTHApiUrl = config('integra.drivers.eduzz.oauth_url_api');
+        $this->eduzzAppSecret = config('integra.drivers.eduzz.app_secret');
+    }
+
+    public function routes()
+    {
+        Route::get('/eduzz/oauth-confirmation', [EduzzController::class, 'oauthConfirmation'])->name('integra.eduzz.oauth-confirmation');
+    }
+
     /*
     private function setTokensFromResult($result)
     {
@@ -104,15 +144,18 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     protected function getToken() : string
     {
-        return $this->fields['oauth_access_token'];//TODO
-    //REVER
-        /*
-        if (!$this->token || $this->token_until->lessThan(now())) {
-            $this->generateToken();
+        if (!isset($this->config['oauth_access_token'])) {
+            throw new \Exception('Erro interno de integração, o driver Eduzz precisa ser instanciado com o oauth token no array config. Email de integração: ' . $this->config['email'] ?? 'Null');
         }
 
-        return $this->token;
-        */
+        return $this->config['oauth_access_token'];
+
+//        if (!$this->token || $this->token_until->lessThan(now())) {
+//            $this->generateToken();
+//        }
+//
+//        return $this->token;
+
     }
 
     /**
@@ -123,7 +166,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     protected function httpClient(): Client
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => config('integra.drivers.eduzz.base_url'),
+            'base_uri' => config('integra.drivers.eduzz.api_url'),
             'headers' => [
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
@@ -140,6 +183,9 @@ class EduzzPlatform extends Platform implements IIntegraDriver
      */
     private function callContentList($page = null) : array
     {
+
+        (new ApiService())->controlThrottleServerRequest('eduzz_throttle', 60);
+
         $http = $this->httpClient();
 
         $query = [];
@@ -158,10 +204,10 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $result = $this->callContentList();
 
-        $paginator = $result['paginator'];
+        $paginator = $result['pagination'];
         $page = 1;
         $servicos = [];
-        while ($page <= $paginator['totalPages']) {
+        while ($page <= $paginator['total_pages']) {
             $servicosApi = $result['data'];
 
             foreach ($servicosApi as $servicoApi) {
@@ -176,7 +222,7 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
             $page++;
 
-            if ($page <= $paginator['totalPages']) {
+            if ($page <= $paginator['total_pages']) {
                 $result = $this->callContentList($page);
             }
         }
@@ -197,9 +243,11 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
         $query = [];
         $query['start_date'] = $from;
+        $query['end_date'] = now()->format('Y-m-d H:i:s');
+        $query['status'] = 'paid';
         if ($page) $query['page'] = $page;
 
-        $result = $http->get('/fiscal/v1', [
+        $result = $http->get('/myeduzz-sales/v1/sales', [
             'query' => $query,
         ]);
 
@@ -223,38 +271,39 @@ class EduzzPlatform extends Platform implements IIntegraDriver
 
             foreach ($vendasApi as $vendaApi) {
                 $vendas[] = [
-                    'driver_id' => $vendaApi['document_id'],
+                    'driver_id' => $vendaApi['id'],
                     'venda' => [
-                        'nome' => $vendaApi['document_name'],
-                        'status' => $vendaApi['document_status'],
+                        'nome' => $vendaApi['main_content']['name'],
+                        'status' => $vendaApi['status']['name'],
                         'tipo_documento' => SpedService::DOCTYPE_NFSE, // TODO refatorar quando trabalhar com NFe
-                        'valor' => $vendaApi['document_basevalue'],
-                        'data_emissao' => $vendaApi['document_emissiondate'],
-                        'data_referencia' => $vendaApi['document_referencedate'],
-                        'data_processamento' => $vendaApi['document_processingdate'],
+                        'valor' => $vendaApi['total_value'],
+                        'data_emissao' => $vendaApi['created_at'],
+                        'data_referencia' => $vendaApi['created_at'],
+                        'data_processamento' => $vendaApi['paid_at'],
                     ],
                     'cliente' => [
-                        'nome' => $vendaApi['destination_company_name'],
-                        'tipo_pessoa' => $vendaApi['destination_taxtype'],
-                        'documento' => $vendaApi['destination_taxid'],
-                        'email' => $vendaApi['destination_email'],
+                        'nome' => $vendaApi['customer']['name'],
+                        'tipo_pessoa' => $vendaApi['customer']['name'],
+                        'documento' => $vendaApi['customer']['document'],
+                        'email' => $vendaApi['customer']['email'],
                         'tipo_logradouro' => $this->resolveTipoLogradouro($vendaApi),
-                        'logradouro' => $vendaApi['destination_street'] ?? '',
-                        'numero' => $vendaApi['destination_number'] ?? '',
-                        'complemento' => $vendaApi['destination_complement'] ?? '',
-                        'bairro' => $vendaApi['destination_district'] ?? '',
-                        'cep' => $vendaApi['destination_zipcode'] ?? '',
-                        'cidade' => $vendaApi['destination_city'] ?? '',
+                        'logradouro' => $vendaApi['customer']['street'],
+                        'numero' => $vendaApi['customer']['addr_number'],
+                        'complemento' => $vendaApi['customer']['addr_complement'],
+                        'bairro' => $vendaApi['customer']['neighborhood'],
+                        'cep' => $vendaApi['customer']['zipcode'],
+                        'cidade' => $vendaApi['customer']['city'],
                         'city_id' => $this->resolveCidadeId($vendaApi),
-                        'estado' => $vendaApi['destination_uf'] ?? '',
-                        'telefone_ddd' => Str::substr($vendaApi['destination_tel'], 0,2),
-                        'telefone_num' => Str::substr($vendaApi['destination_tel'], 2),
+                        'estado' => $vendaApi['customer']['state'] ?? '',
+                        'telefone_ddd' => Str::substr($vendaApi['customer']['cellphone'], 0, 2),
+                        'telefone_num' => Str::substr($vendaApi['customer']['cellphone'], 2),
                     ],
                     'servicos' => [
                         [
-                            'driver_id' => $vendaApi['content_id'],
-                            'valor' => $vendaApi['document_basevalue'],
+                            'driver_id' => $vendaApi['main_content']['id'],
+                            'valor' => $vendaApi['total_value'],
                             'qtde' => 1,
+                            'desconto' => $vendaApi['discount_amount'],
                         ]
                     ],
                     'driver_dados' => $vendaApi,
@@ -275,13 +324,95 @@ class EduzzPlatform extends Platform implements IIntegraDriver
     {
         $tipoLogService = new TipoLogradouroService();
 
-        return $tipoLogService->resolvePeloLogradouro($venda['destination_street']);
+        return $tipoLogService->resolvePeloLogradouro($venda['customer']['street']);
     }
 
     protected function resolveCidadeId(array $venda) : int
     {
         $cidadeService = new CidadeService();
 
-        return $cidadeService->resolveIdPeloNome($venda['destination_city'], $venda['source_city'] ?? 'São Paulo');
+        return $cidadeService->resolveIdPeloNome($venda['customer']['city'], 'São Paulo');
+    }
+
+    /**
+     * Verifica se existe uma assinatura válida na Eduzz, se existir, cria e ou atualiza
+     * o plano correspondente à integração da empresa existente na Eduzz
+     *
+     * @param Integracao $integracaoOauth
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function isValidSignatureStatus(Integracao $integracaoOauth)
+    {
+        // TODO refatorar para um service e driver corretos
+
+        $clientToken = config('integra.drivers.eduzz.clientToken');
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri'  => $this->eduzzSignatureUrl,
+            'headers'   => [
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+                'clientToken'   => $clientToken
+            ],
+            'defaults'  => ['verify' => false],
+        ]);
+        $orbitaID = $integracaoOauth->fields['orbita_id'] ?? 0;
+
+        try {
+            $subscriptionRequest = $client->get("/api/subscription-status/v2/SubscriptionStatus/{$this->eduzzAppSlug}/{$orbitaID}");
+            $resultSubscription = json_decode($subscriptionRequest->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            Log::error('Erro ao testar endpoint de assinatura na Eduzz');
+            Log::error($e);
+            return false;
+        }
+
+        if (app()->environment('production') == false) {
+            logger()->debug($resultSubscription);
+        }
+
+        if ($resultSubscription['appSubscribed']) {
+            $plan = Plan::where('driver_id', $resultSubscription['plan'])->first();
+
+            if ($plan == null) {
+                $mensagem = 'Não foi possível encontrar um plano de assinatura para integração Eduzz com o nome "'.$resultSubscription['plan'].'"'
+                    . ' Sua assinatura ainda não está ativa, por favor, entre em contato com o suporte informando o problema.';
+
+                $integracaoOauth->empresa->owner->notify(new ErroAoVerificarAssinatura(
+                    $integracaoOauth->empresa, (new EduzzDriver())->nome(),
+                    $mensagem
+                ));
+                return false;
+            }
+
+            $features = $plan->features;
+            $features = collect($features)->map(function ($feature) use($resultSubscription) {
+                $feature['balance'] = $feature['value'];
+                return $feature;
+            });
+
+            $driverNome = (new EduzzDriver())->nome();
+
+            EmpresaAssinatura::updateOrCreate(
+                [
+                    'empresa_id' => $integracaoOauth->empresa->id,
+                    'driver' => $driverNome,
+                ],
+                [
+                    'empresa_id' => $integracaoOauth->empresa->id,
+                    'driver' => $driverNome,
+                    'status' => $resultSubscription['status'] == 'Active' ? 1 : 0,
+                    'driver_id' => $resultSubscription['plan'],
+                    'plan_id' => $plan->id,
+                    'status_historico' => '',
+                    'subscribed_at' => $resultSubscription['subscribedAt'],
+                    'expires_at' => $resultSubscription['expiresAt'],
+                    'features' => $features->toArray(),
+                ]
+            );
+        }
+
+        return ($subscriptionRequest->getStatusCode() == 200 && $resultSubscription['status'] == 'Active');
     }
 }

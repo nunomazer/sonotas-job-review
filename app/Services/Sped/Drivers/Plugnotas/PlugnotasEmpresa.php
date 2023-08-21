@@ -2,6 +2,7 @@
 
 namespace App\Services\Sped\Drivers\Plugnotas;
 
+use App\Models\Certificado;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\NFSe;
@@ -10,7 +11,12 @@ use App\Services\Sped\SpedEmpresa;
 use App\Services\Sped\ISpedEmpresa;
 use App\Services\Sped\SpedRegimesTributarios;
 use App\Services\Sped\SpedStatus;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 {
@@ -22,7 +28,14 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
         $certificado = '5ecc441a4ea3b318cec7f999';
         if (config('sped.drivers.plugnotas.producao')) {
-            $certificado = $empresa->certificado ? $empresa->certificado->sped_id : null;
+            // se possui um registro de banco de dados de certificado mas o sped id é null então precisa
+            // gravar o certificado no plugnotas
+            if ($empresa->configuracao_nfse->certificado) {
+                if ($empresa->configuracao_nfse->certificado->sped_id == null) {
+                    $this->cadastrarCertificado($empresa->configuracao_nfse->certificado);
+                }
+            }
+            $certificado = $empresa->configuracao_nfse->certificado ? $empresa->configuracao_nfse->certificado->sped_id : null;
         }
 
         return [
@@ -60,35 +73,82 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
                 'ativo' => true, // empresas são os nossos clientes que emitem NF, então cadastramos ativos para envio de nfse
                 'tipoContrato' => 0, // pode pegar do config, mas por hora forçamos 0 bilhetagem para não correr o risco de sobrepor clientes de nossas empresas que podem ser nossos clientes e se ativar com 1 cobra por cnpj e não emissão
                 'config' => [
-                    'producao' => config('sped.drivers.plugnotas.producao'),
-                    'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
-                    'prefeitura' => [] // TODO VALIDAR AQUI A NECESSIDADE DE DADOS NO CADASTRO
+                    'producao' => $empresa->configuracao_nfse?->producao ?? false,
+                    //'rps' => [], // TODO VALIDAR AQUI A NECESSIDADE DE MAIS CADDASTROS EM BANCO POR EMPRESA
+                    'prefeitura' => [
+                        'login' => $empresa->configuracao_nfse?->prefeitura_usuario,
+                        'senha' => $empresa->configuracao_nfse?->prefeitura_senha,
+                    ] // TODO VALIDAR AQUI A NECESSIDADE DE DADOS NO CADASTRO
                 ]
             ],
             'nfe' => [
                 'ativo'=> false, // Primeira versão sem nfe
                 'tipoContrato'=> 0,
-                'config' => []
+//                'config' => []
             ],
             'nfce' => [
                 'ativo'=> false, // Primeira versão sem nfe
                 'tipoContrato'=> 0,
-                'config' => []
-            ]
+//                'config' => []
+            ],
+            'mdfe' => [
+                'ativo'=> false, // Primeira versão sem nfe
+                'tipoContrato'=> 0,
+//                'config' => []
+            ],
         ];
+    }
+
+    /**
+     * Verifica se a empresa está cadastrada no Plugnotas
+     *
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function isCadastrada(): bool
+    {
+        try {
+            $result = $this->httpClient()->request('GET', 'empresa/'. $this->empresa->documento);
+
+            return true;
+        } catch (\Exception $exception) {
+            if ($exception->getCode() == 404) {
+                return false;
+            }
+
+            Log::error('Erro ao chamar Pesquisa se empresa existe no Plugnotas');
+            Log::error($exception);
+            throw $exception;
+        }
     }
 
     public function cadastrar(): SpedApiReturn
     {
         try {
+            $empresa = $this->toArray();
+
+            // somente pode gravar empresa com certificado
+            if ($empresa['certificado'] == null) {
+                throw new \Exception('Certificado não existe para cadastrar empresa', 400);
+            }
+
+            // para facilitar log de request, ligar somente em dev local quando necessário
+//            $handlerStack = \GuzzleHttp\HandlerStack::create();
+//            $handlerStack->push(
+//                Middleware::log(logger(), new MessageFormatter('{method} {uri} HTTP/{version} '.PHP_EOL .
+//                    '{req_headers}' . PHP_EOL . '{req_body}'))
+//            );
+
             $result = $this->httpClient()->request('POST', 'empresa', [
-                'json' => $this->toArray()
+                'json' => $empresa,
+//                'handler' => $handlerStack
             ]);
 
             return $this->toApiReturn($result);
 
         } catch (\Exception $exception) {
             Log::error('Erro ao chamar Plugnotas Cadastrar Empresa');
+            Log::error(json_encode($empresa??[], JSON_PRETTY_PRINT));
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
@@ -96,6 +156,11 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
     public function alterar(): SpedApiReturn
     {
+
+        if ($this->isCadastrada() == false) {
+            return $this->cadastrar();
+        }
+
         try {
             $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
                 'json' => $this->toArray()
@@ -105,6 +170,7 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
 
         } catch (\Exception $exception) {
             Log::error('Erro ao chamar Plugnotas Alterar Empresa');
+            Log::error('Empresa', $this->toArray());
             Log::error($exception);
             return $this->toApiReturn($exception);
         }
@@ -132,4 +198,90 @@ class PlugnotasEmpresa extends SpedEmpresa implements ISpedEmpresa
             }
         });
     }
+
+    public function cadastrarCertificado(Certificado $certificado): SpedApiReturn
+    {
+        Log::debug(Storage::path($certificado->file));
+        try {
+            $payload = [
+                [
+                    'name' => 'senha',
+                    'contents' => $certificado->password,
+                ],
+                [
+                    'name' => 'arquivo',
+                    'contents' => Utils::tryFopen(Storage::path($certificado->file), 'r'),
+                ],
+            ];
+
+            $result = $this->httpClient()->request('POST', 'certificado', [
+                'multipart' => $payload
+            ]);
+
+            $data = json_decode($result->getBody()->getContents())->data;
+            $certificado->sped_id = $data->id;
+            $certificado->save();
+
+        } catch (\Exception $exception) {
+            // 409 é o erro de conflito, significa que este mesmo certificado já existe cadastrado no plugnotas
+            // portanto ignora se segue para a finalização de associação e retorno normal
+            if ($exception->getCode() == 409) {
+                // pega o id existente para este certificado no plugnotas e associa ao registro em nosso banco de dados
+                $data = json_decode($exception->getResponse()->getBody()->getContents())->error->data->current;
+                $certificado->sped_id = $data->id;
+                $certificado->save();
+            } else {
+                Log::error('Erro ao chamar Plugnotas Cadastrar Certificado');
+                Log::error($exception);
+                return $this->toApiReturn($exception);
+            }
+        }
+
+        $this->associarCertificado();
+
+        return $this->toApiReturn($result);
+    }
+
+    public function associarCertificado(): SpedApiReturn
+    {
+        // se empresa não está cadastrada mas o certificado já foi, no plugnotas, força
+        // o cadastro da empresa
+        if ($this->isCadastrada() == false) {
+            $this->cadastrar();
+        }
+
+        try {
+            // atualiza certificado na empresa plugnotas
+            $result = $this->httpClient()->request('PATCH', 'empresa/'.$this->empresa->documento, [
+                'json' => [
+                    'certificado' => $this->empresa->certificado->sped_id,
+                ]
+            ]);
+
+            return $this->toApiReturn($result);
+
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Empresa Patch para associar Certificado');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+    }
+
+    public function metadadosCidade(): SpedApiReturn
+    {
+        try {
+            $result = $this->httpClient()->request('GET', 'nfse/cidades/' . $this->empresa->cidade->ibge_id);
+
+            $data = json_decode($result->getBody()->getContents());
+
+            $result = $this->toApiReturn($result);
+            $result->data = (array)$data;
+            return $result;
+        } catch (\Exception $exception) {
+            Log::error('Erro ao chamar Plugnotas Consultar status cancelamento NFSe');
+            Log::error($exception);
+            return $this->toApiReturn($exception);
+        }
+    }
+
 }

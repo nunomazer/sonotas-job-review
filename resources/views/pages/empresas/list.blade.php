@@ -23,7 +23,7 @@
 
 
         @foreach($empresas as $empresa)
-        <div class="card d-flex flex-column">
+        <div class="card d-flex flex-column {{$loop->first == false ? 'mt-5' : ''}}">
             <div class="row row-0 flex-fill  ">
                 <div class="col-3 col-md-2">
                     <a href="{{route('empresas.edit', $empresa)}}">
@@ -93,7 +93,20 @@
                                 @endif
                             </div>
                             <div class="ms-md-3 col-6 col-md-5 col-md-4">
-                                @include('pages.empresas.partials.assinatura-status')
+{{--                                @include('pages.empresas.partials.assinatura-status')--}}
+                                Assinatura
+                                <br/>
+                                @if ($empresa->assinatura == null)
+                                    <div class="alert alert-danger">
+                                        Nenhuma assinatura em plano identificada, é necessário para emitir NF pela empresa
+                                    </div>
+                                @else
+                                    {{ucwords($empresa->assinatura->plano->driver)}}: Plano {{$empresa->assinatura->plano->name}} - Assinatura: <strong>{{\App\Services\MoneyFlow\MoneyFlowAssinaturaStatus::getNome($empresa->assinatura->status)}}</strong>
+                                    <br/>
+                                    Docs: {{$empresa->assinatura->featureSaldo(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}} / {{$empresa->assinatura->featureBase(\App\Models\PlanFeature::FEATURE_QTDE_NOTAS)}}
+                                    <br/>
+                                    Expira em: {{$empresa->assinatura->expires_at->format('d/m/Y')}}
+                                @endif
                             </div>
                         </div>
                         <br />

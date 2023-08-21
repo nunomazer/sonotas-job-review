@@ -30,7 +30,7 @@ jobs:
             php artisan config:cache
             php artisan route:clear
             php artisan route:cache
-            php artisan optimize --force
+            php artisan optimize
             sudo cp supervisord-sonotas.conf /etc/supervisor/conf.d/
             sudo supervisorctl reread
             sudo supervisorctl update

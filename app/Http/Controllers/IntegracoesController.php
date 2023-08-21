@@ -6,7 +6,10 @@ use App\Http\Requests\IntegracaoRequest;
 use App\Jobs\IntegracaoImportarServicos;
 use App\Models\Empresa;
 use App\Models\Integracao;
+use App\Notifications\Notificacao;
+use App\Notifications\ServicosImportados;
 use App\Services\Integra\IntegraService;
+use App\Services\IntegracaoService;
 use App\Services\ServicoService;
 use Illuminate\Http\Request;
 
@@ -45,29 +48,46 @@ class IntegracoesController extends Controller
         return view('pages.empresas.integracoes.edit', compact('empresa', 'integracao', 'driver'));
     }
 
-    public function update(IntegracaoRequest $request, Empresa $empresa, Integracao $integracao)
+    public function update(IntegracaoRequest $request, Empresa $empresa, IntegracaoService $integracaoService)
     {
-        $integracao->update($request->toArray());
+        $integracaoService->update($request->toArray());
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Integração atualizada com successo !']);
     }
 
-    public function store(IntegracaoRequest $request, Empresa $empresa)
+    public function store(IntegracaoRequest $request, Empresa $empresa, IntegracaoService $integracaoService)
     {
         // TODO refatorar para o service
         $request->merge([
             'empresa_id' => $empresa->id,
         ]);
-        Integracao::create($request->toArray());
+
+        $integracaoService->create($request->toArray());
 
         return redirect()->route('empresas.list', )
             ->with(['success' => 'Integração criada com successo !']);
     }
 
 
+    /**
+     * Coloca na fila a sincronização de serviços para um integração com uma empresa
+     *
+     * @param Request $request
+     * @param Empresa $empresa
+     * @param Integracao $integracao
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function importFromPlatform(Request $request, Empresa $empresa, Integracao $integracao)
     {
+        if ($empresa->configuracao_nfse == null) {
+            return redirect()->back()->with('error', 'Não é possível importar serviços de integrações antes de Configurar a NFSe da Empresa');
+        }
+
+        $empresa->owner->notify(new Notificacao($empresa,'success',
+            'Iniciada nova importação de serviços da empresa ' . $empresa->nome . ' para integração ' . $integracao->driver
+        ));
+
         $this->dispatch(new IntegracaoImportarServicos($empresa, $integracao));
 
         return redirect()->back()->with('success', 'Importação de serviços para empresa "'.$empresa->nome.'", da integração "'.$integracao->driver.'" está em execução, ao finalizar o resultado é informado na área de notificações');

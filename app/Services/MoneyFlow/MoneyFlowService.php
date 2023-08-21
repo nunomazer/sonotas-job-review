@@ -21,6 +21,7 @@ class MoneyFlowService
     }
 
     /**
+     * Retorna o driver correspondente ao passado como parâmetro na instanciação do MoneyFlowService
      * @return IMoneyFlowDriver
      */
     public function driver(): IMoneyFlowDriver

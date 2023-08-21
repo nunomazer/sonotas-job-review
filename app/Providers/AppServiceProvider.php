@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CacheSoNotas;
 use App\Models\Empresa;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('CacheSoNotas', fn() => new CacheSoNotas());
     }
 
     /**

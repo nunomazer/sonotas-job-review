@@ -11,7 +11,7 @@ return [
             'token' => env('PLUGNOTAS_TOKEN', '2da392a6-79d2-4304-a8b7-959572c7e44d'), // valores padrão são do ambiente de teste
             'base_class' => \App\Services\Sped\Drivers\Plugnotas\PlugnotasDriver::class,
             'tipo_contrato' => 0,
-            'producao' => false,
+            'producao' => env('PLUGNOTAS_PRODUCAO', false),
         ],
     ],
 

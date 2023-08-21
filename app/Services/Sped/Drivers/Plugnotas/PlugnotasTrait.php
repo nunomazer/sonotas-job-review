@@ -60,7 +60,7 @@ trait PlugnotasTrait
             }
         }
 
-        $apiReturn->message = $content['message'];
+        $apiReturn->message = is_array($content) ? $content['message']??'' : $content;
 
         $apiReturn->data = isset($content['data']) ? $content['data'] : [];
 

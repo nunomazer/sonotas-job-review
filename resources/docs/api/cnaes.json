@@ -1,0 +1,255 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "codigo": "4929902",
+            "descricao": "TRANSPORTE RODOVIÁRIO COLETIVO DE PASSAGEIROS, SOB REGIME DE FRETAMENTO, INTERMUNICIPAL, INTERESTADUAL E INTERNACIONAL",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 2,
+            "codigo": "1610204",
+            "descricao": "SERRARIAS SEM DESDOBRAMENTO DE MADEIRA EM BRUTO - RESSERRAGEM",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 3,
+            "codigo": "1610203",
+            "descricao": "SERRARIAS COM DESDOBRAMENTO DE MADEIRA EM BRUTO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "codigo": "4623105",
+            "descricao": "COMÉRCIO ATACADISTA DE CACAU",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "codigo": "3314705",
+            "descricao": "MANUTENÇÃO E REPARAÇÃO DE EQUIPAMENTOS DE TRANSMISSÃO PARA FINS INDUSTRIAIS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 6,
+            "codigo": "4623106",
+            "descricao": "COMÉRCIO ATACADISTA DE SEMENTES, FLORES, PLANTAS E GRAMAS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 7,
+            "codigo": "4623107",
+            "descricao": "COMÉRCIO ATACADISTA DE SISAL",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 8,
+            "codigo": "5620102",
+            "descricao": "SERVIÇOS DE ALIMENTAÇÃO PARA EVENTOS E RECEPÇÕES - BUFÊ",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 9,
+            "codigo": "6611802",
+            "descricao": "BOLSA DE MERCADORIAS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 10,
+            "codigo": "6611803",
+            "descricao": "BOLSA DE MERCADORIAS E FUTUROS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 11,
+            "codigo": "6611804",
+            "descricao": "ADMINISTRAÇÃO DE MERCADOS DE BALCÃO ORGANIZADOS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 12,
+            "codigo": "0111301",
+            "descricao": "CULTIVO DE ARROZ",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 13,
+            "codigo": "0111302",
+            "descricao": "CULTIVO DE MILHO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 14,
+            "codigo": "0111303",
+            "descricao": "CULTIVO DE TRIGO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 15,
+            "codigo": "7729201",
+            "descricao": "ALUGUEL DE APARELHOS DE JOGOS ELETRÔNICOS",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 16,
+            "codigo": "0111399",
+            "descricao": "CULTIVO DE OUTROS CEREAIS NÃO ESPECIFICADOS ANTERIORMENTE",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 17,
+            "codigo": "0112101",
+            "descricao": "CULTIVO DE ALGODÃO HERBÁCEO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 18,
+            "codigo": "0112102",
+            "descricao": "CULTIVO DE JUTA",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 19,
+            "codigo": "0112199",
+            "descricao": "CULTIVO DE OUTRAS FIBRAS DE LAVOURA TEMPORÁRIA NÃO ESPECIFICADAS ANTERIORMENTE",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 20,
+            "codigo": "0113000",
+            "descricao": "CULTIVO DE CANA DE AÇÚCAR",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 21,
+            "codigo": "0114800",
+            "descricao": "CULTIVO DE FUMO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 22,
+            "codigo": "0115600",
+            "descricao": "CULTIVO DE SOJA",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 23,
+            "codigo": "0116401",
+            "descricao": "CULTIVO DE AMENDOIM",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 24,
+            "codigo": "0116402",
+            "descricao": "CULTIVO DE GIRASSOL",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 25,
+            "codigo": "0116403",
+            "descricao": "CULTIVO DE MAMONA",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 26,
+            "codigo": "0133406",
+            "descricao": "CULTIVO DE GUARANÁ",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 27,
+            "codigo": "0721901",
+            "descricao": "EXTRAÇÃO DE MINÉRIO DE ALUMÍNIO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 28,
+            "codigo": "0116499",
+            "descricao": "CULTIVO DE OUTRAS OLEAGINOSAS DE LAVOURA TEMPORÁRIA NÃO ESPECIFICADAS ANTERIORMENTE",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 29,
+            "codigo": "0119901",
+            "descricao": "CULTIVO DE ABACAXI",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 30,
+            "codigo": "0119902",
+            "descricao": "CULTIVO DE ALHO",
+            "created_at": "2022-10-06T18:14:41.000000Z",
+            "updated_at": "2022-10-06T18:14:41.000000Z",
+            "deleted_at": null
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1332,
+            "per_page": 30,
+            "from": 1,
+            "to": 30,
+            "current_page": 1,
+            "last_page": 45
+        },
+        "count": 30
+    }
+}

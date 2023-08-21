@@ -38,4 +38,19 @@ class IntegraService
 
         throw new \Exception("Plataforma de integração {$p} não encontrada");
     }
+
+    /**
+     * Carrega as rotas de cada driver, neste ponto os drivers devem especificar rotas de redirect, webhook
+     *
+     * @return void
+     */
+    public function routes()
+    {
+        foreach ($this->platforms as $p) { // TODO cache, cuidar da implantação de novos drivers para limpar cache
+            if (method_exists($p, 'routes')) {
+                $driver = new $p([]);
+                $driver->routes();
+            }
+        }
+    }
 }

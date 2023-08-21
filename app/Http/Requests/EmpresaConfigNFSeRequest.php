@@ -27,6 +27,7 @@ class EmpresaConfigNFSeRequest extends FormRequest
         $this->merge([
             'iss_retido_fonte' => $this->get('iss_retido_fonte', 0),
             'enviar_nota_email_cliente' => $this->get('enviar_nota_email_cliente', 0),
+            'producao' => $this->get('producao', 0),
         ]);
     }
 

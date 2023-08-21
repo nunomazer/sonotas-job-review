@@ -22,7 +22,7 @@ class AtualizarDocsSpedDriver extends Command
      *
      * @var string
      */
-    protected $description = 'Percorre todas as empresas atualizando os statis das NF';
+    protected $description = 'Percorre todas as empresas atualizando os status das NF';
 
     /**
      * Create a new command instance.

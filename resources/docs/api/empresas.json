@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "id": 11,
+            "ativo": true,
+            "documento": "96914085000192",
+            "nome": "Fábrica de Molas Molejo",
+            "alias": null,
+            "inscricao_estadual": null,
+            "inscricao_municipal": null,
+            "tipo_logradouro": "Rua",
+            "logradouro": "Joaquim Barbosa",
+            "complemento": null,
+            "numero": "350",
+            "bairro": "Centro",
+            "cep": "840665000",
+            "city_id": 1565,
+            "telefone_num": "998556655",
+            "telefone_ddd": "41",
+            "email": "financeiro@molasmolejo.com.br",
+            "regime_tributario": 1,
+            "regime_tributario_especial": 0,
+            "created_at": "2023-03-05T01:03:46.000000Z",
+            "updated_at": "2023-03-05T01:03:46.000000Z",
+            "deleted_at": null,
+            "receber_notificacao_por_email": false
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "per_page": 30,
+            "from": 1,
+            "to": 1,
+            "current_page": 1,
+            "last_page": 1
+        },
+        "count": 1
+    }
+}
